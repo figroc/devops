@@ -1,0 +1,1 @@
+command="ssh -l sftp sftp"
