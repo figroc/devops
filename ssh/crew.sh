@@ -18,7 +18,5 @@ elif [ $# -eq 1 ]; then
 elif [ $# -eq 2 ]; then
     adduser --home /home/jail/home/$1 --ingroup $1 --disabled-password --gecos '' --force-badname $1.$2
     usermod -a -G crews,jail $1.$2
-    < /etc/passwd \
-        sed '/^'$1'\.'$2':.*/s@/home/'$1'\.'$2'@/home/jail/home/'$1'@' \
-        > /etc/passwd
+    sed -i '/^'$1'\.'$2':.*/s@/home/'$1'\.'$2'@/home/jail/home/'$1'@' /etc/passwd
 fi
