@@ -26,13 +26,13 @@ mkdir -p ${jail}/usr/lib/{openssh,rssh}
 chown root:root ${jail}
 chmod go-w ${jail}
 mknod -m 666 ${jail}/dev/null c 1 3
-cp -avr /etc/ld.so.conf.d ${jail}/etc/
+cp -ar /etc/ld.so.conf.d ${jail}/etc/
 cp /etc/ld.so.cache ${jail}/etc/
 cp /etc/ld.so.conf ${jail}/etc/
 cp /etc/nsswitch.conf ${jail}/etc/
 cp /etc/resolv.conf ${jail}/etc/
 cp /etc/hosts ${jail}/etc/
-cp -r /lib/terminfo ${jail}/lib/
+cp -ar /lib/terminfo ${jail}/lib/
 
 # allow commands
 for cmd in ${cmds}; do
