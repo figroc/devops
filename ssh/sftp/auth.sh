@@ -6,6 +6,8 @@
 #   auth.sh user
 #
 
+gate='/etc/ssh/gate'
+
 if [ $1 = 'sftp' ]; then
-    cat /var/gate/sys/*.pub
+    cat ${gate}/sys/*.pub
 fi

@@ -8,8 +8,8 @@
 #   crew.sh user serv
 #
 
-jail='/home/jail'
-gate='/var/gate'
+jail='/var/jail'
+gate='/etc/ssh/gate'
 
 if [ $# -eq 0 ]; then
     addgroup crews

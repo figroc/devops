@@ -6,7 +6,7 @@
 #   serv.sh name
 #
 
-jail='/home/jail'
+jail='/var/jail'
 
 adduser --home ${jail}/home/$1 --disabled-password --gecos '' $1
 sed -i '/^'$1':.*/d' ${jail}/etc/passwd

@@ -4,10 +4,10 @@
 #
 
 # config
-jail='/home/jail'
+jail='/var/jail'
 cmds='bash sh'
 cmdu='ssh scp sftp rssh'
-libs='openssh/sftp-server rssh/rssh_chroot_helper'
+libu='openssh/sftp-server rssh/rssh_chroot_helper'
 
 # tools
 apt-get install rssh
@@ -26,6 +26,7 @@ mkdir -p ${jail}/usr/etc/ssh
 mkdir -p ${jail}/usr/lib/{openssh,rssh}
 chown root:root ${jail}
 chmod go-w ${jail}
+chmod o-r ${jail} ${jail}/home
 
 # jail device
 mknod -m 622 ${jail}/dev/console c 5 1
@@ -80,7 +81,7 @@ for cmd in ${cmdu}; do
     cp /usr/bin/${cmd} ${jail}/usr/bin/
     l2chroot /usr/bin/${cmd}
 done
-for cmd in ${libs}; do
+for cmd in ${libu}; do
     cp /usr/lib/${cmd} ${jail}/usr/lib/${cmd}
     l2chroot /usr/lib/${cmd}
 done

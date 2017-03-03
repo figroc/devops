@@ -1,1 +1,1 @@
-command="sftp -i /var/gate/sys/agent sftp@sftp"
+command="sftp -i /etc/ssh/gate/sys/agent sftp@sftp"

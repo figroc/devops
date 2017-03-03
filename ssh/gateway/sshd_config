@@ -5,10 +5,10 @@ AllowTcpForwarding no
 X11Forwarding no
 
 Match Group jail
-    ChrootDirectory /home/jail
+    ChrootDirectory /var/jail
 
 Match Group crews
-    AuthorizedKeysCommand /var/gate/auth.sh
+    AuthorizedKeysCommand /etc/ssh/gate/auth.sh
     AuthorizedKeysCommandUser devops
 
 Match Group sftp
