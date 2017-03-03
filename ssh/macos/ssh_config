@@ -10,4 +10,4 @@ Host *.figroc.me
 
 Host sftp
     User sftp
-    ProxyCommand ssh -W %h:%p chenp.sftp@w.figroc.me 
+    ProxyJump chenp.sftp@w.figroc.me 
