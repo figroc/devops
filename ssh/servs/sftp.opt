@@ -1,1 +1,1 @@
-command="ssh -l sftp sftp"
+command="ssh -i /home/devops/.ssh/id_rsa sftp@sftp"
