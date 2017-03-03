@@ -11,8 +11,8 @@ libs='openssh/sftp-server rssh/rssh_chroot_helper'
 
 # tools
 apt-get install rssh
-sed -i '/^# chrootpath = .*/s@@chrootpath = '${jail}'@' /etc/rss.conf
-wget -O /sbin/l2chroot http://www.cyberciti.biz/files/lighttpd/l2chroot.txt
+sed -i '/^# chrootpath = .*/s@@chrootpath = '${jail}'@' /etc/rssh.conf
+wget -O /sbin/l2chroot https://www.cyberciti.biz/files/lighttpd/l2chroot.txt
 sed -i '/^BASE=.*/s@@BASE="'${jail}'"@' /sbin/l2chroot
 chmod +x /sbin/l2chroot
 
