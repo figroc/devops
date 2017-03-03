@@ -9,4 +9,5 @@ Host *.figroc.me
     ForwardAgent yes
 
 Host sftp
+    User sftp
     ProxyCommand ssh -W %h:%p chenp.sftp@w.figroc.me 
