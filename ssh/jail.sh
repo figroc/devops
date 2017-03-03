@@ -22,6 +22,7 @@ addgroup jail
 # jail dir
 mkdir -p ${jail}/{dev,etc,lib,lib64,usr,bin,home}
 mkdir -p ${jail}/usr/{bin,lib}
+mkdir -p ${jail}/usr/etc/ssh
 mkdir -p ${jail}/usr/lib/{openssh,rssh}
 chown root:root ${jail}
 chmod go-w ${jail}
@@ -60,6 +61,13 @@ sed -i '/^passwd:/s/compat/files/' ${jail}/etc/nsswitch.conf
 mkdir -p ${jail}/lib/x86_64-linux-gnu
 cp /lib/x86_64-linux-gnu/libnss_* ${jail}/lib/x86_64-linux-gnu/
 cp -ar /lib/terminfo ${jail}/lib/
+
+# jail ssh config
+cat >${jail}/etc/ssh/ssh_config <<EOL
+Host sftp
+    StrictHostKeyChecking no
+    UserKnownHostsFile=/dev/null
+EOL
 
 # jail binary
 for cmd in ${cmds}; do
