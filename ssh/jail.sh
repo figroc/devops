@@ -48,9 +48,17 @@ mount -vt tmpfs none ${jail}/dev/shm
 cp -ar /etc/ld.so.conf.d ${jail}/etc/
 cp /etc/ld.so.cache ${jail}/etc/
 cp /etc/ld.so.conf ${jail}/etc/
-cp /etc/nsswitch.conf ${jail}/etc/
 cp /etc/resolv.conf ${jail}/etc/
 cp /etc/hosts ${jail}/etc/
+touch ${jail}/etc/group
+touch ${jail}/etc/passwd
+sed -i '/^jail:.*/d' ${jail}/etc/group
+grep '^jail:' /etc/group | tee -a ${jail}/etc/group
+cp /etc/nsswitch.conf ${jail}/etc/
+sed -i '/^group:/s/compat/files/' ${jail}/etc/nsswitch.conf
+sed -i '/^passwd:/s/compat/files/' ${jail}/etc/nsswitch.conf
+mkdir -p ${jail}/lib/x86_64-linux-gnu
+cp /lib/x86_64-linux-gnu/libnss_* ${jail}/lib/x86_64-linux-gnu/
 cp -ar /lib/terminfo ${jail}/lib/
 
 # jail binary
