@@ -57,8 +57,8 @@ touch ${jail}/etc/passwd
 sed -i '/^jail:.*/d' ${jail}/etc/group
 grep '^jail:' /etc/group | tee -a ${jail}/etc/group
 cp /etc/nsswitch.conf ${jail}/etc/
-sed -i '/^group:/s/compat/files/' ${jail}/etc/nsswitch.conf
-sed -i '/^passwd:/s/compat/files/' ${jail}/etc/nsswitch.conf
+sed -i '/^group:.*/s/compat/files/' ${jail}/etc/nsswitch.conf
+sed -i '/^passwd:.*/s/compat/files/' ${jail}/etc/nsswitch.conf
 mkdir -p ${jail}/lib/x86_64-linux-gnu
 cp /lib/x86_64-linux-gnu/libnss_* ${jail}/lib/x86_64-linux-gnu/
 cp -ar /lib/terminfo ${jail}/lib/
