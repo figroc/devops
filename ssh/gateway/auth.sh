@@ -8,13 +8,13 @@
 
 gate='/etc/ssh/gate'
 
-IFS=. read user serv <<EOF
+IFS=. read user role <<EOF
 $1
 EOF
 
-user=${gate}'/crews/'${user}'.pub'
-serv=${gate}'/servs/'${serv}'.opt'
+key=${gate}'/crews/'${user}'.pub'
+opt=${gate}'/servs/'${role}'.opt'
 
-if [[ -f ${user} && -f ${serv} ]]; then
-    cat ${serv} ${user} | tr '\n' ' ' | sed 's/[[:space:]]*$/\n/'
+if [[ -f ${key} && -f ${opt} ]]; then
+    cat ${opt} ${key} | tr '\n' ' ' | sed 's/[[:space:]]*$/\n/'
 fi
