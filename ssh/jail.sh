@@ -25,7 +25,26 @@ mkdir -p ${jail}/usr/{bin,lib}
 mkdir -p ${jail}/usr/lib/{openssh,rssh}
 chown root:root ${jail}
 chmod go-w ${jail}
+
+# jail device
+mknod -m 622 ${jail}/dev/console c 5 1
 mknod -m 666 ${jail}/dev/null c 1 3
+mknod -m 666 ${jail}/dev/zero c 1 5
+mknod -m 666 ${jail}/dev/ptmx c 5 2
+mknod -m 666 ${jail}/dev/tty c 5 0
+mknod -m 444 ${jail}/dev/random c 1 8
+mknod -m 444 ${jail}/dev/urandom c 1 9
+chown root:tty ${jail}/dev/{console,ptmx,tty}
+ln -s /proc/self/fd ${jail}/dev/fd
+ln -s /proc/self/fd/0 ${jail}/dev/stdin
+ln -s /proc/self/fd/1 ${jail}/dev/stdout
+ln -s /proc/self/fd/2 ${jail}/dev/stderr
+ln -s /proc/kcore ${jail}/dev/core
+mkdir -p ${jail}/dev/{pts,shm}
+mount -vt devpts -o gid=4,mode=620 none ${jail}/dev/pts
+mount -vt tmpfs none ${jail}/dev/shm
+
+# jail prerequisite file
 cp -ar /etc/ld.so.conf.d ${jail}/etc/
 cp /etc/ld.so.cache ${jail}/etc/
 cp /etc/ld.so.conf ${jail}/etc/
@@ -34,7 +53,7 @@ cp /etc/resolv.conf ${jail}/etc/
 cp /etc/hosts ${jail}/etc/
 cp -ar /lib/terminfo ${jail}/lib/
 
-# allow commands
+# jail binary
 for cmd in ${cmds}; do
     cp /bin/${cmd} ${jail}/bin/
     l2chroot /bin/${cmd}
