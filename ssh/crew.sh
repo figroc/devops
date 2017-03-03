@@ -28,11 +28,14 @@ elif [ $# -eq 2 ]; then
     sed -i '/^'$1'\.'$2':.*/d' ${jail}/etc/passwd
     grep '^'$1'\.'$2':' /etc/passwd | tee -a ${jail}/etc/passwd
     chmod -R g+rw ${jail}/home/$1
-    usermod -a -G crews,jail $1.$2
+    addgroup $2
+    usermod -a -G crews,jail,$2 $1.$2
     sed -i '/^jail:.*/d' ${jail}/etc/group
     sed -i '/^crews:.*/d' ${jail}/etc/group
     sed -i '/^'$1':.*/d' ${jail}/etc/group
+    sed -i '/^'$2':.*/d' ${jail}/etc/group
     grep '^jail:' /etc/group | tee -a ${jail}/etc/group
     grep '^crews:' /etc/group | tee -a ${jail}/etc/group
     grep '^'$1':' /etc/group | tee -a ${jail}/etc/group
+    grep '^'$2':' /etc/group | tee -a ${jail}/etc/group
 fi

@@ -8,7 +8,9 @@ Match Group jail
     ChrootDirectory /home/jail
 
 Match Group crews
-    PermitTTY no
     AuthorizedKeysCommand /var/gate/auth.sh
     AuthorizedKeysCommandUser devops
-    AuthorizedKeysFile /var/gate/crews/null
+
+Match Group sftp
+    AllowTcpForwarding yes
+    PermitOpen sftp:22

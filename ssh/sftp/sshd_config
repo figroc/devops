@@ -10,5 +10,6 @@ Match Group jail
     ChrootDirectory /home/jail
 
 Match Group sftp
-    AuthorizedKeysFile /var/gate/sys/sftp.pub
+    AuthorizedKeysCommand /var/gate/auth.sh
+    AuthorizedKeysCommandUser devops
     ForceCommand internal-sftp -d /files
