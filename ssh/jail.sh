@@ -63,11 +63,13 @@ cp /lib/x86_64-linux-gnu/libnss_* ${jail}/lib/x86_64-linux-gnu/
 cp -ar /lib/terminfo ${jail}/lib/
 
 # jail ssh config
-cat >${jail}/etc/ssh/ssh_config <<EOL
+if [ ! -f ${jail}/etc/ssh/ssh_config ]; then
+    cat >${jail}/etc/ssh/ssh_config <<EOL
 Host sftp
     StrictHostKeyChecking no
     UserKnownHostsFile=/dev/null
 EOL
+fi
 
 # jail binary
 for cmd in ${cmds}; do
