@@ -8,6 +8,10 @@
 
 gate='/etc/ssh/gate'
 
-if [ $1 = 'sftp' ]; then
-    cat ${gate}/sys/*.pub
-fi
+case $1 in
+    sftp)
+        cat ${gate}/sys/*.pub
+        ;;
+    *)
+        ;;
+esac

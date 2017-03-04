@@ -1,0 +1,7 @@
+
+AllowAgentForwarding yes
+AllowTcpForwarding yes
+X11Forwarding yes
+
+Match Group crews
+    AuthorizedKeysFile /etc/ssh/gate/crews/%u.pub

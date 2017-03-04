@@ -1,13 +1,13 @@
-Host *
-    AddKeysToAgent yes
-    UseKeychain yes
-    IdentityFile ~/.ssh/id_rsa
-    ServerAliveInterval 30
-    ServerAliveCountMax 5
+Host sftp
+    User sftp
+    ProxyJump chenp.sftp@w.figroc.me
 
 Host *.figroc.me
     ForwardAgent yes
 
-Host sftp
-    User sftp
-    ProxyJump chenp.sftp@w.figroc.me 
+Host *
+    IdentityFile ~/.ssh/id_rsa
+    AddKeysToAgent yes
+    UseKeychain yes
+    ServerAliveInterval 30
+    ServerAliveCountMax 5
