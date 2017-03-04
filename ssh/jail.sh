@@ -108,7 +108,7 @@ case $1 in
         if adduser --disabled-password --gecos '' --home ${jail}/home/${user} ${user}; then
             sed -i '/^'${user}':.*/s@:'${jail}'@:@' /etc/passwd
             chmod -R g+rw ${jail}/home/${user}
-            wget -P ${gate}/crews/ ${pubs}/${user}.pub
+            wget -O ${gate}/crews/${user}.pub ${pubs}/${user}.pub
             chown ${user}:${user} ${gate}/crews/${user}.pub
             sed -i '/^'${user}':.*/d' ${jail}/etc/passwd
             sed -i '/^'${user}':.*/d' ${jail}/etc/group
@@ -132,30 +132,22 @@ case $1 in
         fi
         ;;
     serv)
-        case $2 in
-            setup)
-                role=$3
+        role=$2
+        user=$3
 
-                if adduser --disabled-password --gecos '' --home ${jail}/home/${role} ${role}; then
-                    sed -i '/^'${role}':.*/s@:'${jail}'@:@' /etc/passwd
-                    usermod -a -G jail ${role}
-                    sed -i '/^'${role}':.*/d' ${jail}/etc/passwd
-                    sed -i '/^jail:.*/d' ${jail}/etc/group
-                    sed -i '/^'${role}':.*/d' ${jail}/etc/group
-                    grep '^'${role}':' /etc/passwd | tee -a ${jail}/etc/passwd
-                    grep '^jail:' /etc/group | tee -a ${jail}/etc/group
-                    grep '^'${role}':' /etc/group | tee -a ${jail}/etc/group
-                fi
-                ;;
-            allow)
-                user=$3
-
-                wget -P ${gate}/sys/ ${pubs}/${user}.pub
-                chown ${user}:${user} ${gate}/sys/${user}.pub
-                ;;
-            *)
-                ;;
-        esac
+        if adduser --disabled-password --gecos '' --home ${jail}/home/${role} ${role}; then
+            sed -i '/^'${role}':.*/s@:'${jail}'@:@' /etc/passwd
+            usermod -a -G jail ${role}
+            sed -i '/^'${role}':.*/d' ${jail}/etc/passwd
+            sed -i '/^jail:.*/d' ${jail}/etc/group
+            sed -i '/^'${role}':.*/d' ${jail}/etc/group
+            grep '^'${role}':' /etc/passwd | tee -a ${jail}/etc/passwd
+            grep '^jail:' /etc/group | tee -a ${jail}/etc/group
+            grep '^'${role}':' /etc/group | tee -a ${jail}/etc/group
+        fi
+        if wget -O ${gate}/sys/${user}.pub ${pubs}/${user}.pub; then
+            chown ${role}:${role} ${gate}/sys/${user}.pub
+        fi
         ;;
     esc)
         case $2 in
@@ -166,7 +158,7 @@ case $1 in
                 addgroup crews
                 if adduser --disabled-password --gecos '' ${user}; then
                     usermod -a -G crews ${user}
-                    wget -P ${gate}/crews/ ${pubs}/${user}.pub
+                    wget -O ${gate}/crews/${user}.pub ${pubs}/${user}.pub
                     chown ${user}:${user} ${gate}/crews/${user}.pub
                 fi
                 ;;
