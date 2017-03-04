@@ -5,8 +5,7 @@
 # Usage:
 #     jail.sh setup
 #     jail.sh crew [user] [role]
-#     jail.sh serv setup [role]
-#     jail.sh serv allow [user]
+#     jail.sh serv [role] [user]
 #     jail.sh esc crew [user]
 #
 
@@ -93,6 +92,7 @@ case $1 in
             l2chroot /usr/lib/${cmd}
         done
         ;;
+
     crew)
         user=$2
         role=$3
@@ -131,6 +131,7 @@ case $1 in
             grep '^'${role}':' /etc/group | tee -a ${jail}/etc/group
         fi
         ;;
+
     serv)
         role=$2
         user=$3
@@ -149,6 +150,7 @@ case $1 in
             chown ${role}:${role} ${gate}/sys/${user}.pub
         fi
         ;;
+
     esc)
         case $2 in
             crew)
@@ -162,10 +164,12 @@ case $1 in
                     chown ${user}:${user} ${gate}/crews/${user}.pub
                 fi
                 ;;
+
             *)
                 ;;
         esac
         ;;
+
     *)
         ;;
 esac
