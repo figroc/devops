@@ -151,6 +151,29 @@ case $1 in
         fi
         ;;
 
+    agent)
+        adir=${jail}${gate}/sys
+
+        case $2 in
+            key)
+                mkdir -p ${adir}
+                if [ ! -f ${adir}/agent.id ]; then
+                    ssh-keygen -t rsa -b 4096 -N '' -C 'agent' ${adir}/agent
+                    mv ${adir}/agent ${adir}/agent.id
+                    chmod a+r ${adir}/agent.id
+                fi
+                ;;
+            cp2)
+                svr=$3
+                if [ ! -z ${svr} ]; then
+                    scp ${adir}/agent.pub ${svr}:${adir}/${HOSTNAME}.pub
+                fi
+                ;;
+            *)
+                ;;
+        esac
+        ;;
+
     esc)
         case $2 in
             crew)
