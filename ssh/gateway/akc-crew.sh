@@ -14,8 +14,12 @@ EOF
 
 opt=${gate}'/servs/'${role}'.opt'
 if [ -f ${opt} ]; then
-    grep -e '^*:' -e '^'${user}':' ${opt} | tail -n 1 \
-        | sed '/^.*:[[:blank:]]*/s///' | tr '\n' ' '
+    grep -e '^[[:blank:]]*[*][[:blank:]]*:[[:blank:]]*' \
+         -e '^[[:blank:]]*'${user}'[[:blank:]]*:[[:blank:]]*' \
+         ${opt} \
+        | tail -n 1 \
+        | sed '/^.*:[[:blank:]]*/s///' \
+        | tr '\n' ' '
 fi
 
 key=${gate}'/crews/'${user}'.pub'
