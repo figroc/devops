@@ -131,7 +131,7 @@ case $1 in
         fi
 
         if adduser --disabled-password --gecos '' --home ${jail}/home/${user} \
-                --force-badname --ingroup ${role} ${user}.${role}; then
+                --force-badname --ingroup ${user} ${user}.${role}; then
             sed -i '/^'${user}'\.'${role}':.*/s@:'${jail}'@:@' /etc/passwd
             addgroup ${role}
             usermod -a -G jail,crews,${role} ${user}.${role}
