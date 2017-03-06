@@ -168,11 +168,11 @@ case $1 in
     agent)
         adir=${jail}${gate}/sys
 
-        mkdir -p ${adir}
-        chown devops:devops ${adir}
         case $2 in
             key)
-                mkdir -p ${adir}
+                if mkdir -p ${adir}; then
+                    chown devops:devops ${adir}
+                fi
                 if [ ! -f ${adir}/agent.id ]; then
                     ssh-keygen -t rsa -b 4096 -N '' -C 'agent' ${adir}/agent
                     mv ${adir}/agent ${adir}/agent.id
