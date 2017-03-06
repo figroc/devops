@@ -1,3 +1,4 @@
 Host sftp play 66.128.149.117
+    ForwardAgent yes
     StrictHostKeyChecking no
     UserKnownHostsFile=/dev/null
