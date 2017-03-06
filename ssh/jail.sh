@@ -103,6 +103,8 @@ case $1 in
 
             *)
                 ;;
+        esac
+        ;;
 
     crew)
         user=$2
