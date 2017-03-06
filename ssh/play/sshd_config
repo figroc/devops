@@ -1,0 +1,9 @@
+
+PasswordAuthentication no
+AllowAgentForwarding no
+AllowTcpForwarding no
+X11Forwarding no
+
+Match Group play
+    AuthorizedKeysCommand /etc/ssh/gate/akc-sys.sh
+    AuthorizedKeysCommandUser devops

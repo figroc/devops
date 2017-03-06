@@ -9,7 +9,7 @@
 gate='/etc/ssh/gate'
 
 case $1 in
-    sftp)
+    play)
         cat ${gate}/sys/*.pub
         ;;
     *)

@@ -5,8 +5,9 @@
 # Usage:
 #     jail.sh setup
 #     jail.sh crew [user] [role]
-#     jail.sh serv [role] [user]
+#     jail.sh role [role] [user]
 #     jail.sh esc crew [user]
+#     jail.sh esc role [role]
 #
 
 # source ${BASH_SOURCE%/*}/vars.sh
@@ -97,7 +98,7 @@ case $1 in
         user=$2
         role=$3
 
-        mkdir -p ${gate}/servs
+        mkdir -p ${gate}/roles
         mkdir -p ${gate}/crews
 
         if addgroup crews; then
@@ -132,7 +133,7 @@ case $1 in
         fi
         ;;
 
-    serv)
+    role)
         role=$2
         user=$3
 
@@ -154,6 +155,7 @@ case $1 in
     agent)
         adir=${jail}${gate}/sys
 
+        mkdir -p ${adir}
         case $2 in
             key)
                 mkdir -p ${adir}
@@ -186,6 +188,12 @@ case $1 in
                     wget -O ${gate}/crews/${user}.pub ${pubs}/${user}.pub
                     chown ${user}:${user} ${gate}/crews/${user}.pub
                 fi
+                ;;
+
+            role)
+                role=$3
+
+                adduser --disabled-password --gecos '' ${role}
                 ;;
 
             *)

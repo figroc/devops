@@ -3,7 +3,7 @@
 # used for AuthorizedKeysCommand in sshd_config
 #
 # Usage: 
-#   auth.sh user
+#   akc-crew.sh user
 #
 
 gate='/etc/ssh/gate'
@@ -12,7 +12,7 @@ IFS=. read user role <<EOF
 $1
 EOF
 
-opt=${gate}'/servs/'${role}'.opt'
+opt=${gate}'/roles/'${role}'.opt'
 if [ -f ${opt} ]; then
     grep -e '^[[:blank:]]*[*][[:blank:]]*:[[:blank:]]*' \
          -e '^[[:blank:]]*'${user}'[[:blank:]]*:[[:blank:]]*' \
