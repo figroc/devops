@@ -180,7 +180,7 @@ case $1 in
             cp2)
                 svr=$3
                 if [ ! -z ${svr} ]; then
-                    scp ${adir}/agent.pub ${svr}:${adir}/${HOSTNAME}.pub
+                    scp ${adir}/agent.pub ${svr}:${gate}/${HOSTNAME}.pub
                 fi
                 ;;
             *)
