@@ -61,7 +61,7 @@ case $1 in
 
             jail)
                 cmds='bash sh'
-                cmdu='ssh scp sftp rssh'
+                cmdu='ssh ssh-agent scp sftp rssh'
                 libu='openssh/sftp-server rssh/rssh_chroot_helper'
 
                 # tools
