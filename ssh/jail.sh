@@ -130,8 +130,8 @@ case $1 in
             grep '^'${user}':' /etc/group | tee -a ${jail}/etc/group
         fi
 
-        if adduser --disabled-password --gecos '' --home ${jail}/home/${user} \
-                --force-badname --ingroup ${user} ${user}.${role}; then
+        if [[ ! -z ${role} ]] && adduser --disabled-password --gecos '' \
+            --home ${jail}/home/${user} --ingroup ${user} ${user}.${role}; then
             sed -i '/^'${user}'\.'${role}':.*/s@:'${jail}'@:@' /etc/passwd
             addgroup ${role}
             usermod -a -G jail,crews,${role} ${user}.${role}
