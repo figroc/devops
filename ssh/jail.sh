@@ -22,6 +22,7 @@ case $1 in
         case $2 in
             gate)
                 mkdir -p ${gate}/{sys,roles,crews}
+                chown devops:devops ${gate}/sys/
                 ;;
 
             jail)
@@ -168,6 +169,7 @@ case $1 in
         adir=${jail}${gate}/sys
 
         mkdir -p ${adir}
+        chown devops:devops ${adir}
         case $2 in
             key)
                 mkdir -p ${adir}
@@ -180,7 +182,7 @@ case $1 in
             cp2)
                 svr=$3
                 if [ ! -z ${svr} ]; then
-                    scp ${adir}/agent.pub ${svr}:${gate}/${HOSTNAME}.pub
+                    scp ${adir}/agent.pub ${svr}:${gate}/sys/${HOSTNAME}.pub
                 fi
                 ;;
             *)
