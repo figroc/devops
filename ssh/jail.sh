@@ -16,6 +16,40 @@ jail='/var/jail'
 gate='/etc/ssh/gate'
 pubs='https://raw.githubusercontent.com/figroc/devops/master/pub'
 
+# functions
+function chroot_cmds {
+    for cmd in $2; do
+        cp $1/${cmd} ${jail}/$1/
+        l2chroot $1/${cmd}
+    done
+}
+
+function shadow_home {
+    if [ -z $2 ]; then
+        sed -i '/^'$1':.*/s@:'${jail}'@:@' /etc/passwd
+    else
+        sed -i '/^'$1'\.'$2':.*/s@:'${jail}'@:@' /etc/passwd
+    fi
+}
+
+function shadow_user {
+    if [ -z $2 ]; then
+        sed -i '/^'$1':.*/d' ${jail}/etc/passwd
+        grep '^'$1':' /etc/passwd | tee -a ${jail}/etc/passwd
+    else
+        sed -i '/^'$1'\.'$2':.*/d' ${jail}/etc/passwd
+        grep '^'$1'\.'$2':' /etc/passwd | tee -a ${jail}/etc/passwd
+    fi
+}
+
+function shadow_group {
+    while (($#)); do
+        sed -i '/^'$1':.*/d' ${jail}/etc/group
+        grep '^'$1':' /etc/group | tee -a ${jail}/etc/group
+        shift
+    done
+}
+
 # command switch
 case $1 in
     setup)
@@ -83,23 +117,13 @@ case $1 in
 
                 # group
                 if addgroup jail; then
-                    sed -i '/^jail:.*/d' ${jail}/etc/group
-                    grep '^jail:' /etc/group | tee -a ${jail}/etc/group
+                    shadow_group jail
                 fi
 
                 # bin
-                for cmd in ${cmds}; do
-                    cp /bin/${cmd} ${jail}/bin/
-                    l2chroot /bin/${cmd}
-                done
-                for cmd in ${cmdu}; do
-                    cp /usr/bin/${cmd} ${jail}/usr/bin/
-                    l2chroot /usr/bin/${cmd}
-                done
-                for cmd in ${libu}; do
-                    cp /usr/lib/${cmd} ${jail}/usr/lib/${cmd}
-                    l2chroot /usr/lib/${cmd}
-                done
+                chroot_cmds /bin ${cmds}
+                chroot_cmds /usr/bin ${cmdu}
+                chroot_cmds /usr/lib ${libu}
                 ;;
 
             *)
@@ -115,45 +139,35 @@ case $1 in
         mkdir -p ${gate}/crews
 
         if addgroup crews; then
-            sed -i '/^crews:.*/d' ${jail}/etc/group
-            grep '^crews:' /etc/group | tee -a ${jail}/etc/group
+            shadow_group crews
         fi
 
         if [ ! -z ${user} ]; then
             if addgroup ${user}; then
-                sed -i '/^'${user}':.*/d' ${jail}/etc/group
-                grep '^'${user}':' /etc/group | tee -a ${jail}/etc/group
+                shadow_group ${user}
             fi
             if adduser --disabled-password --gecos '' --home ${jail}/home/${user} \
                 --ingroup ${user} ${user}; then
-                sed -i '/^'${user}':.*/s@:'${jail}'@:@' /etc/passwd
                 chmod -R g+rw ${jail}/home/${user}
                 wget -O ${gate}/crews/${user}.pub ${pubs}/${user}.pub
                 chown ${user}:${user} ${gate}/crews/${user}.pub
-                sed -i '/^'${user}':.*/d' ${jail}/etc/passwd
-                sed -i '/^'${user}':.*/d' ${jail}/etc/group
-                grep '^'${user}':' /etc/passwd | tee -a ${jail}/etc/passwd
-                grep '^'${user}':' /etc/group | tee -a ${jail}/etc/group
+                usermod -a -G jail,crews ${user}
+                shadow_home ${user}
+                shadow_user ${user}
+                shadow_group jail crews ${user}
             fi
         fi
 
         if [ ! -z ${role} ]; then
             if addgroup ${role}; then
-                sed -i '/^'${role}':.*/d' ${jail}/etc/group
-                grep '^'${role}':' /etc/group | tee -a ${jail}/etc/group
+                shadow_group ${role}
             fi
             if adduser --disabled-password --gecos '' --home ${jail}/home/${user} \
                 --ingroup ${user} ${user}.${role}; then
-                sed -i '/^'${user}'\.'${role}':.*/s@:'${jail}'@:@' /etc/passwd
                 usermod -a -G jail,crews,${role} ${user}.${role}
-                sed -i '/^'${user}'\.'${role}':.*/d' ${jail}/etc/passwd
-                sed -i '/^jail:.*/d' ${jail}/etc/group
-                sed -i '/^crews:.*/d' ${jail}/etc/group
-                sed -i '/^'${role}':.*/d' ${jail}/etc/group
-                grep '^'${user}'\.'${role}':' /etc/passwd | tee -a ${jail}/etc/passwd
-                grep '^jail:' /etc/group | tee -a ${jail}/etc/group
-                grep '^crews:' /etc/group | tee -a ${jail}/etc/group
-                grep '^'${role}':' /etc/group | tee -a ${jail}/etc/group
+                shadow_home ${user} ${role}
+                shadow_user ${user} ${role}
+                shadow_group jail crews ${role}
             fi
         fi
         ;;
@@ -165,12 +179,9 @@ case $1 in
         if adduser --disabled-password --gecos '' --home ${jail}/home/${role} ${role}; then
             sed -i '/^'${role}':.*/s@:'${jail}'@:@' /etc/passwd
             usermod -a -G jail ${role}
-            sed -i '/^'${role}':.*/d' ${jail}/etc/passwd
-            sed -i '/^jail:.*/d' ${jail}/etc/group
-            sed -i '/^'${role}':.*/d' ${jail}/etc/group
-            grep '^'${role}':' /etc/passwd | tee -a ${jail}/etc/passwd
-            grep '^jail:' /etc/group | tee -a ${jail}/etc/group
-            grep '^'${role}':' /etc/group | tee -a ${jail}/etc/group
+            shadow_home ${role}
+            shadow_user ${role}
+            shadow_group jail ${role}
         fi
         if wget -O ${gate}/sys/${user}.pub ${pubs}/${user}.pub; then
             chown ${role}:${role} ${gate}/sys/${user}.pub
