@@ -1,6 +1,6 @@
 
 PasswordAuthentication no
-AllowAgentForwarding no
+AllowAgentForwarding yes
 AllowTcpForwarding no
 X11Forwarding no
 
