@@ -2,7 +2,6 @@
 PasswordAuthentication no
 AllowAgentForwarding yes
 AllowTcpForwarding no
-X11Forwarding no
 
 Match Group jail
     ChrootDirectory /var/jail

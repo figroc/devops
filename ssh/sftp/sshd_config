@@ -4,7 +4,6 @@ Subsystem sftp internal-sftp
 PasswordAuthentication no
 AllowAgentForwarding no
 AllowTcpForwarding no
-X11Forwarding no
 
 Match Group jail
     ChrootDirectory /var/jail
