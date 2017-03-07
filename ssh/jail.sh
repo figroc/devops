@@ -248,7 +248,7 @@ case $1 in
                         fi
                         ;;
                     cp2)
-                        srv=$4
+                        svr=$4
                         if [ ! -z ${svr} ]; then
                             scp ${adir}/agent.pub ${svr}:${adir}/${HOSTNAME}.pub
                         fi
