@@ -197,7 +197,7 @@ case $1 in
                     chown devops:devops ${adir}
                 fi
                 if [ ! -f ${adir}/agent.id ]; then
-                    ssh-keygen -t rsa -b 4096 -N '' -C 'agent' ${adir}/agent
+                    ssh-keygen -t rsa -b 4096 -N '' -C 'agent' -f ${adir}/agent
                     mv ${adir}/agent ${adir}/agent.id
                     chmod a+r ${adir}/agent.id
                 fi
@@ -242,7 +242,7 @@ case $1 in
                             chown devops:devops ${adir}
                         fi
                         if [ ! -f ${adir}/agent.id ]; then
-                            ssh-keygen -t rsa -b 4096 -N '' -C 'agent' ${adir}/agent
+                            ssh-keygen -t rsa -b 4096 -N '' -C 'agent' -f ${adir}/agent
                             mv ${adir}/agent ${adir}/agent.id
                             chown devops:devops ${adir}/agent.*
                         fi
