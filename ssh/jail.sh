@@ -191,26 +191,14 @@ case $1 in
     agent)
         adir=${jail}${gate}/sys
 
-        case $2 in
-            key)
-                if mkdir -p ${adir}; then
-                    chown devops:devops ${adir}
-                fi
-                if [ ! -f ${adir}/agent.id ]; then
-                    ssh-keygen -t rsa -b 4096 -N '' -C 'agent' -f ${adir}/agent
-                    mv ${adir}/agent ${adir}/agent.id
-                    chmod a+r ${adir}/agent.id
-                fi
-                ;;
-            cp2)
-                svr=$3
-                if [ ! -z ${svr} ]; then
-                    scp ${adir}/agent.pub ${svr}:${gate}/sys/${HOSTNAME}.pub
-                fi
-                ;;
-            *)
-                ;;
-        esac
+        if mkdir -p ${adir}; then
+            chown devops:devops ${adir}
+        fi
+        if [ ! -f ${adir}/agent.id ]; then
+            ssh-keygen -t rsa -b 4096 -N '' -C 'agent' -f ${adir}/agent
+            mv ${adir}/agent ${adir}/agent.id
+            chmod a+r ${adir}/agent.id
+        fi
         ;;
 
     esc)
@@ -236,26 +224,14 @@ case $1 in
             agent)
                 adir=${gate}/sys
 
-                case $3 in
-                    key)
-                        if mkdir -p ${adir}; then
-                            chown devops:devops ${adir}
-                        fi
-                        if [ ! -f ${adir}/agent.id ]; then
-                            ssh-keygen -t rsa -b 4096 -N '' -C 'agent' -f ${adir}/agent
-                            mv ${adir}/agent ${adir}/agent.id
-                            chown devops:devops ${adir}/agent.*
-                        fi
-                        ;;
-                    cp2)
-                        svr=$4
-                        if [ ! -z ${svr} ]; then
-                            scp ${adir}/agent.pub ${svr}:${adir}/${HOSTNAME}.pub
-                        fi
-                        ;;
-                    *)
-                        ;;
-                esac
+                if mkdir -p ${adir}; then
+                    chown devops:devops ${adir}
+                fi
+                if [ ! -f ${adir}/agent.id ]; then
+                    ssh-keygen -t rsa -b 4096 -N '' -C 'agent' -f ${adir}/agent
+                    mv ${adir}/agent ${adir}/agent.id
+                    chown devops:devops ${adir}/agent.*
+                fi
                 ;;
 
             *)
