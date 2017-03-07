@@ -233,6 +233,31 @@ case $1 in
                 adduser --disabled-password --gecos '' ${role}
                 ;;
 
+            agent)
+                adir=${gate}/sys
+
+                case $3 in
+                    key)
+                        if mkdir -p ${adir}; then
+                            chown devops:devops ${adir}
+                        fi
+                        if [ ! -f ${adir}/agent.id ]; then
+                            ssh-keygen -t rsa -b 4096 -N '' -C 'agent' ${adir}/agent
+                            mv ${adir}/agent ${adir}/agent.id
+                            chown devops:devops ${adir}/agent.*
+                        fi
+                        ;;
+                    cp2)
+                        srv=$4
+                        if [ ! -z ${svr} ]; then
+                            scp ${adir}/agent.pub ${svr}:${adir}/${HOSTNAME}.pub
+                        fi
+                        ;;
+                    *)
+                        ;;
+                esac
+                ;;
+
             *)
                 ;;
         esac
