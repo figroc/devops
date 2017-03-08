@@ -1,4 +1,4 @@
-Host sftp play devel 66.128.149.117
+Host sftp play devel
     ForwardAgent yes
     StrictHostKeyChecking no
     UserKnownHostsFile=/dev/null
