@@ -4,9 +4,11 @@
 #
 
 user=$1
+home='/var/data/home'
 pubs='https://raw.githubusercontent.com/figroc/devops/master/pub'
 
-mkdir -p /var/data/home
-useradd -m -b /var/data/home -s /usr/sbin/nologin ${user}
+mkdir -p ${home}
+useradd -m -b ${home} -s /usr/sbin/nologin ${user}
 gpasswd -a ${user} docker
-wget -O /var/data/home/${user}/.ssh/authorized_keys ${pubs}/${user}.pub
+mkdir -p ${home}/${user}/.ssh
+wget -O ${home}/${user}/.ssh/authorized_keys ${pubs}/${user}.pub
