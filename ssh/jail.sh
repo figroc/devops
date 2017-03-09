@@ -149,12 +149,13 @@ case $1 in
             if adduser --disabled-password --gecos '' --home ${jail}/home/${user} \
                 --ingroup ${user} ${user}; then
                 chmod -R g+rw ${jail}/home/${user}
-                wget -O ${gate}/crews/${user}.pub ${pubs}/${user}.pub
-                chown ${user}:${user} ${gate}/crews/${user}.pub
                 usermod -a -G jail,crews ${user}
                 shadow_home ${user}
                 shadow_user ${user}
                 shadow_group jail crews ${user}
+            fi
+            if wget -O ${gate}/crews/${user}.pub ${pubs}/${user}.pub; then
+                chown ${user}:${user} ${gate}/crews/${user}.pub
             fi
         fi
 
@@ -210,7 +211,8 @@ case $1 in
                 addgroup crews
                 if adduser --disabled-password --gecos '' ${user}; then
                     usermod -a -G crews ${user}
-                    wget -O ${gate}/crews/${user}.pub ${pubs}/${user}.pub
+                fi
+                if wget -O ${gate}/crews/${user}.pub ${pubs}/${user}.pub; then
                     chown ${user}:${user} ${gate}/crews/${user}.pub
                 fi
                 ;;
