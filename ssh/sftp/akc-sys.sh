@@ -10,6 +10,7 @@ gate='/etc/ssh/gate'
 
 for role in sftp; do
     if [ ${role} == $1 ]; then
-        cat ${gate}/sys/*.pub ${gate}/crews/*.pub
+        cat ${gate}/sys/*.pub ${gate}/crews/*.pub 2>/dev/null
+        exit 0
     fi
 done
