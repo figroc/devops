@@ -50,6 +50,16 @@ function shadow_group {
     done
 }
 
+function update_pkey {
+    if wget -O ${gate}/crews/$1.pub ${pubs}/$1.pub; then
+        if [ -z $2 ]; then
+            chown $1:$1 ${gate}/crews/$1.pub
+        else
+            chown $2:$2 ${gate}/crews/$1.pub
+        fi
+    fi
+}
+
 # command switch
 case $1 in
     setup)
@@ -154,9 +164,7 @@ case $1 in
                 shadow_user ${user}
                 shadow_group jail crews ${user}
             fi
-            if wget -O ${gate}/crews/${user}.pub ${pubs}/${user}.pub; then
-                chown ${user}:${user} ${gate}/crews/${user}.pub
-            fi
+            update_pkey ${user}
         fi
 
         if [ ! -z ${role} ]; then
@@ -184,9 +192,7 @@ case $1 in
             shadow_user ${role}
             shadow_group jail ${role}
         fi
-        if wget -O ${gate}/sys/${user}.pub ${pubs}/${user}.pub; then
-            chown ${role}:${role} ${gate}/sys/${user}.pub
-        fi
+        update_pkey ${user} ${role}
         ;;
 
     agent)
@@ -212,9 +218,7 @@ case $1 in
                 if adduser --disabled-password --gecos '' ${user}; then
                     usermod -a -G crews ${user}
                 fi
-                if wget -O ${gate}/crews/${user}.pub ${pubs}/${user}.pub; then
-                    chown ${user}:${user} ${gate}/crews/${user}.pub
-                fi
+                update_pkey ${user}
                 ;;
 
             role)

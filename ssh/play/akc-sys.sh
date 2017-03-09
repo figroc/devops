@@ -8,10 +8,8 @@
 
 gate='/etc/ssh/gate'
 
-case $1 in
-    play)
-        cat ${gate}/sys/*.pub
-        ;;
-    *)
-        ;;
-esac
+for role in play; do
+    if [ ${role} == $1 ]; then
+        cat ${gate}/sys/*.pub ${gate}/crews/*.pub
+    fi
+done
