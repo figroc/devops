@@ -12,17 +12,11 @@ IFS=. read user role <<EOF
 $1
 EOF
 
-opt=${gate}'/roles/'${role}'.opt'
-if [ -f ${opt} ]; then
-    grep -e '^[[:blank:]]*[*][[:blank:]]*:[[:blank:]]*' \
-         -e '^[[:blank:]]*'${user}'[[:blank:]]*:[[:blank:]]*' \
-         ${opt} \
-        | tail -n 1 \
-        | sed '/^.*:[[:blank:]]*/s///' \
-        | tr '\n' ' '
-fi
+cmd=$(grep ${gate}/roles/${role}.opt \
+    -e '^[[:blank:]]*[*][[:blank:]]*:[[:blank:]]*' \
+    -e '^[[:blank:]]*'${user}'[[:blank:]]*:[[:blank:]]*' \
+    | tail -n 1 | sed '/^.*:[[:blank:]]*/s///' | tr -d '\n')
 
-key=${gate}'/crews/'${user}'.pub'
-if [ -f ${key} ]; then
-    cat ${key}
-fi
+while read line; do
+    echo ${cmd} ${line}
+done < ${gate}/crews/${user}.pub
