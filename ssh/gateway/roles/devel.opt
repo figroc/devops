@@ -1,3 +1,5 @@
-chenp : command="ssh -p 9084 chenp@66.128.149.117"
-tcyang: command="ssh -p 9082 tcyang@66.128.149.117"
-ydfeng: command="ssh -p 9083 ydfeng@66.128.149.117"
+chenp  : command="ssh -p 9084 chenp@devel"
+tcyang : command="ssh -p 9082 tcyang@devel"
+ydfeng : command="ssh -p 9083 ydfeng@devel"
+yaxin  : command="ssh -p 9087 yaxin@devel"
+byzhang: command="ssh -p 9093 byzhang@devel"
