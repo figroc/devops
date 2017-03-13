@@ -7,7 +7,7 @@ gate='/etc/ssh/gate'
 
 case $1 in
     setup)
-        sudo apt-get install sshfs
+        apt-get install sshfs
         sed -i '/#user_allow_other[[:blank:]]*$/s/^#//' /etc/fuse.conf 
         ;;
 
