@@ -1,0 +1,2 @@
+let g:ycm_auto_trigger=0                                                        
+inoremap <A-Space> <C-X><C-U>
