@@ -12,6 +12,7 @@
 #
 
 # source ${BASH_SOURCE%/*}/vars.sh
+dops='devops'
 jail='/var/jail'
 gate='/etc/ssh/gate'
 pubs='https://raw.githubusercontent.com/figroc/devops/master/pub'
@@ -66,7 +67,7 @@ case $1 in
         case $2 in
             gate)
                 mkdir -p ${gate}/{sys,roles,crews}
-                chown devops:devops ${gate}/sys/
+                chown ${dops}:${dops} ${gate}/sys/
                 ;;
 
             jail)
@@ -199,12 +200,19 @@ case $1 in
         adir=${jail}${gate}/sys
 
         if mkdir -p ${adir}; then
-            chown devops:devops ${adir}
+            chown ${dops}:${dops} ${adir}
         fi
         if [ ! -f ${adir}/agent.id ]; then
             ssh-keygen -t rsa -b 4096 -N '' -C 'agent' -f ${adir}/agent
             mv ${adir}/agent ${adir}/agent.id
             chmod a+r ${adir}/agent.id
+        fi
+        if [ ! -z $3 ]; then
+            scp $3:${adir}/agent.pub $3.pub &&
+            scp $3.pub $2:${gate}/sys/ &&
+            rm $3.pub
+        elif [ ! -z $2 ]; then
+            scp ${adir}/agent.pub $2:${gate}/sys/$HOSTNAME.pub
         fi
         ;;
 
@@ -231,12 +239,19 @@ case $1 in
                 adir=${gate}/sys
 
                 if mkdir -p ${adir}; then
-                    chown devops:devops ${adir}
+                    chown ${dops}:${dops} ${adir}
                 fi
                 if [ ! -f ${adir}/agent.id ]; then
                     ssh-keygen -t rsa -b 4096 -N '' -C 'agent' -f ${adir}/agent
                     mv ${adir}/agent ${adir}/agent.id
-                    chown devops:devops ${adir}/agent.*
+                    chown ${dops}:${dops} ${adir}/agent.*
+                fi
+                if [ ! -z $3 ]; then
+                    scp $3:${adir}/agent.pub $3.pub &&
+                    scp $3.pub $2:${adir}/ &&
+                    rm $3.pub
+                elif [ ! -z $2 ]; then
+                    scp ${adir}/agent.pub $2:${adir}/$HOSTNAME.pub
                 fi
                 ;;
 

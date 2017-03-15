@@ -1,8 +1,10 @@
-if [ $# < 5 ]; then
-    echo 'usage: raid0.sh owner mnt-pt md-seq sd-seq ...'
+
+own='devops'
+mnt='/var/data'
+
+if [ $# < 3 ]; then
+    echo 'raid0.sh md-seq sd-seq ...'
 else
-    own=$1; shift
-    mnt=$1; shift
     rmd=$1; shift
     rno=$#; rsd=''
     while (($#)); do
@@ -19,11 +21,15 @@ else
         rsd=${rsd}' /dev/'$1'1'
         shift
     done
-    if mdadm --create --verbos /dev/${rmd} --level=stripe --raid-devices=${rno} ${rsd}; then
+
+    if mdadm --create --verbos /dev/${rmd} --level=stripe \
+        --raid-devices=${rno} ${rsd}; then
         mkfs.ext4 -v -m .1 -b 4096 /dev/${rmd}
         mdadm --detail --scan | tee -a /etc/mdadm/mdadm.conf
         uid=$(blkid /dev/${rmd} | grep -o 'UUID="[^"]+"')
-        echo ${uid//\"/}'   ext4    '${mnt}'    defaults    0   2' | tee -a /etc/fstab
+        echo ${uid//\"/}'   ext4    '${mnt}'    defaults    0   2'\
+            | tee -a /etc/fstab
+
         mkdir -p ${mnt}
         touch ${mnt}/WARNING
         chown ${own}:${own} ${mnt}

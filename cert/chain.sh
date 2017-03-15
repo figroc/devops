@@ -1,3 +1,5 @@
+#!/bin/bash
+
 if [[ ! -f "$1" ]]; then
     echo "$1 is not a file or does not exist"
     exit 1
@@ -10,7 +12,7 @@ if [[ $? -gt 0 ]]; then
 fi
 
 mkdir .temp_cert_dir
-awk '{print > (".temp_cert_dir/cert" (1+n) ".pem")} /-----END CERTIFICATE-----/ {n++}' "$1"
+awk '{print > (".temp_cert_dir/cert" (1+n) ".pem")} /-----END CERTIFICATE-----/ {n++}' $1
 
 j=0
 for i in .temp_cert_dir/cert*.pem ; do

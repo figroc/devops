@@ -1,20 +1,22 @@
-#!/bin/sh
+#!/bin/bash
+
 echo "TestEnvRootCA: "
 read CONFIRM
 if ("$CONFIRM" != "NEW"); then
     exit 1
 fi
 
-mkdir -p ca/certs
-mkdir -p ca/crl
-mkdir -p ca/db
-touch ca/db/index.txt
-touch ca/db/index.txt.attr
-echo FACE > ca/db/serial
-echo "00" > ca/crl/number
+odir=${BASH_SOURCE%/*}
+conf=${odir}/openssl.conf
+ca_d=${odir}/ca
+ca_f=${ca_d}/ca
 
-openssl genrsa -out ca/ca.key 4096
-openssl req -config openssl.conf -extensions v3_ca -key ca/ca.key \
+mkdir -p ${ca_d}/{db,crl,certs}
+touch ${ca_d}/db/{serial,index.txt,index.txt.attr}
+touch ${ca_d}/crl/number
+
+openssl genrsa -out ${ca_f}.key 8192
+openssl req -config ${conf} -extensions v3_ca -key ${ca_f}.key \
     -new -x509 -days 7300 -sha256 -subj "/CN=TestEnvRootCA" \
-    -out ca/ca.crt  
-openssl ca -config openssl.conf -gencrl -out ca/crl/ca.crl -crldays 30 
+    -out ${ca_f}.crt  
+openssl ca -config ${conf} -gencrl -out ${ca_f}.crl -crldays 30 
