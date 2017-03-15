@@ -1,13 +1,13 @@
 Host sftp
     User sftp
-    ProxyJump chenp.sftp@w.figroc.me
+    ProxyJump user.sftp@w.cloudbrain.cc
 
-Host *.figroc.me
+Host *.cloudbrain.cc
     ForwardAgent yes
 
 Host *
-    IdentityFile ~/.ssh/id_rsa
-    AddKeysToAgent yes
     UseKeychain yes
+    AddKeysToAgent yes
+    IdentityFile ~/.ssh/id_rsa
     ServerAliveInterval 30
     ServerAliveCountMax 5
