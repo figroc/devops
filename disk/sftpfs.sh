@@ -18,8 +18,8 @@ case $1 in
 
         sed -i '/sshfs sftp@sftp: .*/d' /etc/rc.local
         sed -i '/exit 0/d' /etc/rc.local
-        echo "sshfs sftp@sftp: ${mnt} -o allow_other,reconnect,nonempty,"\
-             "IdentityFile=${gate}/sys/agent.id " >> /etc/rc.local
+        echo "sshfs sftp@sftp: ${mnt} -o allow_other,reconnect,nonempty" \
+             "-o IdentityFile=${gate}/sys/agent.id" >> /etc/rc.local
         echo "exit 0" >> /etc/rc.local
         ;;
 
