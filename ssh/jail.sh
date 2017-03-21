@@ -91,8 +91,8 @@ case $1 in
                 mkdir -p ${jail}/usr/etc/ssh
                 mkdir -p ${jail}/usr/lib/{openssh,rssh}
                 chown root:root ${jail}
-                chmod go-w ${jail}
-                chmod o-r ${jail} ${jail}/home
+                chmod go-rw ${jail}
+                chmod o-r ${jail}/home
 
                 # devices
                 mknod -m 622 ${jail}/dev/console c 5 1
