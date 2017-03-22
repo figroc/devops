@@ -70,7 +70,11 @@ function update_pkey {
 
 function update_jkey {
     if wget -O ${gate}/projs/$2/$1.pub ${pubs}/projs/$2/$1.pub; then
-        chown $2:$2 ${gate}/projs/$2/$1.pub
+        if [[ $(grep '^'$2':' /etc/passwd) ]]; then
+            chown $2:$2 ${gate}/projs/$2/$1.pub
+        elif [[ $(grep '^'$1'\.'$2':' /etc/passwd) ]]; then
+            chown $1.$2:$2 ${gate}/projs/$2/$1.pub
+        fi
     fi
 }
 
