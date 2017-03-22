@@ -10,13 +10,9 @@ Match Group jail
     AuthorizedKeysCommandUser devops
 
 Match Group sftp
-    ChrootDirectory /var/jail/data
-    ForceCommand internal-sftp -d /
+    ChrootDirectory /var/jail
+    ForceCommand internal-sftp -d /data
 
 Match Group greennet
-    ChrootDirectory /var/jail/data/projs/greennet
-    ForceCommand internal-sftp -d /
-
-Match Group easyops
-    ChrootDirectory /var/jail/data/projs/easyops
-    ForceCommand internal-sftp -d /
+    ChrootDirectory /var/jail/home/%u
+    ForceCommand internal-sftp -d /data
