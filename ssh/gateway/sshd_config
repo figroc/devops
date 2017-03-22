@@ -8,12 +8,10 @@ Match Group jail
     AuthorizedKeysCommandUser devops
     ChrootDirectory /var/jail
 
-Match Group sftp
+Match Group sftp,projs
     AllowTcpForwarding yes
     PermitOpen sftp:22
 
 Match Group projs
     X11Forwarding no
     PermitTTY no
-    AllowTcpForwarding yes
-    PermitOpen sftp:22
