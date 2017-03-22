@@ -1,9 +1,9 @@
 #!/bin/bash
 #
-# setup sftp proj dir
+# setup sftp project dir
 #
 # Usage: 
-#   proj.sh proj
+#   project.sh proj
 #
 
 jail='/var/jail'
@@ -13,6 +13,6 @@ chown -R root:root ${jail}/home/${proj}
 chmod -R o-r ${jail}/home/${proj}
 mkdir -p ${jail}/home/${proj}/data
 chown -R ${proj}:${proj} ${jail}/home/${proj}/data
-mkdir -p ${jail}/data/projs
-cd ${jail}/data/projs && \
+mkdir -p ${jail}/data/projects
+cd ${jail}/data/projects && \
 ln -srf ../../home/${proj}/data ${proj}
