@@ -6,9 +6,17 @@ AllowAgentForwarding no
 AllowTcpForwarding no
 
 Match Group jail
-    ChrootDirectory /var/jail
-
-Match Group sftp
     AuthorizedKeysCommand /etc/ssh/gate/akc.sh
     AuthorizedKeysCommandUser devops
-    ForceCommand internal-sftp -d /data
+
+Match Group sftp
+    ChrootDirectory /var/jail/data
+    ForceCommand internal-sftp -d /
+
+Match Group greennet
+    ChrootDirectory /var/jail/data/projs/greennet
+    ForceCommand internal-sftp -d /
+
+Match Group easyops
+    ChrootDirectory /var/jail/data/projs/easyops
+    ForceCommand internal-sftp -d /
