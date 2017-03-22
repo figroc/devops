@@ -18,7 +18,7 @@ opt=${gate}/roles/${role}.opt
 for pi in ${!projs[@]}; do
     if [[ ${projs[${pi}]} == ${role} ]]; then
         pub=${gate}/projs/${role}/${user}.pub
-        opt=${gate}/roles/tunnel.opt
+        opt=${gate}/roles/none.opt
         break
     fi
 done
