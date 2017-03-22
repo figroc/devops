@@ -3,12 +3,11 @@
 # setup ssh jail
 #
 # Usage:
-#     jail.sh setup gate
-#     jail.sh setup jail
-#     jail.sh crew [user] [role]
-#     jail.sh role [role] [user]
-#     jail.sh esc crew [user]
-#     jail.sh esc role [role]
+#     jail.sh setup [gate|jail]
+#     jail.sh crew <user> <role>
+#     jail.sh proj <proj> <user>
+#     jail.sh role <role> [crew|proj] <user>
+#     jail.sh esc [crew|role] <name>
 #
 
 # source ${BASH_SOURCE%/*}/vars.sh
@@ -30,6 +29,14 @@ function shadow_home {
         sed -i '/^'$1':.*/s@:'${jail}'@:@' /etc/passwd
     else
         sed -i '/^'$1'\.'$2':.*/s@:'${jail}'@:@' /etc/passwd
+    fi
+}
+
+function shadow_shell {
+    if [ -z $2 ]; then
+        sed -i '/^'$1':.*/s@:/bin/bash$@:/bin/true@' /etc/passwd
+    else
+        sed -i '/^'$1'\.'$2':.*/s@:/bin/bash$@:/bin/true@' /etc/passwd
     fi
 }
 
@@ -61,12 +68,18 @@ function update_pkey {
     fi
 }
 
+function update_jkey {
+    if wget -O ${gate}/projs/$2/$1.pub ${pubs}/$2/$1.pub; then
+        chown $1.$2:$2 ${gate}/projs/$2/$1.pub
+    fi
+}
+
 # command switch
 case $1 in
     setup)
         case $2 in
             gate)
-                mkdir -p ${gate}/{sys,roles,crews}
+                mkdir -p ${gate}/{sys,roles,crews,projs}
                 chown ${dops}:${dops} ${gate}/sys/
                 ;;
 
@@ -136,9 +149,6 @@ case $1 in
                 chroot_cmds /usr/bin ${cmdu}
                 chroot_cmds /usr/lib ${libu}
                 ;;
-
-            *)
-                ;;
         esac
         ;;
 
@@ -182,18 +192,61 @@ case $1 in
         fi
         ;;
 
-    role)
-        role=$2
+    proj)
+        proj=$2
         user=$3
 
-        if adduser --disabled-password --gecos '' --home ${jail}/home/${role} ${role}; then
-            sed -i '/^'${role}':.*/s@:'${jail}'@:@' /etc/passwd
-            usermod -a -G jail ${role}
-            shadow_home ${role}
-            shadow_user ${role}
-            shadow_group jail ${role}
+        if addgroup projs; then
+            shadow_group projs
         fi
-        update_pkey ${user} ${role}
+
+        if [ ! -z ${proj} ]; then
+            mkdir -p ${gate}/projs/${proj}
+            if addgroup ${proj}; then
+                shadow_group ${proj}
+            fi
+        fi
+
+        if [ ! -z ${user} ]; then
+            if adduser --disabled-password --gecos '' --home ${jail}/home/${proj} \
+                --ingroup ${proj} --force-badname ${user}.${proj}; then
+                chmod -R g+w ${jail}/home/${proj}
+                usermod -a -G jail projs ${user}.${proj}
+                shadow_home ${user} ${proj}
+                shadow_shell ${user} ${proj}
+                shadow_user ${user} ${proj}
+                shadow_group jail projs ${proj}
+            fi
+            update_jkey ${user} ${proj}
+        fi
+        ;;
+
+    role)
+        role=$2
+        if [ ! -z ${role} ]; then
+            if adduser --disabled-password --gecos '' \
+                --home ${jail}/home/${role} ${role}; then
+                usermod -a -G jail ${role}
+                shadow_home ${role}
+                shadow_user ${role}
+                shadow_group jail ${role}
+            fi
+        fi
+
+        user=$4
+        if [ ! -z ${user} ]; then
+            case $3 in
+                crew)
+                    mkdir -p ${gate}/crews
+                    update_pkey ${user} ${role}
+                    ;;
+
+                proj)
+                    mkdir -p ${gate}/projs/${role}
+                    update_jkey ${user} ${role}
+                    ;;
+            esac
+        fi
         ;;
 
     agent)
@@ -221,16 +274,20 @@ case $1 in
 
                 mkdir -p ${gate}/crews
                 addgroup crews
-                if adduser --disabled-password --gecos '' ${user}; then
-                    usermod -a -G crews ${user}
+                if [ ! -z ${user} ]; then
+                    if adduser --disabled-password --gecos '' ${user}; then
+                        usermod -a -G crews ${user}
+                    fi
+                    update_pkey ${user}
                 fi
-                update_pkey ${user}
                 ;;
 
             role)
                 role=$3
 
-                adduser --disabled-password --gecos '' ${role}
+                if [ ! -z ${role} ]; then
+                    adduser --disabled-password --gecos '' ${role}
+                fi
                 ;;
 
             agent)
@@ -250,12 +307,6 @@ case $1 in
                     scp ${adir}/agent.pub $2:${adir}/$HOSTNAME.pub
                 fi
                 ;;
-
-            *)
-                ;;
         esac
-        ;;
-
-    *)
         ;;
 esac

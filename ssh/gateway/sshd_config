@@ -7,9 +7,15 @@ Match Group jail
     ChrootDirectory /var/jail
 
 Match Group crews
-    AuthorizedKeysCommand /etc/ssh/gate/akc-crew.sh
+    AuthorizedKeysCommand /etc/ssh/gate/akc.sh
     AuthorizedKeysCommandUser devops
 
 Match Group sftp
+    AllowTcpForwarding yes
+    PermitOpen sftp:22
+
+Match Group projs
+    X11Forwarding no
+    PermitTTY no
     AllowTcpForwarding yes
     PermitOpen sftp:22

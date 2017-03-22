@@ -3,14 +3,14 @@
 # used for AuthorizedKeysCommand in sshd_config
 #
 # Usage: 
-#   akc-sys.sh user
+#   akc.sh user
 #
 
 gate='/etc/ssh/gate'
 
-for role in play; do
-    if [ ${role} == $1 ]; then
+case $1 in
+    play)
         cat ${gate}/sys/*.pub ${gate}/crews/*.pub 2>/dev/null
         exit 0
-    fi
-done
+        ;;
+esac

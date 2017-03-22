@@ -3,20 +3,31 @@
 # used for AuthorizedKeysCommand in sshd_config
 #
 # Usage: 
-#   akc-crew.sh user
+#   akc.sh user
 #
 
 gate='/etc/ssh/gate'
+projs=('greennet' 'easyops')
 
 IFS=. read user role <<EOF
 $1
 EOF
 
-cmd=$(grep ${gate}/roles/${role}.opt \
+pub=${gate}/crews/${user}.pub
+opt=${gate}/roles/${role}.opt
+for pi in ${!projs[@]}; do
+    if [[ ${projs[${pi}]} == ${role} ]]; then
+        pub=${gate}/projs/${role}/${user}.pub
+        opt=${gate}/roles/tunnel.opt
+        break
+    fi
+done
+
+cmd=$(grep ${opt} \
     -e '^[[:blank:]]*[*][[:blank:]]*:[[:blank:]]*' \
     -e '^[[:blank:]]*'${user}'[[:blank:]]*:[[:blank:]]*' \
     | tail -n 1 | sed '/^.*:[[:blank:]]*/s///' | tr -d '\n')
 
 while read line; do
     echo ${cmd} ${line}
-done < ${gate}/crews/${user}.pub
+done < ${pub}

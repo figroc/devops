@@ -4,5 +4,5 @@ AllowAgentForwarding yes
 AllowTcpForwarding no
 
 Match Group play
-    AuthorizedKeysCommand /etc/ssh/gate/akc-sys.sh
+    AuthorizedKeysCommand /etc/ssh/gate/akc.sh
     AuthorizedKeysCommandUser devops
