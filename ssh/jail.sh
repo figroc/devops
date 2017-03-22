@@ -69,7 +69,7 @@ function update_pkey {
 }
 
 function update_jkey {
-    if wget -O ${gate}/projs/$2/$1.pub ${pubs}/$2/$1.pub; then
+    if wget -O ${gate}/projs/$2/$1.pub ${pubs}/projs/$2/$1.pub; then
         chown $1.$2:$2 ${gate}/projs/$2/$1.pub
     fi
 }
