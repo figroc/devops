@@ -211,7 +211,7 @@ case $1 in
             if adduser --disabled-password --gecos '' --home ${jail}/home/${proj} \
                 --ingroup ${proj} --force-badname ${user}.${proj}; then
                 chmod -R g+w ${jail}/home/${proj}
-                usermod -a -G jail projs ${user}.${proj}
+                usermod -a -G jail,projs ${user}.${proj}
                 shadow_home ${user} ${proj}
                 shadow_shell ${user} ${proj}
                 shadow_user ${user} ${proj}
