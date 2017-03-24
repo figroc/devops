@@ -7,7 +7,7 @@
 #
 
 gate='/etc/ssh/gate'
-projs=('greennet' 'easyops')
+projs=('greenet' 'easyops')
 
 IFS=. read user role <<EOF
 $1
