@@ -13,6 +13,6 @@ Match Group sftp
     ChrootDirectory /var/jail
     ForceCommand internal-sftp -d /data
 
-Match Group greennet
+Match Group projs
     ChrootDirectory /var/jail/home/%u
     ForceCommand internal-sftp -d /data

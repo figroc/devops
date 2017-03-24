@@ -246,6 +246,10 @@ case $1 in
                     ;;
 
                 proj)
+                    groupadd projs
+                    if usermod -a -G projs ${role}; then
+                        shadow_group projs
+                    fi
                     mkdir -p ${gate}/projs/${role}
                     update_jkey ${user} ${role}
                     ;;
