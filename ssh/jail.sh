@@ -88,7 +88,7 @@ case $1 in
                 ;;
 
             jail)
-                cmds='bash sh'
+                cmds='bash sh true false'
                 cmdu='ssh ssh-agent scp sftp rssh'
                 libu='openssh/sftp-server rssh/rssh_chroot_helper'
 
