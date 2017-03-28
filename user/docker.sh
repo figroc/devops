@@ -20,7 +20,9 @@ fi
 mkdir -p ${home}/${user}/.ssh
 wget -O ${home}/${user}/.ssh/authorized_keys ${pubs}/${user}.pub
 
-mkdir -p /home/${user}
+if mkdir -p /home/${user}; then
+    chown ${user}:${user} /home/${user}
+fi
 if mount --bind ${home}/${user} /home/${user}; then
     echo ${home}/${user}$'\t'/home/${user}$'\tnone\tbind\t0\t0' \
         | tee -a /etc/fstab
