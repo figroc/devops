@@ -1,3 +1,7 @@
+#!/bin/bash
+#
+# raid0 disk setup
+#
 
 own='devops'
 mnt='/var/data'
