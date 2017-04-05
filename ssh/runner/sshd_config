@@ -1,0 +1,7 @@
+
+PasswordAuthentication no
+AllowTcpForwarding no
+
+Match Group crews
+    AuthorizedKeysCommand /etc/ssh/gate/akc.sh
+    AuthorizedKeysCommandUser devops
