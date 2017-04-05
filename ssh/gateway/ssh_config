@@ -2,3 +2,7 @@ Host sftp play devel
     ForwardAgent yes
     StrictHostKeyChecking no
     UserKnownHostsFile=/dev/null
+
+Host *
+    ServerAliveInterval 30
+    ServerAliveCountMax 5
