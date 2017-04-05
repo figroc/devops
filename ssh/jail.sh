@@ -269,9 +269,9 @@ case $1 in
             chmod a+r ${adir}/agent.id
         fi
         if [ ! -z $3 ]; then
-            scp -3 $3:${adir}/agent.pub $2:${gate}/sys/$3.pub
+            scp -3 ${dops}@$3:${adir}/agent.pub ${dops}@$2:${gate}/sys/$3.pub
         elif [ ! -z $2 ]; then
-            scp ${adir}/agent.pub $2:${gate}/sys/$HOSTNAME.pub
+            scp ${adir}/agent.pub ${dops}@$2:${gate}/sys/$HOSTNAME.pub
         fi
         ;;
 
@@ -310,9 +310,9 @@ case $1 in
                     chown ${dops}:${dops} ${adir}/agent.*
                 fi
                 if [ ! -z $3 ]; then
-                    scp -3 $3:${adir}/agent.pub $2:${adir}/$3.pub
+                    scp -3 ${dops}@$3:${adir}/agent.pub ${dops}@$2:${adir}/$3.pub
                 elif [ ! -z $2 ]; then
-                    scp ${adir}/agent.pub $2:${adir}/$HOSTNAME.pub
+                    scp ${adir}/agent.pub ${dops}@$2:${adir}/$HOSTNAME.pub
                 fi
                 ;;
         esac
