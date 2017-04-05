@@ -30,8 +30,8 @@ else
         --raid-devices=${rno} ${rsd}; then
         mkfs.ext4 -v -m .1 -b 4096 /dev/${rmd}
         mdadm --detail --scan | tee -a /etc/mdadm/mdadm.conf
-        uid=$(blkid /dev/${rmd} | grep -o 'UUID="[^"]+"')
-        echo ${uid//\"/}'   ext4    '${mnt}'    defaults    0   2'\
+        uid=$(blkid /dev/${rmd} | grep -o 'UUID="[^"]*"')
+        echo ${uid//\"/}$'\t'${mnt}$'\text4\tdefaults\t0\t2'\
             | tee -a /etc/fstab
 
         mkdir -p ${mnt}
