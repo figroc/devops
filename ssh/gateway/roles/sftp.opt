@@ -1,1 +1,1 @@
- * : command="sftp -i /etc/ssh/gate/sys/agent.id sftp@sftp"
+ * : command="sftp -q -i /etc/ssh/gate/sys/agent.id sftp@sftp"

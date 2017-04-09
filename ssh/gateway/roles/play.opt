@@ -1,1 +1,1 @@
- * : command="ssh -i /etc/ssh/gate/sys/agent.id play@play"
+ * : command="ssh -q -i /etc/ssh/gate/sys/agent.id play@play"
