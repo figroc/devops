@@ -309,10 +309,10 @@ case $1 in
                     mv ${adir}/agent ${adir}/agent.id
                     chown ${dops}:${dops} ${adir}/agent.*
                 fi
-                if [ ! -z $3 ]; then
-                    scp -3 ${dops}@$3:${adir}/agent.pub ${dops}@$2:${adir}/$3.pub
-                elif [ ! -z $2 ]; then
-                    scp ${adir}/agent.pub ${dops}@$2:${adir}/$HOSTNAME.pub
+                if [ ! -z $4 ]; then
+                    scp -3 ${dops}@$4:${adir}/agent.pub ${dops}@$3:${adir}/$4.pub
+                elif [ ! -z $3 ]; then
+                    scp ${adir}/agent.pub ${dops}@$3:${adir}/$HOSTNAME.pub
                 fi
                 ;;
         esac
