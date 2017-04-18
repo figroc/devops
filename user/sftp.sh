@@ -16,6 +16,7 @@ mkdir -p ${jail}/home/${proj}/data
 mkdir -p ${jail}/home/${proj}/data/delivery
 chown -R ${proj}:${proj} ${jail}/home/${proj}/data
 chown -R sftp:sftp ${jail}/home/${proj}/data/delivery
+chmod -R g+w ${jail}/home/${proj}/data
 chmod -R a+r ${jail}/home/${proj}/data
 
 mkdir -p ${jail}/data/projects/${proj}
