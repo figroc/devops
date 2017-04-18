@@ -7,7 +7,7 @@
 #
 
 gate='/etc/ssh/gate'
-projs=('greenet' 'easyops')
+projs=("greenet" "easyops" "360")
 
 IFS=. read user role <<EOF
 $1
@@ -15,8 +15,8 @@ EOF
 
 pub=${gate}/crews/${user}.pub
 opt=${gate}/roles/${role}.opt
-for pi in ${!projs[@]}; do
-    if [[ ${projs[${pi}]} == ${role} ]]; then
+for pi in ${projs[@]}; do
+    if [[ ${pi} -eq ${role} ]]; then
         pub=${gate}/projs/${role}/${user}.pub
         opt=${gate}/roles/none.opt
         break

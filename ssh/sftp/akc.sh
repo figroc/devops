@@ -7,7 +7,7 @@
 #
 
 gate='/etc/ssh/gate'
-projs=('greenet' 'easyops')
+projs=("greenet" "easyops" "360")
 
 case $1 in
     sftp)
@@ -15,7 +15,7 @@ case $1 in
         ;;
     *)
         for pi in ${projs[@]}; do
-            if [[ ${projs[${pi}]} == $1 ]]; then
+            if [[ ${pi} -eq $1 ]]; then
                 cat ${gate}/projs/$1/*.pub 2>/dev/null
                 break
             fi
