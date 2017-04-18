@@ -16,7 +16,7 @@ EOF
 pub=${gate}/crews/${user}.pub
 opt=${gate}/roles/${role}.opt
 for pi in ${projs[@]}; do
-    if [[ ${pi} -eq ${role} ]]; then
+    if [[ ${pi} == ${role} ]]; then
         pub=${gate}/projs/${role}/${user}.pub
         opt=${gate}/roles/none.opt
         break

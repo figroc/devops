@@ -15,7 +15,7 @@ case $1 in
         ;;
     *)
         for pi in ${projs[@]}; do
-            if [[ ${pi} -eq $1 ]]; then
+            if [[ ${pi} == $1 ]]; then
                 cat ${gate}/projs/$1/*.pub 2>/dev/null
                 break
             fi
