@@ -168,7 +168,7 @@ case $1 in
         fi
 
         if [ ! -z ${user} ]; then
-            if addgroup ${user}; then
+            if addgroup --force-badname ${user}; then
                 shadow_group ${user}
             fi
             if adduser --disabled-password --gecos '' --home ${jail}/home/${user} \
@@ -183,7 +183,7 @@ case $1 in
         fi
 
         if [ ! -z ${role} ]; then
-            if addgroup ${role}; then
+            if addgroup --force-badname ${role}; then
                 shadow_group ${role}
             fi
             if adduser --disabled-password --gecos '' --home ${jail}/home/${user} \
@@ -206,7 +206,7 @@ case $1 in
 
         if [ ! -z ${proj} ]; then
             mkdir -p ${gate}/projs/${proj}
-            if addgroup ${proj}; then
+            if addgroup --force-badname ${proj}; then
                 shadow_group ${proj}
             fi
         fi
@@ -228,8 +228,8 @@ case $1 in
     role)
         role=$2
         if [ ! -z ${role} ]; then
-            if adduser --disabled-password --gecos '' \
-                --home ${jail}/home/${role} ${role}; then
+            if adduser --disabled-password --gecos '' --home ${jail}/home/${role} \
+                --force-badname ${role}; then
                 usermod -a -G jail ${role}
                 shadow_home ${role}
                 shadow_user ${role}
@@ -246,7 +246,7 @@ case $1 in
                     ;;
 
                 proj)
-                    groupadd projs
+                    addgroup projs
                     if usermod -a -G projs ${role}; then
                         shadow_group projs
                     fi
