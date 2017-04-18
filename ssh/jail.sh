@@ -172,7 +172,7 @@ case $1 in
                 shadow_group ${user}
             fi
             if adduser --disabled-password --gecos '' --home ${jail}/home/${user} \
-                --ingroup ${user} ${user}; then
+                --ingroup ${user} --force-badname ${user}; then
                 chmod -R g+rw ${jail}/home/${user}
                 usermod -a -G jail,crews ${user}
                 shadow_home ${user}
