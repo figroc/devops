@@ -5,6 +5,7 @@
 
 mnt='/var/data/mnt/docker'
 
+usermod -G docker -a devops
 systemctl stop docker
 if mkdir -p ${mnt}; then
     chown root:root ${mnt}
