@@ -38,5 +38,6 @@ else
         touch ${mnt}/WARNING
         chown ${own}:${own} ${mnt}
         mount -a
+        chown ${own}:${own} ${mnt}
     fi
 fi
