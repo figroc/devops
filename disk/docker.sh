@@ -3,13 +3,19 @@
 # docker storage setup
 #
 
-mnt='/var/data/mnt/docker'
+mnt='/var/data/mnt'
+dkr=${mnt}'/docker'
 
+apt-get -y install docker.io
 usermod -G docker -a devops
+
 systemctl stop docker
 if mkdir -p ${mnt}; then
-    chown root:root ${mnt}
-    chmod go-rw ${mnt}
+    chown devops:devops ${mnt}
+fi
+if mkdir -p ${dkr}; then
+    chown root:root ${dkr}
+    chmod go-rw ${dkr}
 fi
 (   echo '{'
     echo '  "graph": "'${mnt}'",'
@@ -20,3 +26,4 @@ fi
     echo '}'
 ) | tee /etc/docker/daemon.json
 systemctl start docker
+service docker restart

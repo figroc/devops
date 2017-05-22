@@ -9,7 +9,7 @@ mnt='/var/sftp'
 
 case $1 in
     setup)
-        apt-get install sshfs
+        apt-get -y install sshfs
         sed -i '/#user_allow_other/s/#//' /etc/fuse.conf
 
         mkdir -p ${mnt}
