@@ -1,4 +1,4 @@
-Host sftp play devel runner camp
+Host sftp play devel runner camp deve2
     ForwardAgent yes
     StrictHostKeyChecking no
     UserKnownHostsFile=/dev/null
