@@ -3,9 +3,15 @@
 # enable docker user
 #
 
-user=$1
-home='/var/data/home'
-pubs='https://raw.githubusercontent.com/figroc/devops/master/pub'
+if [ -z ${1} ]; then
+    echo ${0}' <user>'
+    exit 1
+fi
+
+source $(dirname ${0})/../env
+
+user=${1}
+home=${data}'/home'
 
 if [ -z /etc/sudoers.d/docker ]; then
     mkdir -p /etc/sudoers.d

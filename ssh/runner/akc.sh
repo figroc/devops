@@ -8,4 +8,4 @@
 
 gate='/etc/ssh/gate'
 
-cat ${gate}/crews/$1.pub 2>/dev/null
+cat ${gate}/crews/${1}.pub 2>/dev/null

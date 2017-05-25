@@ -1,15 +1,18 @@
 #!/bin/bash
+#
+# install mysql python connector
+#
 
 function install_pkg {
-  if [ ! -f $2 ]; then
-    wget $1/$2
+  if [ ! -f ${2} ]; then
+    wget ${1}/${2}
   fi
-  if [ ! -f $2 ]; then
-    echo 'download failed: '$2 >&2
-  elif md5sum $2 | grep $3; then
-    dpkg -i $2
+  if [ ! -f ${2} ]; then
+    echo 'download failed: '${2} >&2
+  elif md5sum ${2} | grep ${3}; then
+    dpkg -i ${2}
   else
-    echo 'checksum error: '$2 >&2
+    echo 'checksum error: '${2} >&2
   fi
 }
 

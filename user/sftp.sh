@@ -2,12 +2,15 @@
 #
 # setup sftp project dir
 #
-# Usage: 
-#   sftp.sh proj
-#
 
-proj=$1
-jail='/var/jail'
+if [ -z ${1} ]; then
+    echo ${0}' <project>'
+    exit 1
+fi
+
+source $(dirname ${0})/../env
+
+proj=${1}
 
 chown -R root:root ${jail}/home/${proj}
 chmod -R o-r ${jail}/home/${proj}

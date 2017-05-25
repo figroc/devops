@@ -7,84 +7,82 @@
 #     jail.sh crew <user> <role>
 #     jail.sh proj <proj> <user>
 #     jail.sh role <role> [crew|proj] <user>
+#     jail.sh agent [copy-to] [copy-from]
 #     jail.sh esc [crew|role] <name>
+#     jail.sh esc agent [copy-to] [copy-from]
 #
 
-# source ${BASH_SOURCE%/*}/vars.sh
-dops='devops'
-jail='/var/jail'
-gate='/etc/ssh/gate'
-pubs='https://raw.githubusercontent.com/figroc/devops/master/pub'
+source $(dirname ${0})/../env
 
 # functions
 function chroot_cmds {
-    for cmd in $2; do
-        cp $1/${cmd} ${jail}/$1/
-        l2chroot $1/${cmd}
+    for cmd in ${2}; do
+        cp ${1}/${cmd} ${jail}/${1}/
+        l2chroot ${1}/${cmd}
     done
 }
 
 function shadow_home {
-    if [ -z $2 ]; then
-        sed -i '/^'$1':.*/s@:'${jail}'@:@' /etc/passwd
+    if [ -z ${2} ]; then
+        sed -i '/^'${1}':.*/s@:'${jail}'@:@' /etc/passwd
     else
-        sed -i '/^'$1'\.'$2':.*/s@:'${jail}'@:@' /etc/passwd
+        sed -i '/^'${1}'\.'${2}':.*/s@:'${jail}'@:@' /etc/passwd
     fi
 }
 
 function shadow_shell {
-    if [ -z $2 ]; then
-        sed -i '/^'$1':.*/s@:/bin/bash$@:/bin/true@' /etc/passwd
+    if [ -z ${2} ]; then
+        sed -i '/^'${1}':.*/s@:/bin/bash$@:/bin/true@' /etc/passwd
     else
-        sed -i '/^'$1'\.'$2':.*/s@:/bin/bash$@:/bin/true@' /etc/passwd
+        sed -i '/^'${1}'\.'${2}':.*/s@:/bin/bash$@:/bin/true@' /etc/passwd
     fi
 }
 
 function shadow_user {
-    if [ -z $2 ]; then
-        sed -i '/^'$1':.*/d' ${jail}/etc/passwd
-        grep '^'$1':' /etc/passwd | tee -a ${jail}/etc/passwd
+    if [ -z ${2} ]; then
+        sed -i '/^'${1}':.*/d' ${jail}/etc/passwd
+        grep '^'${1}':' /etc/passwd | tee -a ${jail}/etc/passwd
     else
-        sed -i '/^'$1'\.'$2':.*/d' ${jail}/etc/passwd
-        grep '^'$1'\.'$2':' /etc/passwd | tee -a ${jail}/etc/passwd
+        sed -i '/^'${1}'\.'${2}':.*/d' ${jail}/etc/passwd
+        grep '^'${1}'\.'${2}':' /etc/passwd | tee -a ${jail}/etc/passwd
     fi
 }
 
 function shadow_group {
-    while (($#)); do
-        sed -i '/^'$1':.*/d' ${jail}/etc/group
-        grep '^'$1':' /etc/group | tee -a ${jail}/etc/group
+    while ((${#})); do
+        sed -i '/^'${1}':.*/d' ${jail}/etc/group
+        grep '^'${1}':' /etc/group | tee -a ${jail}/etc/group
         shift
     done
 }
 
 function update_pkey {
-    if wget -O ${gate}/crews/$1.pub ${pubs}/$1.pub; then
-        if [ -z $2 ]; then
-            chown $1:$1 ${gate}/crews/$1.pub
+    if wget -O ${gate}/crews/${1}.pub ${pubs}/${1}.pub; then
+        if [ -z ${2} ]; then
+            chown ${1}:${1} ${gate}/crews/${1}.pub
         else
-            chown $2:$2 ${gate}/crews/$1.pub
+            chown ${2}:${2} ${gate}/crews/${1}.pub
         fi
     fi
 }
 
 function update_jkey {
-    if wget -O ${gate}/projs/$2/$1.pub ${pubs}/projs/$2/$1.pub; then
-        if [[ $(grep '^'$2':' /etc/passwd) ]]; then
-            chown $2:$2 ${gate}/projs/$2/$1.pub
-        elif [[ $(grep '^'$1'\.'$2':' /etc/passwd) ]]; then
-            chown $1.$2:$2 ${gate}/projs/$2/$1.pub
+    if wget -O ${gate}/projs/${2}/${1}.pub ${pubs}/projs/${2}/${1}.pub; then
+        if [[ $(grep '^'${2}':' /etc/passwd) ]]; then
+            chown ${2}:${2} ${gate}/projs/${2}/${1}.pub
+        elif [[ $(grep '^'${1}'\.'${2}':' /etc/passwd) ]]; then
+            chown ${1}.${2}:${2} ${gate}/projs/${2}/${1}.pub
         fi
     fi
 }
 
 # command switch
-case $1 in
+case ${1} in
     setup)
-        case $2 in
+        case ${2} in
             gate)
                 mkdir -p ${gate}/{sys,roles,crews,projs}
-                chown ${dops}:${dops} ${gate}/sys/
+                chown ${devops}:${devops} ${gate}/sys/
                 ;;
 
             jail)
@@ -157,8 +155,8 @@ case $1 in
         ;;
 
     crew)
-        user=$2
-        role=$3
+        user=${2}
+        role=${3}
 
         mkdir -p ${gate}/roles
         mkdir -p ${gate}/crews
@@ -197,8 +195,8 @@ case $1 in
         ;;
 
     proj)
-        proj=$2
-        user=$3
+        proj=${2}
+        user=${3}
 
         if addgroup projs; then
             shadow_group projs
@@ -226,7 +224,7 @@ case $1 in
         ;;
 
     role)
-        role=$2
+        role=${2}
         if [ ! -z ${role} ]; then
             if adduser --disabled-password --gecos '' \
                 --home ${jail}/home/${role} ${role}; then
@@ -237,9 +235,9 @@ case $1 in
             fi
         fi
 
-        user=$4
+        user=${4}
         if [ ! -z ${user} ]; then
-            case $3 in
+            case ${3} in
                 crew)
                     mkdir -p ${gate}/crews
                     update_pkey ${user} ${role}
@@ -261,24 +259,24 @@ case $1 in
         adir=${jail}${gate}/sys
 
         if mkdir -p ${adir}; then
-            chown ${dops}:${dops} ${adir}
+            chown ${devops}:${devops} ${adir}
         fi
         if [ ! -f ${adir}/agent.id ]; then
             ssh-keygen -t rsa -b 4096 -N '' -C 'agent' -f ${adir}/agent
             mv ${adir}/agent ${adir}/agent.id
             chmod a+r ${adir}/agent.id
         fi
-        if [ ! -z $3 ]; then
-            scp -3 ${dops}@$3:${adir}/agent.pub ${dops}@$2:${gate}/sys/$3.pub
+        if [ ! -z ${3} ]; then
+            scp -3 ${devops}@${3}:${adir}/agent.pub ${devops}@${2}:${gate}/sys/${3}.pub
         elif [ ! -z $2 ]; then
-            scp ${adir}/agent.pub ${dops}@$2:${gate}/sys/$HOSTNAME.pub
+            scp ${adir}/agent.pub ${devops}@${2}:${gate}/sys/${HOSTNAME}.pub
         fi
         ;;
 
     esc)
-        case $2 in
+        case ${2} in
             crew)
-                user=$3
+                user=${3}
 
                 mkdir -p ${gate}/crews
                 addgroup crews
@@ -291,7 +289,7 @@ case $1 in
                 ;;
 
             role)
-                role=$3
+                role=${3}
 
                 if [ ! -z ${role} ]; then
                     adduser --disabled-password --gecos '' ${role}
@@ -302,17 +300,17 @@ case $1 in
                 adir=${gate}/sys
 
                 if mkdir -p ${adir}; then
-                    chown ${dops}:${dops} ${adir}
+                    chown ${devops}:${devops} ${adir}
                 fi
                 if [ ! -f ${adir}/agent.id ]; then
                     ssh-keygen -t rsa -b 4096 -N '' -C 'agent' -f ${adir}/agent
                     mv ${adir}/agent ${adir}/agent.id
-                    chown ${dops}:${dops} ${adir}/agent.*
+                    chown ${devops}:${devops} ${adir}/agent.*
                 fi
-                if [ ! -z $4 ]; then
-                    scp -3 ${dops}@$4:${adir}/agent.pub ${dops}@$3:${adir}/$4.pub
-                elif [ ! -z $3 ]; then
-                    scp ${adir}/agent.pub ${dops}@$3:${adir}/$HOSTNAME.pub
+                if [ ! -z ${4} ]; then
+                    scp -3 ${devops}@${4}:${adir}/agent.pub ${devops}@${3}:${adir}/${4}.pub
+                elif [ ! -z ${3} ]; then
+                    scp ${adir}/agent.pub ${devops}@${3}:${adir}/${HOSTNAME}.pub
                 fi
                 ;;
         esac

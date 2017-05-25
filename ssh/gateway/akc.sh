@@ -10,7 +10,7 @@ gate='/etc/ssh/gate'
 projs=("greenet" "easyops" "s360")
 
 IFS=. read user role <<EOF
-$1
+${1}
 EOF
 
 pub=${gate}/crews/${user}.pub
