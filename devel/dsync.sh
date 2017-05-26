@@ -12,6 +12,6 @@ source $(dirname ${0})/../env
 
 host=${1}
 
-scp -3 -r devel:${dkr_cbs} ${host}:${dkr_mnt}
-scp client.docker.lz ${host}:~ && \
+scp -r devel:${dkr_cbs} ${host}:${dkr_mnt}
+scp devel:~/client.docker.lz ${host}:~ && \
 ssh ${host} "plzip -d client.docker.lz && docker load -i client.docker && rm client.docker"
