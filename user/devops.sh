@@ -3,7 +3,7 @@
 # add pub key for devops
 #
 
-if [ -z ${1} ]; then
+if [[ -z ${1} ]]; then
     echo ${0}' <user>'
     exit 1
 fi

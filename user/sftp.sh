@@ -3,7 +3,7 @@
 # setup sftp project dir
 #
 
-if [ -z ${1} ]; then
+if [[ -z ${1} ]]; then
     echo ${0}' <project>'
     exit 1
 fi

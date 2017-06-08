@@ -3,7 +3,7 @@
 # raid0 disk setup
 #
 
-if [ ${#} < 3 ]; then
+if [[ ${#} < 3 ]]; then
     echo ${0}' md-seq sd-seq ...'
     exit 1
 fi

@@ -2,7 +2,7 @@
 
 echo "TestEnvRootCA: "
 read CONFIRM
-if ("$CONFIRM" != "NEW"); then
+if [[ "$CONFIRM" != "NEW" ]]; then
     exit 1
 fi
 

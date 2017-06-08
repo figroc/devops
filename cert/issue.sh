@@ -1,11 +1,9 @@
 #!/bin/bash
 
-if [ -z "$1" ]; then
-    echo "./server.sh <server_root_domain_name>"
+if [[ -z "$1" ]]; then
+    echo $0" <server_root_domain_name>"
     exit 1
 fi
-
-
 
 odir=${BASH_SOURCE%/*}
 conf=${odir}/openssl.conf
@@ -47,7 +45,7 @@ function usage {
     echo "issue.sh server <root-domain>\nissue.sh user <name>"
 }
 
-if [ $# < 2]; then
+if (( $# < 2 )); then
     usage
     exit 1
 fi
