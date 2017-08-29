@@ -17,7 +17,7 @@ ca_d=${odir}/ca
 ca_f=${ca_d}/ca
 
 mkdir -p ${ca_d}/{db,crl,certs}
-#touch ${ca_d}/db/{serial,index.txt,index.txt.attr}
+touch ${ca_d}/db/{serial,index.txt,index.txt.attr}
 #touch ${ca_d}/crl/number
 
 openssl genrsa -out ${ca_f}.key 8192
