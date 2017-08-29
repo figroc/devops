@@ -1,6 +1,11 @@
 #!/bin/bash
 
-echo "TestEnvRootCA: "
+if [[ ! -z ${1} ]]; then
+    echo "${0} <root>"
+fi
+root="${1}RootCA"
+
+echo "${root}: "
 read CONFIRM
 if [[ "$CONFIRM" != "NEW" ]]; then
     exit 1
