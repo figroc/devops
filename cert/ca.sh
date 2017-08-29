@@ -13,6 +13,7 @@ fi
 
 odir=${BASH_SOURCE%/*}
 conf=${odir}/openssl.conf
+ca_r=${odir}/crl/ca.crl
 ca_d=${odir}/ca
 ca_f=${ca_d}/ca
 
@@ -24,4 +25,4 @@ openssl genrsa -out ${ca_f}.key 8192
 openssl req -config ${conf} -extensions v3_ca -key ${ca_f}.key \
     -new -x509 -days 7300 -sha256 -subj "/CN=${root}" \
     -out ${ca_f}.crt
-openssl ca -config ${conf} -gencrl -out ${ca_f}.crl -crldays 30
+openssl ca -config ${conf} -gencrl -out ${ca_r} -crldays 30
