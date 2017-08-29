@@ -13,17 +13,15 @@ fi
 
 odir=${BASH_SOURCE%/*}
 conf=${odir}/openssl.conf
-ca_d=${odir}/ca
-ca_f=${ca_d}/ca
-ca_r=${ca_d}/crl/ca.crl
+card=${odir}/ca
 
-mkdir -p ${ca_d}/{db,crl,certs} 2> /dev/null
-touch ${ca_d}/db/{index.txt,index.txt.attr} 2> /dev/null
-echo FACE > ${ca_d}/db/serial
-echo "00" > ${ca_d}/crl/number
+mkdir -p ${card}/{db,crl,certs} 2> /dev/null
+touch ${card}/db/{index.txt,index.txt.attr} 2> /dev/null
+echo FACE > ${card}/db/serial
+echo "00" > ${card}/crl/number
 
-openssl genrsa -out ${ca_f}.key 8192
-openssl req -config ${conf} -extensions v3_ca -key ${ca_f}.key \
+openssl genrsa -out ${card}/ca.key 8192
+openssl req -config ${conf} -extensions v3_ca -key ${card}/ca.key \
     -new -x509 -days 7300 -sha256 -subj "/CN=${root}" \
-    -out ${ca_f}.crt
-openssl ca -config ${conf} -gencrl -out ${ca_r} -crldays 30
+    -out ${card}/ca.crt
+openssl ca -config ${conf} -gencrl -out ${card}/crl/ca.crl -crldays 30
