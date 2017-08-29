@@ -33,11 +33,12 @@ function issue {
         -in ${subj_f}.csr -out ${subj_f}.crt
 
     openssl verify -CAfile ${ca_f} ${subj_f}.crt
-    cat ${subj_f}.crt ${ca_f}.crt > ${subj_f}.crt.chain
+    cat ${subj_f}.crt ${ca_f} > ${subj_f}.crt.chain
 }
 
 function usage {
-    echo "issue.sh server <root-domain>\nissue.sh user <name>"
+    echo "issue.sh server <domain>"
+    echo "issue.sh user <name>"
 }
 
 if (( $# < 2 )); then
