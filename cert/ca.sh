@@ -13,13 +13,14 @@ fi
 
 odir=${BASH_SOURCE%/*}
 conf=${odir}/openssl.conf
-ca_r=${odir}/crl/ca.crl
 ca_d=${odir}/ca
 ca_f=${ca_d}/ca
+ca_r=${ca_d}/crl/ca.crl
 
-mkdir -p ${ca_d}/{db,crl,certs}
-touch ${ca_d}/db/{serial,index.txt,index.txt.attr}
-touch ${ca_d}/crl/number
+mkdir -p ${ca_d}/{db,crl,certs} 2> /dev/null
+touch ${ca_d}/db/{index.txt,index.txt.attr} 2> /dev/null
+echo FACE > ${ca_d}/db/serial
+echo "00" > ${ca_d}/crl/number
 
 openssl genrsa -out ${ca_f}.key 8192
 openssl req -config ${conf} -extensions v3_ca -key ${ca_f}.key \
