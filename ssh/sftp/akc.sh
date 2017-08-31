@@ -7,7 +7,7 @@
 #
 
 gate='/etc/ssh/gate'
-projs=("greenet" "s360" "wind")
+projs=("greenet" "s360" "wind" "sse")
 
 case ${1} in
     sftp)
