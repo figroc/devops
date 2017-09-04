@@ -85,6 +85,10 @@ case ${1} in
                 chown ${devops}:${devops} ${gate}/sys/
                 ;;
 
+            cmds)
+                chroot_cmds ${3} ${4}
+                ;;
+
             jail)
                 cmds='bash sh true false'
                 cmdu='ssh ssh-agent scp sftp rssh'
