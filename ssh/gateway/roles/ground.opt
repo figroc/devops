@@ -1,0 +1,1 @@
+ * : command="ssh -q -i /etc/ssh/gate/sys/agent.id play@ground"
