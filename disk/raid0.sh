@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 #
 # raid0 disk setup
 #
@@ -23,6 +23,7 @@ while ((${#})); do
         echo w    # write changes
         echo Y    #   confirm
     ) | gdisk /dev/${1}
+    partprobe /dev/${1}
     rsd=${rsd}' /dev/'${1}'1'
     shift
 done
