@@ -26,7 +26,7 @@ done
 cmd=$(grep ${opt} \
     -e '^[[:blank:]]*[*][[:blank:]]*:[[:blank:]]*' \
     -e '^[[:blank:]]*'${user}'[[:blank:]]*:[[:blank:]]*' \
-    | tail -n 1 | sed '/^.*:[[:blank:]]*/s///' | tr -d '\n')
+    | tail -n 1 | sed '/^[^:]*:[[:blank:]]*/s///' | tr -d '\n')
 
 while read line; do
     echo ${cmd} ${line}
