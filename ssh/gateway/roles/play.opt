@@ -1,2 +1,2 @@
  * : command="ssh -q -i /etc/ssh/gate/sys/agent.id play@play"
-huangw: command="curl -s -G play:9200/sxs/resume4w/_search --data-urlencode \"${SSH_ORIGINAL_COMMAND}\" -o -"
+huangw: command="/etc/ssh/gate/cmds/es.sh \"${SSH_ORIGINAL_COMMAND}\""
