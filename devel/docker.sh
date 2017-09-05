@@ -5,6 +5,8 @@
 
 source $(dirname ${0})/../env
 
+apt-get update
+
 apt-get -y install docker.io
 usermod -G docker -a ${devops}
 
