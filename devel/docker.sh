@@ -4,6 +4,7 @@
 #
 
 source $(dirname ${0})/../env
+cert=$(dirname ${0})/../certs/server/asset.ca.crt
 
 apt-get update
 
@@ -26,6 +27,14 @@ fi
     echo '  }'
     echo '}'
 ) | tee /etc/docker/daemon.json
+
+if mkdir -p ${dkr_reg}; then
+    chown root:root ${dkr_reg}
+fi
+cp ${cert} ${dkr_reg}/ca.crt
+chown root:root ${dkr_reg}/ca.crt
+chmod 644 ${dkr_reg}/ca.crt
+
 systemctl start docker
 service docker restart
 

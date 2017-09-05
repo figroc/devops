@@ -9,6 +9,7 @@ data='/var/data'
 sftp='/var/sftp'
 jail='/var/jail'
 
+dkr_reg='/etc/docker/certs.d/deepro.io'
 dkr_mnt=${data}'/mnt'
 dkr_cbs=${dkr_mnt}'/cloudbrain'
 dkr_graf=${dkr_mnt}'/docker'
