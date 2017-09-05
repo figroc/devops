@@ -30,4 +30,5 @@ systemctl start docker
 service docker restart
 
 apt-get -y install python-pip
+pip install --upgrade pip
 pip install docker-compose
