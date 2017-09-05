@@ -26,3 +26,6 @@ fi
 ) | tee /etc/docker/daemon.json
 systemctl start docker
 service docker restart
+
+apt-get -y install python-pip
+pip install docker-compose
