@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 #
 # setup common tools on target host
 #
@@ -10,7 +10,6 @@ fi
 
 source $(dirname ${0})/../env
 
-host=${1}
-
-ssh ${host} "sudo apt-get -y install tree plzip"
-ssh ${host} "git clone ${repo}"
+git clone ${repo}
+apt-get update
+apt-get -y install tree plzip
