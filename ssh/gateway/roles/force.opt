@@ -14,3 +14,4 @@ hefy   : command="ssh -q -i /etc/ssh/gate/sys/agent.id devops@deve2 /home/devops
 tangkh : command="ssh -q -i /etc/ssh/gate/sys/agent.id devops@deve2 /home/devops/docker/load.sh tangkh \"${SSH_ORIGINAL_COMMAND}\""
 zhangm : command="ssh -q -i /etc/ssh/gate/sys/agent.id devops@deve2 /home/devops/docker/load.sh zhangm \"${SSH_ORIGINAL_COMMAND}\""
 zhengjh: command="ssh -q -i /etc/ssh/gate/sys/agent.id devops@deve2 /home/devops/docker/load.sh zhengjh \"${SSH_ORIGINAL_COMMAND}\""
+zhangjc: command="ssh -q -i /etc/ssh/gate/sys/agent.id devops@deve2 /home/devops/docker/load.sh zhangjc \"${SSH_ORIGINAL_COMMAND}\""
