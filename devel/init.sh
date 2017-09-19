@@ -11,5 +11,5 @@ fi
 source $(dirname ${0})/../env
 
 git clone ${repo}
-apt-get update
-apt-get -y install tree plzip
+sudo apt-get update
+sudo apt-get -y install tree plzip
