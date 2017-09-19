@@ -15,7 +15,7 @@ home=${data}'/home'
 
 if [[ -z /etc/sudoers.d/docker ]]; then
     mkdir -p /etc/sudoers.d
-    echo '%docker  ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/docker
+    echo '%docker ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/docker
 fi
 
 mkdir -p ${home}

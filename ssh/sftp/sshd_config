@@ -1,9 +1,4 @@
-
 Subsystem sftp internal-sftp
-
-PasswordAuthentication no
-AllowAgentForwarding no
-AllowTcpForwarding no
 
 Match Group jail
     AuthorizedKeysCommand /etc/ssh/gate/akc.sh

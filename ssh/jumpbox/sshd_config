@@ -1,6 +1,3 @@
-
-PasswordAuthentication no
-AllowAgentForwarding yes
 AllowTcpForwarding yes
 
 Match Group crews
