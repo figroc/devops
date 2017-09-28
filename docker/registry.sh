@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 
 rr=${1}
 repo=${3}
@@ -10,7 +10,7 @@ function usage() {
     echo "  repo: list repos "
     echo "  tag <repo>: list tags list "
     echo "  man <repo> <tag>: show image "
-    echo "  rmi <repo> <ref>: delete image "
+    echo "  rmi <repo> <tag>: delete image "
     exit 1
 }
 
@@ -31,6 +31,9 @@ case ${2} in
         if [[ -z ${tag} ]]; then
             usage ${0}
         fi
+        tag=$(curl -vsk -H "Accept: application/vnd.docker.distribution.manifest.v2+json" \
+                   -XGET https://${rr}/v2/${repo}/manifests/${tag} 2>&1 \
+                   | grep Docker-Content-Digest | awk '{print ($3)}')
         curl -k -XDELETE https://${rr}/v2/${repo}/manifests/${tag}
         ;;
     *)
