@@ -34,7 +34,7 @@ case ${2} in
         tag=$(curl -vsk -H "Accept: application/vnd.docker.distribution.manifest.v2+json" \
                    -XGET https://${rr}/v2/${repo}/manifests/${tag} 2>&1 \
                    | grep Docker-Content-Digest | awk '{print ($3)}')
-        curl -k -XDELETE https://${rr}/v2/${repo}/manifests/${tag}
+        curl -k -XDELETE https://${rr}/v2/${repo}/manifests/${tag%$'\r'}
         ;;
     *)
         usage ${0}
