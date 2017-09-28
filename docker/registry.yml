@@ -6,7 +6,7 @@ registry:
     environment:
         REGISTRY_HTTP_TLS_CERTIFICATE: /certs/server.crt
         REGISTRY_HTTP_TLS_KEY: /certs/server.key
-        REGISTRY_STORAGE_DELETE_ENABLED: true
+        REGISTRY_STORAGE_DELETE_ENABLED: 'true'
     volumes:
         - /var/data/certs:/certs:ro
         - /var/data/registry:/var/lib/registry
