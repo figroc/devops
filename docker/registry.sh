@@ -14,7 +14,7 @@ function usage() {
     exit 1
 }
 
-case ${2}:
+case ${2} in
     repo)
         curl -k -XGET https://${rr}/v2/_catalog
         ;;
