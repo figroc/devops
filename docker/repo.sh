@@ -33,9 +33,9 @@ case ${2} in
         ;;
     rmi)
         usage ${tag}
-        tag=$(curl -vsk -H "Accept: application/vnd.docker.distribution.manifest.v2+json" \
-                   -XGET https://${rr}/v2/${repo}/manifests/${tag} 2>&1 \
-                   | grep Docker-Content-Digest | awk '{print ($3)}')
+        tag=$(curl -sk -H "Accept: application/vnd.docker.distribution.manifest.v2+json" \
+                   -D- -o/dev/null -XGET https://${rr}/v2/${repo}/manifests/${tag} \
+                   | grep Docker-Content-Digest | awk '{print ($2)}')
         curl -k -XDELETE https://${rr}/v2/${repo}/manifests/${tag%$'\r'}
         ;;
     *)
