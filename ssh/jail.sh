@@ -272,7 +272,7 @@ case ${1} in
         fi
         if [ ! -z ${3} ]; then
             scp -3 ${devops}@${3}:${adir}/agent.pub ${devops}@${2}:${gate}/sys/${3}.pub
-        elif [ ! -z $2 ]; then
+        elif [ ! -z ${2} ]; then
             scp ${adir}/agent.pub ${devops}@${2}:${gate}/sys/${HOSTNAME}.pub
         fi
         ;;
