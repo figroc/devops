@@ -5,38 +5,40 @@ repo=${3}
 tag=${4}
 
 function usage() {
-    echo "${0} <registry> <command> [options]"
-    echo "commands: "
-    echo "  repo: list repos "
-    echo "  tag <repo>: list tags list "
-    echo "  man <repo> <tag>: show image "
-    echo "  rmi <repo> <tag>: delete image "
-    exit 1
+    if [[ -z ${1} ]]; then
+        echo "${0} <registry> <command> [options]"
+        echo "commands:"
+        echo "  gc: garbage collect"
+        echo "  lib: list library"
+        echo "  tag <lib>: list tag"
+        echo "  man <lib> <tag>: show manifest"
+        echo "  rmi <lib> <tag>: delete image"
+        exit 1
+    fi
 }
 
 case ${2} in
-    repo)
+    gc)
+        ssh ${rr} ~/devops/docker/gc.sh
+        ;;
+    lib)
         curl -k -XGET https://${rr}/v2/_catalog
         ;;
     tag)
         curl -k -XGET https://${rr}/v2/${repo}/tags/list
         ;;
     man)
-        if [[ -z ${tag} ]]; then
-            usage ${0}
-        fi
+        usage ${tag}
         curl -k -XGET https://${rr}/v2/${repo}/manifests/${tag}
         ;;
     rmi)
-        if [[ -z ${tag} ]]; then
-            usage ${0}
-        fi
+        usage ${tag}
         tag=$(curl -vsk -H "Accept: application/vnd.docker.distribution.manifest.v2+json" \
                    -XGET https://${rr}/v2/${repo}/manifests/${tag} 2>&1 \
                    | grep Docker-Content-Digest | awk '{print ($3)}')
         curl -k -XDELETE https://${rr}/v2/${repo}/manifests/${tag%$'\r'}
         ;;
     *)
-        usage ${0}
+        usage
         ;;
 esac
