@@ -1,17 +1,26 @@
 #!/bin/bash
 
+function usage {
+    echo "$0 svr <domain> [subject]"
+    echo "$0 usr <name> [subject]"
+    exit 1
+}
+
+if (( $# < 2 )); then
+    usage
+fi
+
 odir=${BASH_SOURCE%/*}
 conf=${odir}/openssl.conf
 ca_f=${odir}/ca/ca.crt
 
 function genr {
-    subj_n=$3
-    subj_d=${odir}/$1/$2
-    subj_f=${subj_d}/$1
+    subj_d=${odir}/${role}/${name}
+    subj_f=${subj_d}/${role}
 
     mkdir -p ${subj_d}
-    if [ -f $1.csr ]; then
-        mv $1.csr ${subj_d}/
+    if [ -f ${name}.csr ]; then
+        mv ${name}.csr ${subj_d}/
     else
         openssl genrsa -out ${subj_f}.key 4096
         openssl req -config ${conf} -key ${subj_f}.key \
@@ -31,29 +40,26 @@ function sign {
     cat ${subj_f}.crt ${ca_f} > ${subj_f}.crt.chain
 }
 
-function usage {
-    echo "issue.sh server <domain>"
-    echo "issue.sh user <name>"
-}
-
-if (( $# < 2 )); then
-    usage
-    exit 1
-fi
-
-case $1 in
-    server)
+role=$1
+name=$2
+subj_n=$3
+case ${role} in
+    svr)
         ext_n='server_cert'
-        genr server $2 *.$2
-        sign
+        if [[ -z ${subj_n} ]]; then
+            subj_n="*.${name}"
+        fi
         ;;
-    user)
+    usr)
         ext_n='usr_cert'
-        genr user $2 $2
-        sign
+        if [[ -z ${subj_n} ]]; then
+            subj_n=${name}
+        fi
         ;;
     *)
         usage
-        exit 1
         ;;
 esac
+
+genr
+sign
