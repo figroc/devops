@@ -1,1 +1,3 @@
  * : command="sftp -q -i /etc/ssh/gate/sys/agent.id sftp@sftp"
+yjzhu   : no-port-forwarding,command="false"
+yxzhang : no-port-forwarding,command="false"
