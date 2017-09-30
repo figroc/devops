@@ -1,8 +1,6 @@
-Host sftp play ground runner camp devel deve2
+Host *
     ForwardAgent yes
     StrictHostKeyChecking no
     UserKnownHostsFile=/dev/null
-
-Host *
     ServerAliveInterval 30
     ServerAliveCountMax 5
