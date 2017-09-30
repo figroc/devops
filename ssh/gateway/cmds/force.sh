@@ -1,7 +1,7 @@
 #!/bin/bash -e
 
 function z_err() {
-    if [[ -z ${2} ]]; then echo ${1}; exit 1; fi
+    if [[ -z ${2} ]]; then echo ${1} 1>&2; exit 1; fi
 }
 
 function s_rm() {
@@ -42,3 +42,5 @@ case ${cmd} in
         z_err "command not support"
         ;;
 esac
+
+echo "done"
