@@ -14,7 +14,7 @@ fi
 opts=(\
     ''\
     '/C=US/ST=California/L=Mountain View/O=CloudBrain Inc.'\
-    '/C=CN/ST=Yunnan/L=Dali/O=Aixin Xiaozhan Org.'\
+    '/C=CN/ST=Yunnan/L=Dali/O=AiXinZhuXue Org.'\
     )
 optn=${#opts[@]}
 echo 'select or input subject field: '
