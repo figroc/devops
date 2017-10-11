@@ -14,15 +14,14 @@ usr=${1}; z_err "user not specified" ${usr};
 hot=${2}; z_err "host not specified" ${hot};
 pot=${3}; z_err "port not specified" ${pot};
 cmd=${args[0]};
-opt="";
 
 case ${cmd} in
     jupyter)
-        s_rm /tmp/${user}.jupyter
-        opt="-L/tmp/${usr}.jupyter:127.0.0.1:8888"
+        s_rm /tmp/${usr}.jupyter
+        opt=" -L/tmp/${usr}.jupyter:127.0.0.1:8888 -oExitOnForwardFailure=yes"
         ;;
     *)
         ;;
 esac
 
-ssh -q ${opt} -p${pot} ${usr}@${hot}
+ssh -q${opt} -p${pot} ${usr}@${hot}
