@@ -48,5 +48,3 @@ case ${cmd} in
         z_err "command not support"
         ;;
 esac
-
-echo "done"
