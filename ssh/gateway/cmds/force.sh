@@ -16,13 +16,18 @@ cmd=${args[0]}; z_err "no command specified" ${cmd};
 case ${cmd} in
     ?)
         echo "box <devel|paddle>: reload devel docker"
-        echo "ban <user> [role]: disable user access"
+        echo "box status: list running devel docker"
         ;;
     box)
         devel=${1}; z_err "not host specified" ${devel};
         docker=${args[1]}; z_err "no target specified" ${docker};
-        ssh -q -i /etc/ssh/gate/sys/agent.id devops@${devel} \
-            /home/devops/docker/load.sh ${usr} ${docker}
+        if [[ "${docker}" == "status" ]]; then
+            ssh -q -i /etc/ssh/gate/sys/agent.id devops@${devel} \
+                docker ps -f name=${usr}
+        else
+            ssh -q -i /etc/ssh/gate/sys/agent.id devops@${devel} \
+                /home/devops/docker/load.sh ${usr} ${docker}
+        fi
         ;;
     ban)
         if [[ ! ${usr} =~ ^(chenp|yaxin|byzhang)$ ]]; then
