@@ -12,16 +12,13 @@ pot=${3}; z_err "port not specified" ${pot};
 cmd=${args[0]};
 
 case ${cmd} in
-    )
-        ;;
+    "") ;;
     jupyter)
         soc="/tmp/${usr}.jupyter"
         opt=" -L${soc}:127.0.0.1:8888"
         rm -f ${soc}
         ;;
-    *)
-        exit 1
-        ;;
+    *)  exit 1 ;;
 esac
 
 ssh -q${opt} -p${pot} ${usr}@${hot}
