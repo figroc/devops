@@ -4,10 +4,6 @@ function z_err() {
     if [[ -z ${2} ]]; then echo ${1} 1>&2; exit 1; fi
 }
 
-function s_rm() {
-    if [[ -f ${1} ]]; then sudo rm ${1}; fi
-}
-
 read -a args <<< "${SSH_ORIGINAL_COMMAND}"
 
 usr=${1}; z_err "user not specified" ${usr};
@@ -17,11 +13,16 @@ cmd=${args[0]};
 
 case ${cmd} in
     jupyter)
-        s_rm /tmp/${usr}.jupyter
-        opt=" -L/tmp/${usr}.jupyter:127.0.0.1:8888 -oExitOnForwardFailure=yes"
+        soc="/tmp/${usr}.jupyter"
+        opt=" -L${soc}:127.0.0.1:8888"
+        rm -f ${soc}
         ;;
     *)
         ;;
 esac
 
 ssh -q${opt} -p${pot} ${usr}@${hot}
+
+if [[ ! -z ${soc} ]]; then
+    rm -f ${soc}
+fi

@@ -5,7 +5,7 @@ function z_err() {
 }
 
 function s_rm() {
-    if [[ -f ${1} ]]; then sudo rm ${1}; fi
+    if [[ -f ${1} ]]; then sudo rm -f ${1}; fi
 }
 
 read -a args <<< "${SSH_ORIGINAL_COMMAND}"
