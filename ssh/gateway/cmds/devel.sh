@@ -23,6 +23,4 @@ esac
 
 ssh -q${opt} -p${pot} ${usr}@${hot}
 
-if [[ ! -z ${soc} ]]; then
-    rm -f ${soc}
-fi
+if [[ ! -z ${soc} ]]; then rm -f ${soc}; fi
