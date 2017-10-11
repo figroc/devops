@@ -11,6 +11,7 @@ function s_rm() {
 read -a args <<< "${SSH_ORIGINAL_COMMAND}"
 
 usr=${1}; z_err "user not specified" ${usr};
+hot=${2};
 cmd=${args[0]}; z_err "no command specified" ${cmd};
 
 case ${cmd} in
@@ -19,13 +20,13 @@ case ${cmd} in
         echo "box status: list running devel docker"
         ;;
     box)
-        devel=${1}; z_err "not host specified" ${devel};
+        z_err "not host specified" ${hot};
         docker=${args[1]}; z_err "no target specified" ${docker};
         if [[ "${docker}" == "status" ]]; then
-            ssh -i /etc/ssh/gate/sys/agent.id devops@${devel} \
+            ssh -i /etc/ssh/gate/sys/agent.id devops@${hot} \
                 docker ps -f "name=${usr}"
         else
-            ssh -i /etc/ssh/gate/sys/agent.id devops@${devel} \
+            ssh -i /etc/ssh/gate/sys/agent.id devops@${hot} \
                 /home/devops/docker/load.sh ${usr} ${docker}
         fi
         ;;
