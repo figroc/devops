@@ -7,6 +7,10 @@ Match Group sftp,projs
     AllowTcpForwarding yes
     PermitOpen sftp:22
 
+Match User zhangjie.devel
+    AllowTcpForwarding local
+    PermitOpen *:10062
+
 Match Group projs
     X11Forwarding no
     PermitTTY no

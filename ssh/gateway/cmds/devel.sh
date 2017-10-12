@@ -14,9 +14,13 @@ cmd=${args[0]};
 case ${cmd} in
     "") ;;
     jupyter)
-        soc="/tmp/${usr}.jupyter"
-        opt=" -L${soc}:127.0.0.1:8888"
-        rm -f ${soc}
+        if [[ "${usr}" == "zhangjie" ]]; then
+            opt=" -L10062:127.0.0.1:8888"
+        else
+            soc="/tmp/${usr}.jupyter"
+            opt=" -L${soc}:127.0.0.1:8888"
+            rm -f ${soc}
+        fi
         ;;
     *)  exit 1 ;;
 esac
