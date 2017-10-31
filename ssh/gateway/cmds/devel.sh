@@ -14,16 +14,15 @@ cmd=${args[0]};
 case ${cmd} in
     "") ;;
     jupyter)
-        if [[ "${usr}" == "zhangjie" ]]; then
-            opt=" -L10062:127.0.0.1:8888"
-        elif [[ "${usr}" == "huxn" ]]; then
-            opt=" -L10072:127.0.0.1:8888"
-        else
-            soc="/tmp/${usr}.jupyter"
-            opt=" -L${soc}:127.0.0.1:8888"
-            rm -f ${soc}
-        fi
-        ;;
+        case ${usr} in
+            tcyang)   opt=" -L19182:127.0.0.1:8888" ;;
+            zhangjie) opt=" -L10062:127.0.0.1:8888" ;;
+            *)
+                soc="/tmp/${usr}.jupyter"
+                opt=" -L${soc}:127.0.0.1:8888"
+                rm -f ${soc}
+                ;;
+        esac   ;;
     *)  exit 1 ;;
 esac
 
