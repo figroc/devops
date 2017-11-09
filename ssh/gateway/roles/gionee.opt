@@ -1,0 +1,1 @@
+ * : command="ssh -q -i /etc/ssh/gate/sys/agent.id -p 34543 prodyunnaouser@120.27.230.84"
