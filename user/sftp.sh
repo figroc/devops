@@ -12,8 +12,10 @@ source $(dirname ${0})/../env
 
 proj=${1}
 
+mkdir -p ${jail}/home/${proj}
 chown -R root:root ${jail}/home/${proj}
-chmod -R o-r ${jail}/home/${proj}
+chmod -R o-rw ${jail}/home/${proj}
+chmod -R g-w ${jail}/home/${proj}
 
 mkdir -p ${jail}/home/${proj}/data
 mkdir -p ${jail}/home/${proj}/data/delivery
