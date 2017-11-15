@@ -10,7 +10,7 @@ if ! grep deepro.io /etc/hosts; then
 fi
 
 if [ ! -d ~/${devops} ]; then
-    git clone ${repo}
+    git -C ~ clone ${repo}
 fi
 
 sudo apt-get update && apt-get -y install tree plzip zip
