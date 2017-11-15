@@ -13,4 +13,5 @@ if [ ! -d ~/${devops} ]; then
     git -C ~ clone ${repo}
 fi
 
-sudo apt-get update && apt-get -y install tree plzip zip
+sudo apt-get update &&\
+sudo apt-get -y install tree plzip zip
