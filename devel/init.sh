@@ -1,15 +1,16 @@
 #!/bin/bash -e
 #
-# setup common tools on target host
+# setup common tools
 #
-
-if [[ -z ${1} ]]; then
-    echo ${0}' <target>'
-    exit 1
-fi
 
 source $(dirname ${0})/../env
 
-git clone ${repo}
-sudo apt-get update
-sudo apt-get -y install tree plzip
+if ! grep deepro.io /etc/hosts; then
+    echo "10.2.0.4  deepro.io" | sudo tee -a /etc/hosts
+fi
+
+if [ ! -d ~/${devops} ]; then
+    git clone ${repo}
+fi
+
+sudo apt-get update && apt-get -y install tree plzip zip
