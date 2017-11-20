@@ -27,7 +27,6 @@ if mkdir -p ${dkr_graf}; then
 fi
 (   echo '{'
     echo '  "graph": "'${dkr_graf}'",'
-    echo '  "live-restore": true,'
     echo '  "registry-mirrors":'
     echo '      ["https://f62945bb.mirror.aliyuncs.com"]'
     echo '  }'
