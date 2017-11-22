@@ -40,6 +40,7 @@ cp ${cert} ${dkr_reg}/ca.crt
 chown root:root ${dkr_reg}/ca.crt
 chmod 644 ${dkr_reg}/ca.crt
 
+systemctl daemon-reload
 systemctl start docker
 service docker restart
 
