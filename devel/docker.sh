@@ -15,9 +15,9 @@ add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(
 
 apt-get update
 apt-get -y install docker-ce
-usermod -G docker -a ${devops}
-
 systemctl stop docker
+
+mkdir -p ${data}
 if mkdir -p ${dkr_mnt}; then
     chown devops:devops ${dkr_mnt}
 fi
@@ -25,6 +25,7 @@ if mkdir -p ${dkr_graf}; then
     chown root:root ${dkr_graf}
     chmod go-rw ${dkr_graf}
 fi
+
 (   echo '{'
     echo '  "graph": "'${dkr_graf}'",'
     echo '  "registry-mirrors":'
@@ -40,9 +41,9 @@ cp ${cert} ${dkr_reg}/ca.crt
 chown root:root ${dkr_reg}/ca.crt
 chmod 644 ${dkr_reg}/ca.crt
 
+usermod -G docker -a ${devops}
 systemctl daemon-reload
 systemctl start docker
-service docker restart
 
 apt-get -y install python-pip
 pip install --upgrade pip
