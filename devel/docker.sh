@@ -27,7 +27,10 @@ if mkdir -p ${dkr_graf}; then
 fi
 
 (   echo '{'
-    echo '  "graph": "'${dkr_graf}'",'
+    echo '  "data-root": "'${dkr_graf}'",'
+    echo '  "log-opts": {'
+    echo '      "max-size": "1g"'
+    echo '  },'
     echo '  "registry-mirrors":'
     echo '      ["https://f62945bb.mirror.aliyuncs.com"]'
     echo '  }'
