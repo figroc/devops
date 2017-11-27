@@ -29,11 +29,11 @@ fi
 (   echo '{'
     echo '  "data-root": "'${dkr_graf}'",'
     echo '  "log-opts": {'
-    echo '      "max-size": "1g"'
+    echo '    "max-size": "1g"'
     echo '  },'
-    echo '  "registry-mirrors":'
-    echo '      ["https://f62945bb.mirror.aliyuncs.com"]'
-    echo '  }'
+    echo '  "registry-mirrors": ['
+    echo '    "https://f62945bb.mirror.aliyuncs.com"'
+    echo '  ]'
     echo '}'
 ) | tee /etc/docker/daemon.json
 
