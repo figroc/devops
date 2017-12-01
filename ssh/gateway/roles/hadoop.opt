@@ -1,1 +1,0 @@
- * : command="ssh -q -i /etc/ssh/gate/sys/agent.id devops@ondata-ssh.azurehdinsight.cn"
