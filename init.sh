@@ -6,13 +6,14 @@
 source $(dirname ${0})/../env
 
 if [ "$(id -u)" -eq "0" ]; then
-    useradd -mU -c Ubuntu ${devops}
+    useradd -m -U -s /bin/bash -c Ubuntu ${devops}
     usermod -a ${devops} -G sudo,dialout,dip,plugdev,netdev,cdrom,floppy,audio,video
+    echo "devops ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/90-cloud-init-users
     mkdir -p /home/${devops}/.ssh
     cp .ssh/authorized_keys /home/${devops}/.ssh/
     chown -R ${devops}:${devops} /home/${devops}/.ssh
     chmod -R go-rwx /home/${devops}/.ssh
-    logout
+    shutdown -r now
 fi
 
 if [ ! -f /etc/sysctl.d/60-elastic.conf ]; then
