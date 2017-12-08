@@ -11,7 +11,8 @@ if [ "$(id -u)" -eq "0" ]; then
         ${devops}
     echo "devops ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/90-cloud-init-users
     cp -a ~/.ssh /home/${devops}/
-    chown -R ${devops}:${devops} /home/${devops}/.ssh
+    mv ~/${devops} /home/${devops}/
+    chown -R ${devops}:${devops} /home/${devops}/.ssh /home/${devops}/${devops}
     shutdown -r now
 fi
 
