@@ -6,13 +6,12 @@
 source $(dirname ${0})/../env
 
 if [ "$(id -u)" -eq "0" ]; then
-    useradd -m -U -s /bin/bash -c Ubuntu ${devops}
-    usermod -a ${devops} -G sudo,dialout,dip,plugdev,netdev,cdrom,floppy,audio,video
+    useradd -m -U -s /bin/bash -c Ubuntu \
+        -G sudo,dialout,dip,plugdev,netdev,cdrom,floppy,audio,video \
+        ${devops}
     echo "devops ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/90-cloud-init-users
-    mkdir -p /home/${devops}/.ssh
-    cp .ssh/authorized_keys /home/${devops}/.ssh/
+    cp -a ~/.ssh /home/${devops}/
     chown -R ${devops}:${devops} /home/${devops}/.ssh
-    chmod -R go-rwx /home/${devops}/.ssh
     shutdown -r now
 fi
 
