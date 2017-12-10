@@ -17,7 +17,7 @@ while ((${#})); do
         echo Y    #   confirm
         echo n    # new partition
         echo      # default partition number 1
-        echo      # default first sector 
+        echo      # default first sector
         echo      # default last sector
         echo fd00 # linux raid
         echo w    # write changes
