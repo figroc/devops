@@ -25,8 +25,10 @@ partprobe ${dsk}
 dsk="${dsk}1"
 
 mkfs.ext4 -v -m .1 -b 4096 ${dsk}
-uid=$(blkid ${dsk} | grep -o 'UUID="[^"]*"')
-echo ${uid//\"/}$'\t'${data}$'\text4\tdefaults\t0\t2'\
+uid=$(blkid ${dsk} | grep -o ': UUID="[^"]*"')
+uid=${uid:2}
+uid=${uid//\"/}
+echo ${uid}$'\t'${data}$'\text4\tdefaults\t0\t2'\
     | tee -a /etc/fstab
 
 mkdir -p ${data}
