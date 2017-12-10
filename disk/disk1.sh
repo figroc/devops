@@ -34,5 +34,5 @@ echo ${uid}$'\t'${data}$'\text4\tdefaults\t0\t2'\
 mkdir -p ${data}
 touch ${data}/WARNING
 chown ${devops}:${devops} ${data}
-mount -a
+mount ${data}
 chown ${devops}:${devops} ${data}

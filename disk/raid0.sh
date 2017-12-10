@@ -41,6 +41,6 @@ if mdadm --create --verbos /dev/${rmd} --level=stripe \
     mkdir -p ${data}
     touch ${data}/WARNING
     chown ${devops}:${devops} ${data}
-    mount -a
+    mount ${data}
     chown ${devops}:${devops} ${data}
 fi
