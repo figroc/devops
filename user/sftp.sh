@@ -4,7 +4,7 @@
 #
 
 if [[ -z ${1} ]]; then
-    echo ${0}' <project>'
+    echo "${0} <project>"
     exit 1
 fi
 

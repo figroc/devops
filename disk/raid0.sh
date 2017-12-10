@@ -4,9 +4,11 @@
 #
 
 if [[ ${#} < 3 ]]; then
-    echo ${0}' md-seq sd-seq ...'
+    echo "${0} md-seq sd-seq ..."
     exit 1
 fi
+
+apt-get update && apt-get install -y mdadm
 
 source $(dirname ${0})/../env
 

@@ -4,7 +4,7 @@
 #
 
 if [[ -z ${2} ]]; then
-    echo ${0}' <user> <group>'
+    echo "${0} <user> <group>"
     exit 1
 fi
 

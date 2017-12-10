@@ -30,4 +30,4 @@ if [ ! -d ~/${devops} ]; then
 fi
 
 sudo apt-get update &&\
-sudo apt-get -y install gdisk tree plzip zip
+sudo apt-get install -y gdisk tree plzip zip
