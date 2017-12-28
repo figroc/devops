@@ -3,7 +3,7 @@ Match Group jail
     AuthorizedKeysCommandUser devops
     ChrootDirectory /var/jail
 
-Match User devel,paddle
+Match Group devel,paddle,play
     AllowStreamLocalForwarding local
     AllowTcpForwarding local
 
@@ -14,3 +14,7 @@ Match Group sftp,projs
 Match Group projs
     X11Forwarding no
     PermitTTY no
+
+Match Group editor
+    AllowTcpForwarding local
+    PermitOpen localhost:5000
