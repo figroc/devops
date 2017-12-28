@@ -7,7 +7,7 @@
 #
 
 gate='/etc/ssh/gate'
-projs="greenet s360 wind sse gionee"
+projs="greenet s360 wind sse gionee editor"
 
 IFS=. read user role <<EOF
 ${1}
