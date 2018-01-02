@@ -15,16 +15,7 @@ source $(dirname ${0})/../env
 rmd=${1}; shift
 rno=${#}; rsd=''
 while ((${#})); do
-    (   echo o    # clear partition table
-        echo Y    #   confirm
-        echo n    # new partition
-        echo      # default partition number 1
-        echo      # default first sector
-        echo      # default last sector
-        echo fd00 # linux raid
-        echo w    # write changes
-        echo Y    #   confirm
-    ) | gdisk /dev/${1}
+    sgdisk -o -N1 -t1:fd00 /dev/${1}
     partprobe /dev/${1}
     rsd=${rsd}' /dev/'${1}'1'
     shift
