@@ -25,6 +25,7 @@ if mdadm --create --verbos /dev/${rmd} --level=stripe \
     --raid-devices=${rno} ${rsd}; then
     mkfs.ext4 -v -m .1 -b 4096 /dev/${rmd}
     mdadm --detail --scan | tee -a /etc/mdadm/mdadm.conf
+
     uid=$(blkid /dev/${rmd} | grep -o ': UUID="[^"]*"')
     uid=${uid:2}
     uid=${uid//\"/}

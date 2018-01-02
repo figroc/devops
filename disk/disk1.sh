@@ -13,9 +13,10 @@ source $(dirname ${0})/../env
 dsk="/dev/${1}"
 sgdisk -o -N1 -t1:8300 ${dsk}
 partprobe ${dsk}
-dsk="${dsk}1"
 
+dsk="${dsk}1"
 mkfs.ext4 -v -m .1 -b 4096 ${dsk}
+
 uid=$(blkid ${dsk} | grep -o ': UUID="[^"]*"')
 uid=${uid:2}
 uid=${uid//\"/}
