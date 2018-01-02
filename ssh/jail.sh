@@ -16,9 +16,12 @@ source $(dirname ${0})/../env
 
 # functions
 function chroot_cmds {
-    for cmd in ${2}; do
-        cp ${1}/${cmd} ${jail}/${1}/
-        l2chroot ${1}/${cmd}
+    local src=${1}
+    shift
+    while ((${#})); do
+        cp ${src}/${1} ${jail}/${src}/
+        l2chroot ${src}/${1}
+        shift
     done
 }
 
@@ -90,9 +93,9 @@ case ${1} in
                 ;;
 
             jail)
-                cmds='bash sh true false'
-                cmdu='env ssh ssh-agent scp sftp rssh'
-                libu='openssh/sftp-server rssh/rssh_chroot_helper'
+                cmds=( bash sh true false )
+                cmdu=( env ssh ssh-agent scp sftp rssh )
+                libu=( openssh/sftp-server rssh/rssh_chroot_helper )
 
                 # tools
                 if apt-get install rssh; then
@@ -151,9 +154,9 @@ case ${1} in
                 fi
 
                 # bin
-                chroot_cmds /bin ${cmds}
-                chroot_cmds /usr/bin ${cmdu}
-                chroot_cmds /usr/lib ${libu}
+                chroot_cmds /bin ${cmds[@]}
+                chroot_cmds /usr/bin ${cmdu[@]}
+                chroot_cmds /usr/lib ${libu[@]}
                 ;;
         esac
         ;;
