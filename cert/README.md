@@ -5,7 +5,7 @@
 测试手机使用测试环境时需要安装测试环境的CA根证书，通过adb命令进行安装：
 
     CA="test.ca.crt"
-    RN="$(openssl x509 -inform PEM -subject_hash_old -in ${CA} | head -1).0"
+    RN="$(openssl x509 -inform PEM -subject_hash_old -noout -in ${CA}).0"
     cp ${CA} ${RN} && adb push ${RN} /system/etc/security/cacerts
 
 
