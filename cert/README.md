@@ -6,8 +6,12 @@
 
     CA="test.ca.crt"
     RN="$(openssl x509 -inform PEM -subject_hash_old -noout -in ${CA}).0"
-    cp ${CA} ${RN} && adb push ${RN} /system/etc/security/cacerts
+    cp ${CA} ${RN} && adb push ${RN} /system/etc/security/cacerts && rm ${RN}
 
+或者直接信任特定站点的SSL证书，获取方法：
+
+    openssl s_client -showcerts -connect ${HOST}:${PORT} </dev/null 2>/dev/null |\
+    openssl x509 -outform PEM >${CERT_FILE}
 
 测试服务器证书安装方法
 ----------------------
