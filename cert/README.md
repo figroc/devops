@@ -2,9 +2,9 @@
 测试手机证书安装方法
 --------------------
 ### [ android ]
-测试手机使用测试环境时需要安装测试环境的CA根证书（35770e0c.0），通过adb命令进行安装：
+测试手机使用测试环境时需要安装测试环境的CA根证书，通过adb命令进行安装：
 
-    adb push 35770e0c.0 /system/etc/security/cacerts
+    adb push test.ca.crt /system/etc/security/cacerts
 
 
 测试服务器证书安装方法
