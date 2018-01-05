@@ -31,7 +31,7 @@ case ${cmd} in
             elif [[ "${docker}" != "paddle" ]]; then
                 z_err "target not supported: ${docker}"
             fi
-            ssh -i /etc/ssh/gate/sys/agent.id devops@${hot} \
+            ssh -i /etc/ssh/gate/sys/agent.id -q devops@${hot} \
                 /home/devops/docker/${docker}/${usr}.sh
         fi
         ;;
