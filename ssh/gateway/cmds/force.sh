@@ -24,7 +24,7 @@ case ${cmd} in
         docker=${args[1]}; z_err "no target specified" ${docker};
         if [[ "${docker}" == "status" ]]; then
             ssh -i /etc/ssh/gate/sys/agent.id devops@${hot} \
-                docker ps -f "name=${usr}" 2>/dev/null
+                docker ps -f "name=${usr}-" 2>/dev/null
         else
             ssh -i /etc/ssh/gate/sys/agent.id devops@${hot} \
                 /home/devops/docker/load.sh ${usr} ${docker} 2>/dev/null
