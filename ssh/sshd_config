@@ -1,5 +1,4 @@
-
-PasswordAuthentication no
 AllowAgentForwarding yes
+AllowStreamLocalForwarding no
 AllowTcpForwarding no
-
+PasswordAuthentication no
