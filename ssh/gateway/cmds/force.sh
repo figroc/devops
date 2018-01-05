@@ -20,8 +20,8 @@ case ${cmd} in
         echo "box status: list running devel docker"
         ;;
     box)
-        z_err "no host specified" ${hot};
-        docker=${args[1]}; z_err "no target specified" ${docker};
+        z_err "host not specified" ${hot};
+        docker=${args[1]}; z_err "target not specified" ${docker};
         if [[ "${docker}" == "status" ]]; then
             ssh -i /etc/ssh/gate/sys/agent.id devops@${hot} \
                 docker ps -f "name=${usr}-" 2>/dev/null
@@ -29,7 +29,7 @@ case ${cmd} in
             if [[ "${docker}" == "devel" ]]; then
                 docker="client"
             elif [[ "${docker}" != "paddle" ]]; then
-                z_err "unsupported target: ${docker}"
+                z_err "target not supported: ${docker}"
             fi
             ssh -i /etc/ssh/gate/sys/agent.id devops@${hot} \
                 /home/devops/docker/${docker}/${usr}.sh
@@ -39,7 +39,7 @@ case ${cmd} in
         if [[ ! ${usr} =~ ^(chenp|yaxin|byzhang)$ ]]; then
             z_err "forbidden"
         fi
-        user=${args[1]}; z_err "no user specified" ${user};
+        user=${args[1]}; z_err "user not specified" ${user};
         role=${args[2]};
         if [[ -z ${role} ]]; then
             s_rm /etc/ssh/gate/crews/${user}.pub
@@ -50,6 +50,6 @@ case ${cmd} in
         fi
         ;;
     *)
-        z_err "command not support"
+        z_err "command not supported"
         ;;
 esac
