@@ -20,14 +20,19 @@ case ${cmd} in
         echo "box status: list running devel docker"
         ;;
     box)
-        z_err "not host specified" ${hot};
+        z_err "no host specified" ${hot};
         docker=${args[1]}; z_err "no target specified" ${docker};
         if [[ "${docker}" == "status" ]]; then
             ssh -i /etc/ssh/gate/sys/agent.id devops@${hot} \
                 docker ps -f "name=${usr}-" 2>/dev/null
         else
+            if [[ "${docker}" == "devel" ]]; then
+                docker="client"
+            elif [[ "${docker}" != "paddle" ]]; then
+                z_err "unsupported target: ${docker}"
+            fi
             ssh -i /etc/ssh/gate/sys/agent.id devops@${hot} \
-                /home/devops/docker/load.sh ${usr} ${docker} 2>/dev/null
+                /home/devops/docker/${docker}/${usr}.sh
         fi
         ;;
     ban)
