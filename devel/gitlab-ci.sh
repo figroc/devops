@@ -4,7 +4,6 @@
 #
 
 source $(dirname ${0})/../env
-cert=$(dirname ${0})/../cert/server/asset.ca.crt
 
 curl -fsSL https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.deb.sh | bash
 cat > /etc/apt/preferences.d/pin-gitlab-runner.pref <<EOF
@@ -13,17 +12,17 @@ Package: gitlab-runner
 Pin: origin packages.gitlab.com
 Pin-Priority: 1001
 EOF
-apt-get install gitlab-runner
+apt-get install -y gitlab-runner
 
-read -p "Gitlab coordinator: " R_SERVER
-read -p "Registration token: " R_TOKENS
-read -p "Runner description: " R_REMARK
-( echo ${R_SERVER}
-  echo ${R_TOKENS}
-  echo ${R_REMARK}
-  echo ''
-  echo 'true'
-  echo 'false'
-  echo 'docker'
-  echo 'alpine'
+while [[ -z "${R_SERVER}" ]]; do read -p "Gitlab coordinator: " R_SERVER; done
+while [[ -z "${R_TOKENS}" ]]; do read -p "Registration token: " R_TOKENS; done
+while [[ -z "${R_REMARK}" ]]; do read -p "Runner description: " R_REMARK; done
+( echo "${R_SERVER}"
+  echo "${R_TOKENS}"
+  echo "${R_REMARK}"
+  echo ""
+  echo "true"
+  echo "false"
+  echo "docker"
+  echo "alpine"
 ) | gitlab-runner register
