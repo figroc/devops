@@ -14,6 +14,7 @@ add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(
 
 apt-get update
 apt-get -y install docker-ce
+apt-mark hold docker-ce
 systemctl stop docker
 
 mkdir -p ${data}

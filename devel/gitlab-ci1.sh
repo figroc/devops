@@ -13,3 +13,4 @@ Pin: origin packages.gitlab.com
 Pin-Priority: 1001
 EOF
 apt-get install -y gitlab-ci-multi-runner=1.11.5
+apt-mark hold gitlab-ci-multi-runner
