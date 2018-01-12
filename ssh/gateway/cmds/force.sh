@@ -19,6 +19,20 @@ case ${cmd} in
         echo "box <devel|paddle>: reload devel docker"
         echo "box status: list running devel docker"
         ;;
+    ban)
+        if [[ ! ${usr} =~ ^(chenp|byzhang|yaxin)$ ]]; then
+            z_err "forbidden"
+        fi
+        user=${args[1]}; z_err "user not specified" ${user};
+        role=${args[2]};
+        if [[ -z ${role} ]]; then
+            s_rm /etc/ssh/gate/crews/${user}.pub
+        fi
+        if sudo userdel ${user}.${role} 2>/dev/null; then
+            sudo sed -i "/^${user}.${role}:/d" /var/jail/etc/passwd
+            sudo sed -i "s/\b${user}.${role}\b,\?//g;s/,$//g" /var/jail/etc/group
+        fi
+        ;;
     box)
         z_err "host not specified" ${hot};
         docker=${args[1]}; z_err "target not specified" ${docker};
@@ -35,19 +49,16 @@ case ${cmd} in
                 /home/devops/docker/${docker}/${usr}.sh
         fi
         ;;
-    ban)
-        if [[ ! ${usr} =~ ^(chenp|yaxin|byzhang)$ ]]; then
+    sec)
+        if [[ ! ${usr} =~ ^(chenp|tcyang|wujz|ydfeng|zhengjh|zslai)$ ]]; then
             z_err "forbidden"
         fi
-        user=${args[1]}; z_err "user not specified" ${user};
-        role=${args[2]};
-        if [[ -z ${role} ]]; then
-            s_rm /etc/ssh/gate/crews/${user}.pub
-        fi
-        if sudo userdel ${user}.${role} 2>/dev/null; then
-            sudo sed -i "/^${user}.${role}:/d" /var/jail/etc/passwd
-            sudo sed -i "s/\b${user}.${role}\b,\?//g;s/,$//g" /var/jail/etc/group
-        fi
+        for hot in devel deve2 camp; do
+            ssh -i /etc/ssh/gate/sys/agent.id devops@${hot} \
+                "cd env-dev && git pull && sudo ./file.sh"
+        done
+        ssh -i /etc/ssh/gate/sys/agent.id devops@runner \
+            "cd env-dev && git pull && ./docker.sh"
         ;;
     *)
         z_err "command not supported"
