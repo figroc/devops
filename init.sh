@@ -16,15 +16,17 @@ if [ "$(id -u)" -eq "0" ]; then
     shutdown -r now
 fi
 
-if [ ! -f /etc/sysctl.d/50-elastic.conf ]; then
-    echo "vm.max_map_count = 262144" | sudo tee /etc/sysctl.d/50-elastic.conf
+if [ ! -f /etc/sysctl.d/50-deepro.conf ]; then
+    echo "vm.max_map_count = 262144" | sudo tee /etc/sysctl.d/50-deepro.conf
     sudo sysctl -w vm.max_map_count=262144
 fi
-if [ ! -f /etc/security/limits.d/50-elastic.conf ]; then
+if [ ! -f /etc/security/limits.d/50-deepro.conf ]; then
     (
+      echo "* hard nofile unlimited"
+      echo "* soft nofile unlimited"
       echo "* hard memlock unlimited"
       echo "* soft memlock unlimited"
-    ) | sudo tee /etc/security/limits.d/50-elastic.conf
+    ) | sudo tee /etc/security/limits.d/50-deepro.conf
 fi
 
 if ! grep deepro.io /etc/hosts; then
