@@ -16,6 +16,11 @@ if [ "$(id -u)" -eq "0" ]; then
     shutdown -r now
 fi
 
+for pam in common-session common-session-noninteractive; do
+    if ! grep pam_limits.so /etc/pam.d/${pam}; then
+        echo "session required pam_limits.so" | sudo tee -a /etc/pam.d/${pam}
+    fi
+done
 if [ ! -f /etc/sysctl.d/50-deepro.conf ]; then
     (
         echo "vm.max_map_count = 262144"
@@ -33,12 +38,8 @@ if [ ! -f /etc/security/limits.d/50-deepro.conf ]; then
         echo "*    hard memlock unlimited"
         echo "*    soft memlock unlimited"
     ) | sudo tee /etc/security/limits.d/50-deepro.conf
+    sudo shutdown -r now
 fi
-for pam in common-session common-session-noninteractive; do
-    if ! grep pam_limits.so /etc/pam.d/${pam}; then
-        echo "session required pam_limits.so" | sudo tee -a /etc/pam.d/${pam}
-    fi
-done
 
 if ! grep deepro.io /etc/hosts; then
     echo "10.2.0.4  deepro.io" | sudo tee -a /etc/hosts
