@@ -22,11 +22,18 @@ if [ ! -f /etc/sysctl.d/50-deepro.conf ]; then
 fi
 if [ ! -f /etc/security/limits.d/50-deepro.conf ]; then
     (
-      echo "* hard nofile unlimited"
-      echo "* soft nofile unlimited"
-      echo "* hard memlock unlimited"
-      echo "* soft memlock unlimited"
+      echo "root hard nofile  unlimited"
+      echo "root soft nofile  unlimited"
+      echo "*    hard nofile  unlimited"
+      echo "*    soft nofile  unlimited"
+      echo "root hard memlock unlimited"
+      echo "root soft memlock unlimited"
+      echo "*    hard memlock unlimited"
+      echo "*    soft memlock unlimited"
     ) | sudo tee /etc/security/limits.d/50-deepro.conf
+fi
+if ! grep pam_limits.so /etc/pam.d/common-session; then
+    echo "session required pam_limits.so" | sudo tee -a /etc/pam.d/common-session
 fi
 
 if ! grep deepro.io /etc/hosts; then
