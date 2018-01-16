@@ -16,9 +16,11 @@ if [ "$(id -u)" -eq "0" ]; then
     shutdown -r now
 fi
 
-if [ ! -f /etc/sysctl.d/60-elastic.conf ]; then
+if [ ! -f /etc/sysctl.d/50-elastic.conf ]; then
     echo "vm.max_map_count = 262144" | sudo tee /etc/sysctl.d/50-elastic.conf
     sudo sysctl -w vm.max_map_count=262144
+fi
+if [ ! -f /etc/security/limits.d/50-elastic.conf ]; then
     (
       echo "* hard memlock unlimited"
       echo "* soft memlock unlimited"
@@ -33,5 +35,5 @@ if [ ! -d ~/${devops} ]; then
     git -C ~ clone ${repo}
 fi
 
-sudo apt-get update &&\
+sudo apt-get update && \
 sudo apt-get install -y gdisk tree plzip zip
