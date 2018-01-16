@@ -19,6 +19,10 @@ fi
 if [ ! -f /etc/sysctl.d/60-elastic.conf ]; then
     echo "vm.max_map_count=262144" | sudo tee /etc/sysctl.d/60-elastic.conf
     sudo sysctl -w vm.max_map_count=262144
+    (
+      echo "* hard memlock unlimited"
+      echo "* soft memlock unlimited"
+    ) | sudo tee /etc/security/limits.d/60-elastic.conf
 fi
 
 if ! grep deepro.io /etc/hosts; then
