@@ -10,14 +10,9 @@ Match Group sftp,projs
     AllowTcpForwarding yes
     PermitOpen sftp:22
 
-Match Group tcyang
-    PermitOpen localhost:19182 runner:3000 runner:9000
-Match Group zhangjie
-    PermitOpen localhost:10062 runner:3000 runner:9000
 Match Group crews
     AllowStreamLocalForwarding yes
     AllowTcpForwarding yes
-    PermitOpen runner:3000 runner:9000
 
 Match Group editor
     AllowTcpForwarding yes
