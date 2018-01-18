@@ -14,4 +14,4 @@ Pin-Priority: 1001
 EOF
 
 apt-get install -y gitlab-runner
-sed -ir '/^concurrent\s+=\s+1$/s/1/3/' /etc/gitlab-runner/config.toml
+#sed -ir '/^concurrent\s+=\s+1$/s/1/3/' /etc/gitlab-runner/config.toml
