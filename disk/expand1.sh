@@ -15,4 +15,5 @@ sgdisk e -d1 -N1 ${dsk}
 partprobe ${dsk}
 
 dsk="${dsk}1"
+sleep 2
 resize2fs ${dsk}

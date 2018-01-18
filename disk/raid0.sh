@@ -21,6 +21,7 @@ while ((${#})); do
     shift
 done
 
+sleep 2
 if mdadm --create --verbos /dev/${rmd} --level=stripe \
     --raid-devices=${rno} ${rsd}; then
     mkfs.ext4 -v -m .1 -b 4096 /dev/${rmd}

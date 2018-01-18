@@ -15,6 +15,7 @@ sgdisk -o -N1 -t1:8300 ${dsk}
 partprobe ${dsk}
 
 dsk="${dsk}1"
+sleep 2
 mkfs.ext4 -v -m .1 -b 4096 ${dsk}
 
 uid=$(blkid ${dsk} | grep -o ': UUID="[^"]*"')
