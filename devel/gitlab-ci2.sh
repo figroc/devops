@@ -15,3 +15,5 @@ EOF
 
 apt-get install -y gitlab-runner
 #sed -ir '/^concurrent\s+=\s+1$/s/1/3/' /etc/gitlab-runner/config.toml
+
+echo "@daily docker container prune -f && docker volume prune -f" >/etc/cron.d/gci
