@@ -34,8 +34,10 @@ case ${2} in
     rmi)
         usage ${tag}
         tag=$(curl -ksS -D- -o/dev/null -XGET \
+                -H"Accept: application/vnd.docker.distribution.manifest.v2+json" \
                 https://${rr}/v2/${repo}/manifests/${tag} \
-              | grep Docker-Content-Digest | awk '{print ($2)}')
+            | grep Docker-Content-Digest \
+            | awk '{print ($2)}')
         curl -k -XDELETE https://${rr}/v2/${repo}/manifests/${tag%$'\r'}
         ;;
     *)
