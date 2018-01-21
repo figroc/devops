@@ -5,6 +5,9 @@
 
 source $(dirname ${0})/../env
 
+apt-get remove -y gitlab-ci-multi-runner
+rm -f /etc/apt/sources.list.d/runner_gitlab-ci-multi-runner.list
+
 curl -fsSL https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.deb.sh | bash
 cat > /etc/apt/preferences.d/pin-gitlab-runner.pref <<EOF
 Explanation: Prefer GitLab provided packages over the Debian native ones
