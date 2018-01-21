@@ -7,7 +7,6 @@ Match Group projs
     PermitTTY no
     X11Forwarding no
 Match Group sftp,projs
-    AllowTcpForwarding yes
     PermitOpen sftp:22
 
 Match Group crews
@@ -15,5 +14,7 @@ Match Group crews
     AllowTcpForwarding yes
 
 Match Group editor
-    AllowTcpForwarding yes
     PermitOpen localhost:5000
+
+Match Group monitor
+    PermitOpen localhost:3000 localhost:9000
