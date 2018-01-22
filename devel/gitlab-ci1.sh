@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/bash
 #
 # gitlab runner setup
 #
@@ -8,6 +8,7 @@ source $(dirname ${0})/../env
 apt-get remove -y gitlab-runner
 rm -f /etc/apt/sources.list.d/runner_gitlab-runner.list
 
+set -e
 curl -fsSL https://packages.gitlab.com/install/repositories/runner/gitlab-ci-multi-runner/script.deb.sh | bash
 apt-get install -y gitlab-ci-multi-runner=1.11.5
 apt-mark hold gitlab-ci-multi-runner
