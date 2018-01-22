@@ -15,4 +15,4 @@ gitlab-runner register -n \
   --docker-image alpine \
   --docker-volumes /etc/docker/daemon.json:/etc/docker/daemon.json:ro \
   --docker-volumes /etc/docker/certs.d:/etc/docker/certs.d:ro \
-  --docker-volumes /var/file/inn:/var/file/inn:rw && \
+  --docker-volumes /var/file/inn:/var/file/inn:rw
