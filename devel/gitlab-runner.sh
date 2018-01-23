@@ -11,6 +11,7 @@ gitlab-runner register -n --locked false \
   --limit 1 --request-concurrency 1 \
   -u ${R_SERVER} -r ${R_TOKENS} \
   --executor docker --docker-privileged --docker-image alpine \
+  --docker-helper-image deepro.io/gitlab/gitlab-runner-helper \
   --docker-volumes /etc/docker/daemon.json:/etc/docker/daemon.json:ro \
   --docker-volumes /etc/docker/certs.d:/etc/docker/certs.d:ro \
   --docker-volumes /var/file/inn:/var/file/inn:rw && \
