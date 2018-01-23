@@ -16,5 +16,5 @@ gitlab-runner register -n --locked false \
   --docker-volumes /etc/docker/certs.d:/etc/docker/certs.d:ro \
   --docker-volumes /var/file/inn:/var/file/inn:rw && \
 awk -i inplace \
-  'FNR==NR{if(/^\s+executor\s+=\s+"docker"$/)p=NR;next}1;FNR==p{print"  environment = [\"DOCKER_DRIVER=overlay2\"]"}' \
+  'FNR==NR{if(/^\s+executor\s+=\s+"docker"$/)p=NR;next}1;FNR==p{print"  environment = [\"DOCKER_DRIVER=overlay2\",\"COMPOSE_PROJECT_NAME=${CI_COMMIT_SHA}\"]"}' \
   /etc/gitlab-runner/config.toml /etc/gitlab-runner/config.toml
