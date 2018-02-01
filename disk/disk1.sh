@@ -4,7 +4,7 @@
 #
 
 if [[ ${#} < 2 ]]; then
-    echo "${0} <init|expand> disk"
+    echo "${0} < init | expand > disk"
     exit 1
 fi
 
