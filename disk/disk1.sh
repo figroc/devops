@@ -3,30 +3,30 @@
 # single disk setup
 #
 
-if [[ ${#} < 1 ]]; then
-    echo "${0} disk"
+if [[ ${#} < 2 ]]; then
+    echo "${0} <init|expand> disk"
     exit 1
 fi
 
 source $(dirname ${0})/../env
+source $(dirname ${0})/imount
 
-dsk="/dev/${1}"
-sgdisk -o -N1 -t1:8300 ${dsk}
+cmd="${1}"
+dsk="/dev/${2}"
+if [[ "${cmd}" == "init" ]]; then
+    sgdisk -o -N1 -t1:8300 ${dsk}
+else
+    umount ${data}
+    sgdisk e -d1 -N1 ${dsk}
+fi
+
 partprobe ${dsk}
+sleep 2
 
 dsk="${dsk}1"
-sleep 2
-mkfs.ext4 -v -m .1 -b 4096 ${dsk}
-
-uid=$(blkid ${dsk} | grep -o ': UUID="[^"]*"')
-uid=${uid:2}
-uid=${uid//\"/}
-echo ${uid}$'\t'${data}$'\text4\tdefaults\t0\t2'\
-    | tee -a /etc/fstab
-
-if mkdir ${data} 2> /dev/null; then
-    touch ${data}/WARNING
-    chown ${devops}:${devops} ${data}
+if [[ "${cmd}" == "init" ]]; then
+    imount ${dsk}
+else
+    resize2fs ${dsk}
     mount ${data}
-    chown ${devops}:${devops} ${data}
 fi

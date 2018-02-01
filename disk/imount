@@ -1,0 +1,21 @@
+#!/bin/bash -e
+#
+# init disk mount
+#
+
+function imount {
+    local dev="${1}"
+    mkfs.ext4 -v -m .1 -b 4096 ${dev}
+
+    uid=$(blkid ${dev} | grep -o ': UUID="[^"]*"')
+    uid=${uid:2}
+    uid=${uid//\"/}
+    echo ${uid}$'\t'${data}$'\text4\tdefaults\t0\t2'\
+        | tee -a /etc/fstab
+
+    mkdir -p ${data}
+    touch ${data}/WARNING
+    chown ${devops}:${devops} ${data}
+    mount ${data}
+    chown ${devops}:${devops} ${data}
+}
