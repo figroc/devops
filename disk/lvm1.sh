@@ -8,7 +8,7 @@ if [[ ${#} < 3 ]]; then
     exit 1
 fi
 
-apt-get update && apt-get install -y lvm
+apt-get update && apt-get install -y lvm2
 
 source $(dirname ${0})/../env
 source $(dirname ${0})/imount
