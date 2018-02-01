@@ -3,6 +3,8 @@
 # docker storage setup
 #
 
+mirror="${1}"
+
 source $(dirname ${0})/../env
 cert=$(dirname ${0})/../cert/server/asset.ca.crt
 
@@ -21,33 +23,37 @@ mkdir -p ${data}
 if mkdir -p ${dkr_mnt}; then
     chown devops:devops ${dkr_mnt}
 fi
-if mkdir -p ${dkr_graf}; then
-    chown root:root ${dkr_graf}
-    chmod go-rw ${dkr_graf}
+if mkdir -p ${dkr_dir}; then
+    chown root:root ${dkr_dir}
+    chmod go-rw ${dkr_dir}
 fi
 
 (   echo '{'
-    echo '  "data-root": "'${dkr_graf}'",'
+    echo '  "data-root": "'${dkr_dir}'",'
     echo '  "log-opts": {'
     echo '    "max-size": "1g"'
-    echo '  },'
-    echo '  "registry-mirrors": ['
-    echo '    "https://f62945bb.mirror.aliyuncs.com"'
-    echo '  ]'
+    if [[ -n "${mirror}" ]]; then
+        echo '  },'
+        echo '  "registry-mirrors": ['
+        echo '    "https://f62945bb.mirror.aliyuncs.com"'
+        echo '  ]'
+    else
+        echo '  }'
+    fi
     echo '}'
 ) | tee /etc/docker/daemon.json
 
-if mkdir -p ${dkr_reg}; then
-    chown root:root ${dkr_reg}
+if mkdir -p ${dkr_crt}; then
+    chown root:root ${dkr_crt}
 fi
-cp ${cert} ${dkr_reg}/ca.crt
-chown root:root ${dkr_reg}/ca.crt
-chmod 644 ${dkr_reg}/ca.crt
+cp ${cert} ${dkr_crt}/ca.crt
+chown root:root ${dkr_crt}/ca.crt
+chmod 644 ${dkr_crt}/ca.crt
 
 usermod -G docker -a ${devops}
 systemctl daemon-reload
 systemctl start docker
 
 apt-get -y install python-pip
-pip install --upgrade pip
-pip install --upgrade docker-compose
+pip install ${mirror:+-i https://mirrors.aliyun.com/pypi/simple} --upgrade pip
+pip install ${mirror:+-i https://mirrors.aliyun.com/pypi/simple} --upgrade docker-compose
