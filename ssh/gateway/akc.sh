@@ -29,5 +29,5 @@ cmd=$(grep ${opt} \
     | tail -n 1 | sed '/^[^:]*:[[:blank:]]*/s///' | tr -d '\n')
 
 while read line; do
-    echo ${cmd} ${line}
+    echo ${cmd//@@/${user}} ${line}
 done < ${pub}

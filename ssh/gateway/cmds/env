@@ -1,0 +1,65 @@
+#!/bin/bash
+
+function z_err() {
+    if [[ -z ${2} ]]; then echo ${1} 1>&2; exit 1; fi
+}
+
+declare -A PORTS
+PORTS["byzhang"]=9092
+PORTS["xjfan"  ]=9094
+PORTS["hzhao"  ]=9095
+PORTS["hohaxu" ]=9096
+PORTS["yaxin"  ]=9097
+PORTS["tcyang" ]=9082
+PORTS["ydfeng" ]=9083
+PORTS["chenp"  ]=9084
+PORTS["wujz"   ]=9085
+PORTS["zslai"  ]=9088
+PORTS["lip"    ]=11010
+PORTS["hefy"   ]=11020
+PORTS["tangkh" ]=11030
+PORTS["zhangm" ]=11040
+PORTS["zhengjh"]=11060
+PORTS["zhangjc"]=11070
+PORTS["huangs" ]=11080
+PORTS["suix"   ]=11090
+PORTS["qiaoyw" ]=11100
+PORTS["shengs" ]=11110
+PORTS["zhangp" ]=11120
+PORTS["liuyh"   ]=10030
+PORTS["yxzhang" ]=10040
+PORTS["tangsc"  ]=10050
+PORTS["zhangjie"]=10060
+PORTS["huangw"   ]=10110
+PORTS["cuilb"    ]=10120
+PORTS["zhangjing"]=10130
+
+declare -A HOSTS
+HOSTS["byzhang"]="devel"
+HOSTS["xjfan"  ]="devel"
+HOSTS["hzhao"  ]="devel"
+HOSTS["hohaxu" ]="devel"
+HOSTS["yaxin"  ]="devel"
+HOSTS["tcyang" ]="devel"
+HOSTS["ydfeng" ]="devel"
+HOSTS["chenp"  ]="devel"
+HOSTS["wujz"   ]="devel"
+HOSTS["zslai"  ]="devel"
+HOSTS["lip"    ]="deve2"
+HOSTS["hefy"   ]="deve2"
+HOSTS["tangkh" ]="deve2"
+HOSTS["zhangm" ]="deve2"
+HOSTS["zhengjh"]="deve2"
+HOSTS["zhangjc"]="deve2"
+HOSTS["huangs" ]="deve2"
+HOSTS["suix"   ]="deve2"
+HOSTS["qiaoyw" ]="deve2"
+HOSTS["shengs" ]="deve2"
+HOSTS["zhangp" ]="camp"
+HOSTS["liuyh"   ]="camp"
+HOSTS["yxzhang" ]="camp"
+HOSTS["tangsc"  ]="camp"
+HOSTS["zhangjie"]="camp"
+HOSTS["huangw"   ]="camp"
+HOSTS["cuilb"    ]="camp"
+HOSTS["zhangjing"]="camp"

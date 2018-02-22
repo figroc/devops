@@ -1,4 +1,0 @@
-chenp  : command="ssh -q chenp@runner"
-tcyang : command="ssh -q tcyang@runner"
-ydfeng : command="ssh -q ydfeng@runner"
-zslai  : command="ssh -q zslai@runner"
