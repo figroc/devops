@@ -94,7 +94,7 @@ case ${1} in
 
             jail)
                 cmds=( bash sh true false )
-                cmdu=( env ssh ssh-agent scp sftp rssh )
+                cmdu=( dirname env ssh ssh-agent scp sftp rssh )
                 libu=( openssh/sftp-server rssh/rssh_chroot_helper )
 
                 # tools

@@ -31,8 +31,8 @@ case ${cmd} in
         fi
         ;;
     box)
-        hot=${HOSTS[${usr}]}; z_err "host not specified" ${hot};
-        docker=${args[1]};    z_err "dbox not specified" ${docker};
+        hot=${HOSTS["${usr}"]}; z_err "host not specified" ${hot};
+        docker=${args[1]};      z_err "dbox not specified" ${docker};
         if [[ "${docker}" == "status" ]]; then
             ssh -i /etc/ssh/gate/sys/agent.id devops@${hot} \
                 docker ps -f "name=${usr}-" 2>/dev/null
