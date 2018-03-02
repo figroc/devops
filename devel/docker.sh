@@ -32,7 +32,7 @@ fi
     echo '  "data-root": "'${dkr_dir}'",'
     echo '  "log-opts": {'
     echo '    "max-size": "1g"'
-    if [[ -n "${mirror}" ]]; then
+    if [[ -z "${mirror}" ]]; then
         echo '  },'
         echo '  "registry-mirrors": ['
         echo '    "https://f62945bb.mirror.aliyuncs.com"'
