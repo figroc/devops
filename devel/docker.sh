@@ -19,9 +19,7 @@ apt-get install -y curl apt-transport-https ca-certificates software-properties-
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
 add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
 
-apt-get update
-apt-get -y install docker-ce
-apt-mark hold docker-ce
+apt-get update && apt-get -y install docker-ce && apt-mark hold docker-ce
 systemctl stop docker
 
 mkdir -p ${data}
@@ -56,7 +54,6 @@ chown root:root ${dkr_crt}/ca.crt
 chmod 644 ${dkr_crt}/ca.crt
 
 usermod -G docker -a ${devops}
-systemctl daemon-reload
 systemctl start docker
 
 apt-get -y install python-pip
