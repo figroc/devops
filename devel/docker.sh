@@ -4,12 +4,17 @@
 #
 
 mirror="${1}"
+if [[ -n "${mirror}" ]]; then
+    if [[ "${mirror}" != "-m" ]]; then
+        echo "unrecognized options" 1>&2
+        exit 1
+    fi
+fi
 
 source $(dirname ${0})/../env
 cert=$(dirname ${0})/../cert/server/asset.ca.crt
 
 apt-get update
-apt-get remove -y docker docker.io
 apt-get install -y curl apt-transport-https ca-certificates software-properties-common
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
 add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
@@ -32,7 +37,7 @@ fi
     echo '  "data-root": "'${dkr_dir}'",'
     echo '  "log-opts": {'
     echo '    "max-size": "1g"'
-    if [[ -z "${mirror}" ]]; then
+    if [[ -n "${mirror}" ]]; then
         echo '  },'
         echo '  "registry-mirrors": ['
         echo '    "https://f62945bb.mirror.aliyuncs.com"'
