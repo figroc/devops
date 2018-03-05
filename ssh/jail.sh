@@ -120,13 +120,14 @@ case ${1} in
                 fi
 
                 # dirs
-                mkdir -p ${jail}/{dev,etc,lib,lib64,usr,bin,home}
+                mkdir -p ${jail}/{dev,etc,lib,lib64,usr,bin,home,tmp}
                 mkdir -p ${jail}/etc/ssh
                 mkdir -p ${jail}/usr/{bin,lib}
                 mkdir -p ${jail}/usr/lib/{openssh,rssh}
                 chown root:root ${jail}
                 chmod go-rw ${jail}
                 chmod o-r ${jail}/home
+                chmod 777 ${jail}/tmp
 
                 # devices
                 mknod -m 622 ${jail}/dev/console c 5 1
