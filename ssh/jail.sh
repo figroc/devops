@@ -86,13 +86,18 @@ case ${1} in
             gate)
                 mkdir -p ${gate}/{sys,crews,projs}
                 \cp -r ${rdir}/ssh/gateway/{akc.sh,roles} ${gate}/
+                cat ${rdir}/ssh/sshd_config         >> ${gate}/../sshd_config
+                cat ${rdir}/ssh/gateway/sshd_config >> ${gate}/../sshd_config
+                cat ${rdir}/ssh/gateway/ssh_config  >> ${gate}/../ssh_config
                 chown ${devops}:${devops} ${gate}/sys/
                 if [[ -d ${jail} ]]; then
                     mkdir -p ${jail}${gate}
-                    \cp -r ${rdir}/ssh/gateway/cmds ${jail}${gate}/
+                    \cp -r ${rdir}/ssh/gateway/ssh_config ${jail}${gate}/../
+                    \cp -r ${rdir}/ssh/gateway/cmds       ${jail}${gate}/
                 else
                     \cp -r ${rdir}/ssh/gateway/cmds ${gate}/
                 fi
+                service ssh reload
                 ;;
 
             cmds)
