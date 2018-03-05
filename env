@@ -1,8 +1,8 @@
 #!/bin/bash
 
 devops='devops'
+rdir=$(dirname ${BASH_SOURCE[0]})
 repo='https://github.com/figroc/devops.git'
-pubs='https://raw.githubusercontent.com/figroc/devops/master/pub'
 
 gate='/etc/ssh/gate'
 data='/var/data'

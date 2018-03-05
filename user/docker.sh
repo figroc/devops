@@ -24,7 +24,7 @@ if useradd -m -b ${home} -s /usr/sbin/nologin ${user}; then
 fi
 
 mkdir -p ${home}/${user}/.ssh
-wget -O ${home}/${user}/.ssh/authorized_keys ${pubs}/${user}.pub
+\cp ${rdir}/pub/${user}.pub ${home}/${user}/.ssh/authorized_keys
 
 if mkdir -p /home/${user}; then
     chown ${user}:${user} /home/${user}

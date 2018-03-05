@@ -60,7 +60,7 @@ function shadow_group {
 }
 
 function update_pkey {
-    if wget -O ${gate}/crews/${1}.pub ${pubs}/${1}.pub; then
+    if \cp ${rdir}/pub/${1}.pub ${gate}/crews/${1}.pub; then
         if [ -z ${2} ]; then
             chown ${1}:${1} ${gate}/crews/${1}.pub
         else
@@ -70,7 +70,7 @@ function update_pkey {
 }
 
 function update_jkey {
-    if wget -O ${gate}/projs/${2}/${1}.pub ${pubs}/projs/${2}/${1}.pub; then
+    if \cp ${rdir}/pub/projs/${2}/${1}.pub ${gate}/projs/${2}/${1}.pub; then
         if [[ $(grep '^'${2}':' /etc/passwd) ]]; then
             chown ${2}:${2} ${gate}/projs/${2}/${1}.pub
         elif [[ $(grep '^'${1}'\.'${2}':' /etc/passwd) ]]; then
@@ -84,8 +84,15 @@ case ${1} in
     setup)
         case ${2} in
             gate)
-                mkdir -p ${gate}/{sys,roles,crews,projs}
+                mkdir -p ${gate}/{sys,crews,projs}
+                \cp -r ${rdir}/ssh/gateway/{akc.sh,roles} ${gate}/
                 chown ${devops}:${devops} ${gate}/sys/
+                if [[ -d ${jail} ]]; then
+                    mkdir -p ${jail}${gate}
+                    \cp -r ${rdir}/ssh/gateway/cmds ${jail}${gate}/
+                else
+                    \cp -r ${rdir}/ssh/gateway/cmds ${gate}/
+                fi
                 ;;
 
             cmds)
@@ -109,8 +116,8 @@ case ${1} in
 
                 # dirs
                 mkdir -p ${jail}/{dev,etc,lib,lib64,usr,bin,home}
+                mkdir -p ${jail}/etc/ssh
                 mkdir -p ${jail}/usr/{bin,lib}
-                mkdir -p ${jail}/usr/etc/ssh
                 mkdir -p ${jail}/usr/lib/{openssh,rssh}
                 chown root:root ${jail}
                 chmod go-rw ${jail}

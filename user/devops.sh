@@ -12,4 +12,4 @@ source $(dirname ${0})/../env
 
 user=${1}
 
-wget ${pubs}/${user}.pub -O - | tee -a ~/.ssh/authorized_keys
+cat ${rdir}/pub/${user}.pub | tee -a ~/.ssh/authorized_keys
