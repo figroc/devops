@@ -22,13 +22,8 @@ case ${cmd} in
         fi
         user=${args[1]}; z_err "user not specified" ${user};
         role=${args[2]};
-        if [[ -z ${role} ]]; then
-            s_rm /etc/ssh/gate/crews/${user}.pub
-        fi
-        if sudo userdel ${user}.${role} 2>/dev/null; then
-            sudo sed -i "/^${user}.${role}:/d" /var/jail/etc/passwd
-            sudo sed -i "s/\b${user}.${role}\b,\?//g;s/,$//g" /var/jail/etc/group
-        fi
+        ssh -i /etc/ssh/gate/sys/agent.id -q devops@localhost \
+            /home/devops/devops/ssh/jail.sh remo ${user} ${role}
         ;;
     box)
         hot=${HOSTS["${usr}"]}; z_err "host not specified" ${hot};

@@ -26,42 +26,42 @@ function chroot_cmds {
 }
 
 function shadow_home {
-    if [ -z ${2} ]; then
-        sed -i '/^'${1}':.*/s@:'${jail}'@:@' /etc/passwd
+    if [ -z "${2}" ]; then
+        sed -i "/^${1}:.*/s@:${jail}@:@" /etc/passwd
     else
-        sed -i '/^'${1}'\.'${2}':.*/s@:'${jail}'@:@' /etc/passwd
+        sed -i "/^${1}\\.${2}:.*/s@:${jail}@:@" /etc/passwd
     fi
 }
 
 function shadow_shell {
-    if [ -z ${2} ]; then
-        sed -i '/^'${1}':.*/s@:/bin/bash$@:/bin/true@' /etc/passwd
+    if [ -z "${2}" ]; then
+        sed -i "/^${1}:.*/s@:/bin/bash\$@:/bin/true@" /etc/passwd
     else
-        sed -i '/^'${1}'\.'${2}':.*/s@:/bin/bash$@:/bin/true@' /etc/passwd
+        sed -i "/^${1}\\.${2}:.*/s@:/bin/bash\$@:/bin/true@" /etc/passwd
     fi
 }
 
 function shadow_user {
-    if [ -z ${2} ]; then
-        sed -i '/^'${1}':.*/d' ${jail}/etc/passwd
-        grep '^'${1}':' /etc/passwd | tee -a ${jail}/etc/passwd
+    if [ -z "${2}" ]; then
+        sed -i "/^${1}:.*/d" ${jail}/etc/passwd
+        grep "^${1}:" /etc/passwd | tee -a ${jail}/etc/passwd
     else
-        sed -i '/^'${1}'\.'${2}':.*/d' ${jail}/etc/passwd
-        grep '^'${1}'\.'${2}':' /etc/passwd | tee -a ${jail}/etc/passwd
+        sed -i "/^${1}\\.${2}:.*/d" ${jail}/etc/passwd
+        grep "^${1}\\.${2}:" /etc/passwd | tee -a ${jail}/etc/passwd
     fi
 }
 
 function shadow_group {
     while ((${#})); do
-        sed -i '/^'${1}':.*/d' ${jail}/etc/group
-        grep '^'${1}':' /etc/group | tee -a ${jail}/etc/group
+        sed -i "/^${1}:.*/d" ${jail}/etc/group
+        grep "^${1}:" /etc/group | tee -a ${jail}/etc/group
         shift
     done
 }
 
 function update_pkey {
     if \cp ${rdir}/pub/${1}.pub ${gate}/crews/${1}.pub; then
-        if [ -z ${2} ]; then
+        if [ -z "${2}" ]; then
             chown ${1}:${1} ${gate}/crews/${1}.pub
         else
             chown ${2}:${2} ${gate}/crews/${1}.pub
@@ -71,27 +71,28 @@ function update_pkey {
 
 function update_jkey {
     if \cp ${rdir}/pub/projs/${2}/${1}.pub ${gate}/projs/${2}/${1}.pub; then
-        if [[ $(grep '^'${2}':' /etc/passwd) ]]; then
+        if grep "^${2}:" /etc/passwd; then
             chown ${2}:${2} ${gate}/projs/${2}/${1}.pub
-        elif [[ $(grep '^'${1}'\.'${2}':' /etc/passwd) ]]; then
+        elif grep "^${1}\\.${2}:" /etc/passwd; then
             chown ${1}.${2}:${2} ${gate}/projs/${2}/${1}.pub
         fi
     fi
 }
 
 # command switch
-case ${1} in
+case "${1}" in
     setup)
-        case ${2} in
+        case "${2}" in
             gate)
                 mkdir -p ${gate}/{sys,crews,projs}
                 \cp -r ${rdir}/ssh/gateway/{akc.sh,roles} ${gate}/
                 cat ${rdir}/ssh/sshd_config         >> ${gate}/../sshd_config
                 cat ${rdir}/ssh/gateway/sshd_config >> ${gate}/../sshd_config
                 cat ${rdir}/ssh/gateway/ssh_config  >> ${gate}/../ssh_config
-                chown ${devops}:${devops} ${gate}/sys/
-                if [[ -d ${jail} ]]; then
-                    mkdir -p ${jail}${gate}
+                chown ${devops}:${devops} ${gate}/sys
+                if [[ -d "${jail}" ]]; then
+                    mkdir -p ${jail}${gate}/sys
+                    chown ${devops}:${devops} ${jail}${gate}/sys
                     \cp -r ${rdir}/ssh/gateway/ssh_config ${jail}${gate}/../
                     \cp -r ${rdir}/ssh/gateway/cmds       ${jail}${gate}/
                 else
@@ -111,10 +112,10 @@ case ${1} in
 
                 # tools
                 if apt-get install rssh; then
-                    sed -i '/^# chrootpath = .*/s@@chrootpath = '${jail}'@' /etc/rssh.conf
+                    sed -i "/^# chrootpath = .*/s@@chrootpath = ${jail}@" /etc/rssh.conf
                 fi
                 if wget -O /sbin/l2chroot https://www.cyberciti.biz/files/lighttpd/l2chroot.txt; then
-                    sed -i '/^BASE=.*/s@@BASE="'${jail}'"@' /sbin/l2chroot
+                    sed -i "/^BASE=.*/s@@BASE=\"${jail}\"@" /sbin/l2chroot
                     chown root:root /sbin/l2chroot
                     chmod +x /sbin/l2chroot
                 fi
@@ -155,8 +156,8 @@ case ${1} in
                 cp /etc/hosts ${jail}/etc/
                 touch ${jail}/etc/{group,passwd}
                 cp /etc/nsswitch.conf ${jail}/etc/
-                sed -i '/^group:.*/s/compat/files/' ${jail}/etc/nsswitch.conf
-                sed -i '/^passwd:.*/s/compat/files/' ${jail}/etc/nsswitch.conf
+                sed -i "/^group:.*/s/compat/files/" ${jail}/etc/nsswitch.conf
+                sed -i "/^passwd:.*/s/compat/files/" ${jail}/etc/nsswitch.conf
                 mkdir -p ${jail}/lib/x86_64-linux-gnu
                 cp /lib/x86_64-linux-gnu/libnss_* ${jail}/lib/x86_64-linux-gnu/
                 cp -ar /lib/terminfo ${jail}/lib/
@@ -185,14 +186,15 @@ case ${1} in
             shadow_group crews
         fi
 
-        if [ ! -z ${user} ]; then
+        if [[ -n "${user}" ]]; then
             if addgroup ${user}; then
                 shadow_group ${user}
             fi
-            if adduser --disabled-password --gecos '' --home ${jail}/home/${user} \
+            if adduser --disabled-password --gecos "" \
+                --home ${jail}/home/${user} \
                 --ingroup ${user} ${user}; then
                 chmod -R g+rw ${jail}/home/${user}
-                usermod -a -G jail,crews ${user}
+                usermod -aG jail,crews ${user}
                 shadow_home ${user}
                 shadow_user ${user}
                 shadow_group jail crews ${user}
@@ -200,13 +202,14 @@ case ${1} in
             update_pkey ${user}
         fi
 
-        if [ ! -z ${role} ]; then
+        if [[ -n "${role}" ]]; then
             if addgroup ${role}; then
                 shadow_group ${role}
             fi
-            if adduser --disabled-password --gecos '' --home ${jail}/home/${user} \
+            if adduser --disabled-password --gecos "" \
+                --home ${jail}/home/${user} \
                 --ingroup ${user} --force-badname ${user}.${role}; then
-                usermod -a -G jail,crews,${role} ${user}.${role}
+                usermod -aG jail,crews,${role} ${user}.${role}
                 shadow_home ${user} ${role}
                 shadow_user ${user} ${role}
                 shadow_group jail crews ${role}
@@ -222,18 +225,19 @@ case ${1} in
             shadow_group projs
         fi
 
-        if [ ! -z ${proj} ]; then
+        if [[ -n "${proj}" ]]; then
             mkdir -p ${gate}/projs/${proj}
             if addgroup ${proj}; then
                 shadow_group ${proj}
             fi
         fi
 
-        if [ ! -z ${user} ]; then
-            if adduser --disabled-password --gecos '' --home ${jail}/home/${proj} \
+        if [[ -n "${user}" ]]; then
+            if adduser --disabled-password --gecos "" \
+                --home ${jail}/home/${proj} \
                 --ingroup ${proj} --force-badname ${user}.${proj}; then
                 chmod -R g+w ${jail}/home/${proj}
-                usermod -a -G jail,projs ${user}.${proj}
+                usermod -aG jail,projs ${user}.${proj}
                 shadow_home ${user} ${proj}
                 shadow_shell ${user} ${proj}
                 shadow_user ${user} ${proj}
@@ -243,12 +247,25 @@ case ${1} in
         fi
         ;;
 
+    remo)
+        user=${2}
+        role=${3}
+        if [[ -n "${user}" ]]; then
+            if [[ -z "${role}" ]]; then
+                s_rm ${gate}/crews/${user}.pub
+            elif userdel ${user}.${role} 2>/dev/null; then
+                sed -i "/^${user}.${role}:/d" ${jail}/etc/passwd
+                sed -i "s/\\b${user}.${role}\\b,\?//g;s/,$//g" ${jail}/etc/group
+            fi
+        fi
+        ;;
+
     role)
         role=${2}
-        if [ ! -z ${role} ]; then
-            if adduser --disabled-password --gecos '' \
+        if [[ -n "${role}" ]]; then
+            if adduser --disabled-password --gecos "" \
                 --home ${jail}/home/${role} ${role}; then
-                usermod -a -G jail ${role}
+                usermod -aG jail ${role}
                 shadow_home ${role}
                 shadow_user ${role}
                 shadow_group jail ${role}
@@ -256,8 +273,8 @@ case ${1} in
         fi
 
         user=${4}
-        if [ ! -z ${user} ]; then
-            case ${3} in
+        if [[ -n "${user}" ]]; then
+            case "${3}" in
                 crew)
                     mkdir -p ${gate}/crews
                     update_pkey ${user} ${role}
@@ -265,7 +282,7 @@ case ${1} in
 
                 proj)
                     addgroup projs
-                    if usermod -a -G projs ${role}; then
+                    if usermod -aG projs ${role}; then
                         shadow_group projs
                     fi
                     mkdir -p ${gate}/projs/${role}
@@ -278,31 +295,30 @@ case ${1} in
     agent)
         adir=${jail}${gate}/sys
 
-        if mkdir -p ${adir}; then
-            chown ${devops}:${devops} ${adir}
+        if sudo mkdir -p ${adir}; then
+            sudo chown ${devops}:${devops} ${adir}
         fi
-        if [ ! -f ${adir}/agent.id ]; then
-            ssh-keygen -t rsa -b 4096 -N '' -C 'agent' -f ${adir}/agent
+        if [[ ! -f ${adir}/agent.id ]]; then
+            ssh-keygen -t rsa -b 4096 -N "" -C "agent" -f ${adir}/agent
             mv ${adir}/agent ${adir}/agent.id
-            chmod a+r ${adir}/agent.id
         fi
-        if [ ! -z ${3} ]; then
+        if [[ -n "${3}" ]]; then
             scp -3 ${devops}@${3}:${adir}/agent.pub ${devops}@${2}:${gate}/sys/${3}.pub
-        elif [ ! -z ${2} ]; then
+        elif [[ -n "${2}" ]]; then
             scp ${adir}/agent.pub ${devops}@${2}:${gate}/sys/${HOSTNAME}.pub
         fi
         ;;
 
     esc)
-        case ${2} in
+        case "${2}" in
             crew)
                 user=${3}
 
                 mkdir -p ${gate}/crews
                 addgroup crews
-                if [ ! -z ${user} ]; then
-                    if adduser --disabled-password --gecos '' ${user}; then
-                        usermod -a -G crews ${user}
+                if [[ -n "${user}" ]]; then
+                    if adduser --disabled-password --gecos "" ${user}; then
+                        usermod -aG crews ${user}
                     fi
                     update_pkey ${user}
                 fi
@@ -311,25 +327,24 @@ case ${1} in
             role)
                 role=${3}
 
-                if [ ! -z ${role} ]; then
-                    adduser --disabled-password --gecos '' ${role}
+                if [[ -n ${role} ]]; then
+                    adduser --disabled-password --gecos "" ${role}
                 fi
                 ;;
 
             agent)
                 adir=${gate}/sys
 
-                if mkdir -p ${adir}; then
-                    chown ${devops}:${devops} ${adir}
+                if sudo mkdir -p ${adir}; then
+                    sudo chown ${devops}:${devops} ${adir}
                 fi
-                if [ ! -f ${adir}/agent.id ]; then
-                    ssh-keygen -t rsa -b 4096 -N '' -C 'agent' -f ${adir}/agent
+                if [[ ! -f ${adir}/agent.id ]]; then
+                    ssh-keygen -t rsa -b 4096 -N "" -C "agent" -f ${adir}/agent
                     mv ${adir}/agent ${adir}/agent.id
-                    chown ${devops}:${devops} ${adir}/agent.*
                 fi
-                if [ ! -z ${4} ]; then
+                if [[ -n "${4}" ]]; then
                     scp -3 ${devops}@${4}:${adir}/agent.pub ${devops}@${3}:${adir}/${4}.pub
-                elif [ ! -z ${3} ]; then
+                elif [[ -n "${3}" ]]; then
                     scp ${adir}/agent.pub ${devops}@${3}:${adir}/${HOSTNAME}.pub
                 fi
                 ;;
