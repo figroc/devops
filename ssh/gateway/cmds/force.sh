@@ -30,8 +30,8 @@ case "${cmd}" in
         docker=${args[1]};      z_err "dbox not specified" ${docker};
         case "${docker}" in
             status)
-                ssh -i /etc/ssh/gate/sys/agent.id devops@${hot} \
-                    docker ps -f "name=${usr}-" 2>/dev/null
+                ssh -i /etc/ssh/gate/sys/agent.id -q devops@${hot} \
+                    docker ps -f "name=${usr}-"
                 ;;
             devel)
                 docker="client"
@@ -49,7 +49,7 @@ case "${cmd}" in
         fi
         for ecs in ${SPOOL[@]}; do
             echo -n "${ecs}: "
-            ssh -i /etc/ssh/gate/sys/agent.id devops@localhost \
+            ssh -i /etc/ssh/gate/sys/agent.id -q devops@localhost \
                 devops/aliyun/ecs/${act}.sh ${ecs}
         done
         ;;
