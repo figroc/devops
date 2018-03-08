@@ -11,7 +11,7 @@ read -a args <<< "${SSH_ORIGINAL_COMMAND}"
 usr=${1};       z_err "user not specified" ${usr};
 cmd=${args[0]}; z_err "no command specified" ${cmd};
 
-case ${cmd} in
+case "${cmd}" in
     ?)
         echo "box <devel...>: reload devel docker"
         echo "box status: list running devel docker"
@@ -23,21 +23,35 @@ case ${cmd} in
         user=${args[1]}; z_err "user not specified" ${user};
         role=${args[2]};
         ssh -i /etc/ssh/gate/sys/agent.id -q devops@localhost \
-            /home/devops/devops/ssh/jail.sh remo ${user} ${role}
+            devops/ssh/jail.sh remo ${user} ${role}
         ;;
     box)
         hot=${HOSTS["${usr}"]}; z_err "host not specified" ${hot};
         docker=${args[1]};      z_err "dbox not specified" ${docker};
-        if [[ "${docker}" == "status" ]]; then
-            ssh -i /etc/ssh/gate/sys/agent.id devops@${hot} \
-                docker ps -f "name=${usr}-" 2>/dev/null
-        else
-            if [[ "${docker}" == "devel" ]]; then
+        case "${docker}" in
+            status)
+                ssh -i /etc/ssh/gate/sys/agent.id devops@${hot} \
+                    docker ps -f "name=${usr}-" 2>/dev/null
+                ;;
+            devel)
                 docker="client"
-            fi
-            ssh -i /etc/ssh/gate/sys/agent.id -q devops@${hot} \
-                /home/devops/docker/etc/azure.sh ${usr} ${docker}
+                ;&
+            *)
+                ssh -i /etc/ssh/gate/sys/agent.id -q devops@${hot} \
+                    docker/etc/azure.sh ${usr} ${docker}
+        esac
+        ;;
+    gpu)
+        hot=${HOSTS["${usr}"]}; z_err "host not specified" ${hot};
+        act=${args[1]};         z_err "action not specified" ${act};
+        if [[ ! *" ${act} "* == " status start stop " ]]; then
+            z_err "action not supported"
         fi
+        for ecs in ${SPOOL[@]}; do
+            echo -n "${ecs}: "
+            ssh -i /etc/ssh/gate/sys/agent.id devops@localhost \
+                devops/aliyun/ecs/${act}.sh ${ecs}
+        done
         ;;
     sec)
         if [[ ! ${usr} =~ ^(chenp|tcyang|wujz|ydfeng|zhengjh|zslai)$ ]]; then

@@ -62,3 +62,6 @@ declare -A HOSTS=(
     ["cuilb"]="camp"
     ["zhangjing"]="camp"
 )
+declare -A SPOOL=(
+    i-bp131x0l2f6ptmuecn49
+)
