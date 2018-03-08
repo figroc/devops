@@ -44,7 +44,7 @@ case "${cmd}" in
     gpu)
         hot=${HOSTS["${usr}"]}; z_err "host not specified" ${hot};
         act=${args[1]};         z_err "action not specified" ${act};
-        if [[ ! *" ${act} "* == " status start stop " ]]; then
+        if [[ " status start stop " != *" ${act} "* ]]; then
             z_err "action not supported"
         fi
         for ecs in ${SPOOL[@]}; do
