@@ -58,10 +58,10 @@ case "${cmd}" in
             z_err "forbidden"
         fi
         for hot in devel deve2 camp; do
-            ssh -i /etc/ssh/gate/sys/agent.id devops@${hot} \
+            ssh -i /etc/ssh/gate/sys/agent.id -q devops@${hot} \
                 "cd env-dev && git pull && sudo ./file.sh"
         done
-        ssh -i /etc/ssh/gate/sys/agent.id devops@runner \
+        ssh -i /etc/ssh/gate/sys/agent.id -q devops@runner \
             "cd env-dev && git pull && ./docker.sh"
         ;;
     *)

@@ -10,7 +10,7 @@ load=( $(aliyuncli ecs DescribeInstanceMonitorData \
     | jq '.MonitorData.InstanceMonitorData[].CPU') )
 
 for u in ${load[@]}; do
-    if [[ *" ${u} "* == " 0 1 null " ]]; then
+    if [[ " 0 1 null " = *" ${u} "* ]]; then
         continue
     fi
     echo "busy"
