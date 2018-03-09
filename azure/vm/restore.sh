@@ -13,20 +13,17 @@ if [[ -z "${sz}" ]]; then
   exit 1
 fi
 
-gp_o=${gp}
-gp_u=$(echo ${gp} | tr /a-z/ /A-Z/)
-
 function az_res_list {
   local fmt="[?resourceGroup=='${1}' && starts_with(name, '${vm}')"
   if [[ -n "${3}" ]]; then
       local fmt="${fmt} && ${3}"
   fi
   local fmt="${fmt}].id"
-  az ${2} list -o tsv --query="${fmt}" | tr "\n" " " | sed "s/ *$//"
+  az ${2} list -o tsv --query="${fmt}" | tr -d "\n" | sed "s/ *$//"
 }
 
 echo "OS"
-aod=$(az_res_list ${gp_u} "disk" "osType!=null")
+aod=$(az_res_list ${gp^^} "disk" "osType!=null")
 echo "  Disk: ${aod}"
 if [[ -z "${aod}" ]]; then
   exit 2
@@ -34,13 +31,13 @@ fi
 ost=$(az disk show --ids ${aod} -o tsv --query="osType")
 echo "  Type: ${ost}"
 
-add=$(az_res_list ${gp_u} "disk" "osType==null")
+add=$(az_res_list ${gp^^} "disk" "osType==null")
 if [[ -n "${add}" ]]; then
   echo "Data: ${add}"
   add="--attach-data-disks ${add}"
 fi
 
-nic=$(az_res_list ${gp_o} "network nic")
+nic=$(az_res_list ${gp} "network nic")
 echo "NIC:  ${nic}"
 if [[ -z "${nic}" ]]; then
   exit 2

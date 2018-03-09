@@ -1,5 +1,6 @@
 #!/bin/bash -e
-apt-get install -y jq
-pip install aliyuncli aliyun-python-sdk-core
+sudo apt-get update && sudo apt-get install -y jq
+sudo pip install aliyuncli aliyun-python-sdk-core aliyun-python-sdk-ecs
+
 aliyuncli configure set --region cn-hangzhou --output json
 aliyuncli configure

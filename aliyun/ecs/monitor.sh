@@ -4,7 +4,7 @@ ecs=${1}
 
 stat=$($(dirname ${0})/status.sh ${ecs})
 if [[ "${stat}" != "Running" ]]; then
-    echo "${stat}" | tr '[:upper:]' '[:lower:]'
+    echo "${stat,,}"
     exit 0
 fi
 

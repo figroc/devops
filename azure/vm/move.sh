@@ -1,6 +1,6 @@
 #!/bin/bash -e
 #
-# mv vm to availability set
+# move vm to availability set
 #
 
 gp=${1}
@@ -13,7 +13,7 @@ if [[ -z "${ab}" ]]; then
 fi
 
 function az_vm_show {
-  az vm show -g ${gp} -n ${vm} -o tsv --query "${1}" | tr "\n" " " | sed "s/ *$//"
+  az vm show -g ${gp} -n ${vm} -o tsv --query "${1}" | tr -d "\n" | sed "s/ *$//"
 }
 
 avl=$(az_vm_show "availabilitySet.id")
