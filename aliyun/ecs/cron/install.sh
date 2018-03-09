@@ -1,3 +1,5 @@
 #!/bin/bash -e
-
-echo "10 * * * * devops /home/devops/devops/aliyun/ecs/cron/auto_scale.sh /home/devops/devops/ssh/gateway/cmds/env" > /etc/cron.d/auto_scale_vm
+(
+    echo "PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin"
+    echo "*/5 * * * * devops cd ~/devops && aliyun/ecs/cron/auto_scale.sh ssh/gateway/cmds/env"
+) > /etc/cron.d/auto_scale_vm
