@@ -14,6 +14,7 @@ load=( $(aliyuncli ecs DescribeInstanceMonitorData \
     --Period 60 \
     --InstanceId ${ecs} \
     | jq '.MonitorData.InstanceMonitorData[].CPU') )
+echo "${load[@]}" 1>&2
 
 for u in ${load[@]}; do
     if [[ " 0 1 null " = *" ${u} "* ]]; then
