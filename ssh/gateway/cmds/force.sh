@@ -13,8 +13,14 @@ cmd=${args[0]}; z_err "no command specified" ${cmd};
 
 case "${cmd}" in
     ?)
-        echo "box <devel...>: reload devel docker"
-        echo "box status: list running devel docker"
+        echo "box [status]: list running devel docker"
+        echo "    <devel>:  reload devel docker"
+        echo
+        echo "vms [status]: list elastic vm pool status"
+        echo "    start:    start one vm in pool"
+        echo "    stop:     stop one vm in pool"
+        echo
+        echo "ban <user>:   block login"
         ;;
     ban)
         if [[ ! ${usr} =~ ^(chenp|byzhang|yaxin)$ ]]; then
@@ -26,24 +32,21 @@ case "${cmd}" in
             devops/ssh/jail.sh remo ${user} ${role}
         ;;
     box)
-        hot=${HOSTS["${usr}"]}; z_err "host not specified" ${hot};
-        docker=${args[1]};      z_err "dbox not specified" ${docker};
+        hot=${HOSTS["${usr}"]};    z_err "host not specified" ${hot};
+        docker=${args[1]:+status}; z_err "dbox not specified" ${docker};
         case "${docker}" in
             status)
                 ssh -i /etc/ssh/gate/sys/agent.id -q devops@${hot} \
                     docker ps -f "name=${usr}-"
                 ;;
-            devel)
-                docker="client"
-                ;&
             *)
                 ssh -i /etc/ssh/gate/sys/agent.id -q devops@${hot} \
                     docker/etc/azure.sh ${usr} ${docker}
         esac
         ;;
-    gpu)
-        hot=${HOSTS["${usr}"]}; z_err "host not specified" ${hot};
-        act=${args[1]};         z_err "action not specified" ${act};
+    vms)
+        hot=${HOSTS["${usr}"]}; z_err "host not specified"   ${hot};
+        act=${args[1]:+status}; z_err "action not specified" ${act};
         if [[ " status start stop " != *" ${act} "* ]]; then
             z_err "action not supported"
         fi
