@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-source $(dirname $0)/env
+source $(dirname $0)/.env
 
 read -a args <<< "${SSH_ORIGINAL_COMMAND}"
 

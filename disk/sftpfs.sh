@@ -3,9 +3,9 @@
 # sshfs mount uitility
 #
 
-source $(dirname ${0})/../env
+source $(dirname ${0})/../.env
 
-case ${1} in
+case "${1}" in
     setup)
         apt-get update && apt-get install -y sshfs
         sed -i '/#user_allow_other/s/#//' /etc/fuse.conf

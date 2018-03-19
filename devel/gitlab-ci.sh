@@ -3,7 +3,7 @@
 # gitlab runner setup
 #
 
-source $(dirname ${0})/../env
+source $(dirname ${0})/../.env
 
 curl -fsSL https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.deb.sh | bash
 cat > /etc/apt/preferences.d/pin-gitlab-runner.pref <<EOF

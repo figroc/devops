@@ -10,7 +10,7 @@ fi
 
 apt-get update && apt-get install -y lvm2
 
-source $(dirname ${0})/../env
+source $(dirname ${0})/../.env
 source $(dirname ${0})/imount
 
 cmd=${1}

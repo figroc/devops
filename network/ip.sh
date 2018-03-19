@@ -3,7 +3,7 @@
 # ip addr operation
 #
 
-source $(dirname ${0})/../env
+source $(dirname ${0})/../.env
 
 ifc="/etc/network/interfaces.d/50-cloud-init.cfg"
 

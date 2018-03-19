@@ -11,7 +11,7 @@ if [[ -n "${mirror}" ]]; then
     fi
 fi
 
-source $(dirname ${0})/../env
+source $(dirname ${0})/../.env
 cert=$(dirname ${0})/../cert/server/asset.ca.crt
 
 apt-get update

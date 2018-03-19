@@ -3,7 +3,7 @@
 # setup common tools
 #
 
-source $(dirname ${0})/env
+source $(dirname ${0})/.env
 
 if [ "$(id -u)" -eq "0" ]; then
     useradd -m -U -s /bin/bash -c Ubuntu \

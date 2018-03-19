@@ -8,7 +8,7 @@ if [[ -z ${1} ]]; then
     exit 1
 fi
 
-source $(dirname ${0})/../env
+source $(dirname ${0})/../.env
 
 proj=${1}
 

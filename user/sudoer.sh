@@ -8,7 +8,7 @@ if [[ -z ${2} ]]; then
     exit 1
 fi
 
-source $(dirname ${0})/../env
+source $(dirname ${0})/../.env
 
 user=${1}
 group=${2}

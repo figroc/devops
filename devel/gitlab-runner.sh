@@ -3,7 +3,7 @@
 # gitlab runner setup
 #
 
-source $(dirname ${0})/../env
+source $(dirname ${0})/../.env
 
 while [[ -z "${R_SERVER}" ]]; do read -p "Gitlab coordinator: " R_SERVER; done
 while [[ -z "${R_TOKENS}" ]]; do read -p "Registration token: " R_TOKENS; done

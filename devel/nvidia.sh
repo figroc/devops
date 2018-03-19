@@ -3,7 +3,7 @@
 # docker nvidia setup
 #
 
-source $(dirname ${0})/../env
+source $(dirname ${0})/../.env
 
 if dpkg -s nvidia-docker >/dev/null 2>&1; then
   docker volume ls -q -f driver=nvidia-docker | \

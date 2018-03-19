@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-source $(dirname $0)/env
+source $(dirname $0)/.env
 
 function s_rm() {
     if [[ -f ${1} ]]; then sudo rm -f ${1}; fi
@@ -17,10 +17,10 @@ case "${cmd}" in
         echo "    <devel>:  reload devel docker"
         echo
         echo "vms [status]: list elastic vm pool status"
-        echo "    start:    start one vm in pool"
-        echo "    stop:     stop one vm in pool"
+        echo "    start:    start all vm in pool"
+        echo "    stop:     stop all vm in pool"
         echo
-        echo "ban <user>:   block login"
+        echo "ban <user>:   block user from login"
         ;;
     ban)
         if [[ ! ${usr} =~ ^(chenp|byzhang|yaxin)$ ]]; then
@@ -32,21 +32,22 @@ case "${cmd}" in
             devops/ssh/jail.sh remo ${user} ${role}
         ;;
     box)
-        hot=${HOSTS["${usr}"]};    z_err "host not specified" ${hot};
-        docker=${args[1]:+status}; z_err "dbox not specified" ${docker};
-        case "${docker}" in
+        hot=${HOSTS["${usr}"]}; z_err "host not specified" ${hot};
+        dok=${args[1]:-status}; z_err "dbox not specified" ${dok};
+        case "${dok}" in
             status)
                 ssh -i /etc/ssh/gate/sys/agent.id -q devops@${hot} \
                     docker ps -f "name=${usr}-"
                 ;;
             *)
                 ssh -i /etc/ssh/gate/sys/agent.id -q devops@${hot} \
-                    docker/etc/azure.sh ${usr} ${docker}
+                    docker/etc/azure.sh ${usr} ${dok}
+                ;;
         esac
         ;;
     vms)
         hot=${HOSTS["${usr}"]}; z_err "host not specified"   ${hot};
-        act=${args[1]:+status}; z_err "action not specified" ${act};
+        act=${args[1]:-status}; z_err "action not specified" ${act};
         if [[ " status start stop " != *" ${act} "* ]]; then
             z_err "action not supported"
         fi

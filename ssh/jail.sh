@@ -12,7 +12,7 @@
 #     jail.sh esc agent [copy-to] [copy-from]
 #
 
-source $(dirname ${0})/../env
+source $(dirname ${0})/../.env
 
 # functions
 function chroot_cmds {
