@@ -3,7 +3,7 @@
 # setup ssh jail
 #
 # Usage:
-#     jail.sh setup [gate|jail]
+#     jail.sh setup [jail|gate]
 #     jail.sh crew <user> <role>
 #     jail.sh proj <proj> <user>
 #     jail.sh role <role> [crew|proj] <user>
@@ -110,8 +110,10 @@ case "${1}" in
             gate)
                 mkdir -p ${gate}/{sys,crews,projs}
                 \cp -r ${rdir}/ssh/gateway/{akc.sh,roles} ${gate}/
+                echo                                >> ${gate}/../sshd_config
                 cat ${rdir}/ssh/sshd_config         >> ${gate}/../sshd_config
                 cat ${rdir}/ssh/gateway/sshd_config >> ${gate}/../sshd_config
+                echo                                >> ${gate}/../ssh_config
                 cat ${rdir}/ssh/gateway/ssh_config  >> ${gate}/../ssh_config
                 chown ${devops}:${devops} ${gate}/sys
                 if [[ -d "${jail}" ]]; then
