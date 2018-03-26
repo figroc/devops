@@ -24,7 +24,9 @@ if useradd -m -b ${home} -s /usr/sbin/nologin ${user}; then
 fi
 
 mkdir -p ${home}/${user}/.ssh
-\cp ${rdir}/pub/${user}.pub ${home}/${user}/.ssh/authorized_keys
+\cp ${rdir}/pub/${user}.pub ${gate}/crews/
+chown ${user}:${user} ${gate}/crews/${user}.pub
+chmod 644 ${gate}/crews/${user}.pub
 
 if mkdir -p /home/${user}; then
     chown ${user}:${user} /home/${user}

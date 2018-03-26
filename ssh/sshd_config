@@ -1,4 +1,9 @@
+
 AllowAgentForwarding yes
 AllowStreamLocalForwarding no
 AllowTcpForwarding no
 PasswordAuthentication no
+
+Match User devops
+  AllowStreamLocalForwarding yes
+  AllowTcpForwarding yes

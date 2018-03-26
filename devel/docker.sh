@@ -28,7 +28,7 @@ if mkdir -p ${dkr_mnt}; then
 fi
 if mkdir -p ${dkr_dir}; then
     chown root:root ${dkr_dir}
-    chmod go-rw ${dkr_dir}
+    chmod 600 ${dkr_dir}
 fi
 
 (   echo '{'

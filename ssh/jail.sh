@@ -152,9 +152,9 @@ case "${1}" in
                 mkdir -p ${jail}/usr/{bin,lib}
                 mkdir -p ${jail}/usr/lib/{openssh,rssh}
                 chown root:root ${jail}
-                chmod go-rw ${jail}
-                chmod o-r ${jail}/home
-                chmod 777 ${jail}/tmp
+                chmod o-rw ${jail}
+                chmod o-rw ${jail}/home
+                chmod a+rw ${jail}/tmp
 
                 # devices
                 mknod -m 622 ${jail}/dev/console c 5 1
@@ -262,7 +262,7 @@ case "${1}" in
             if adduser --disabled-password --gecos "" \
                 --home ${jail}/home/${proj} \
                 --ingroup ${proj} --force-badname ${user}.${proj}; then
-                chmod -R g+w ${jail}/home/${proj}
+                chmod -R g+rw ${jail}/home/${proj}
                 usermod -aG jail,projs ${user}.${proj}
                 shadow_home ${user} ${proj}
                 shadow_shell ${user} ${proj}
