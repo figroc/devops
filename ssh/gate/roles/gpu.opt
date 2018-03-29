@@ -1,0 +1,1 @@
+ * : command="ssh -p2222 -q @@.bogon@localhost \"${SSH_ORIGINAL_COMMAND}\""

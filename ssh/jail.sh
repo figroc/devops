@@ -109,20 +109,21 @@ case "${1}" in
         case "${2}" in
             gate)
                 mkdir -p ${gate}/{sys,crews,projs}
-                \cp -r ${rdir}/ssh/gateway/{akc.sh,roles} ${gate}/
-                echo                                >> ${gate}/../sshd_config
-                cat ${rdir}/ssh/sshd_config         >> ${gate}/../sshd_config
-                cat ${rdir}/ssh/gateway/sshd_config >> ${gate}/../sshd_config
-                echo                                >> ${gate}/../ssh_config
-                cat ${rdir}/ssh/gateway/ssh_config  >> ${gate}/../ssh_config
+                \cp -r ${rdir}/ssh/${2}/{akc.sh,roles} ${gate}/
+                echo                             >> ${gate}/../sshd_config
+                cat ${rdir}/ssh/sshd_config      >> ${gate}/../sshd_config
+                cat ${rdir}/ssh/${2}/sshd_config >> ${gate}/../sshd_config
+                echo                             >> ${gate}/../ssh_config
+                cat ${rdir}/ssh/ssh_config       >> ${gate}/../ssh_config
+                cat ${rdir}/ssh/${2}/ssh_config  >> ${gate}/../ssh_config
                 chown ${devops}:${devops} ${gate}/sys
                 if [[ -d "${jail}" ]]; then
                     mkdir -p ${jail}${gate}/sys
                     chown ${devops}:${devops} ${jail}${gate}/sys
-                    \cp -r ${rdir}/ssh/gateway/ssh_config ${jail}${gate}/../
-                    \cp -r ${rdir}/ssh/gateway/cmds       ${jail}${gate}/
+                    \cp -r ${gate}/../ssh_config ${jail}${gate}/../
+                    \cp -r ${rdir}/ssh/${2}/cmds ${jail}${gate}/
                 else
-                    \cp -r ${rdir}/ssh/gateway/cmds ${gate}/
+                    \cp -r ${rdir}/ssh/${2}/cmds ${gate}/
                 fi
                 service ssh reload
                 ;;
