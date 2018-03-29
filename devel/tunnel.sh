@@ -26,9 +26,20 @@ ExecStart=/usr/bin/ssh -NT \
 WantedBy=multi-user.target
 EOF
 
-iptables -A INPUT -i lo -j ACCEPT
-iptables -A INPUT -i docker0 -j ACCEPT
-iptables -A INPUT -j REJECT
+iptable="/etc/network/if-pre-up.d/stunnel"
+cat >${iptable} <<'EOF'
+#!/bin/bash
+function iptable_rule_set {
+  iptables -C ${1} &>/dev/null || iptables -A ${1}
+}
+iptable_rule_set "INPUT -j ACCEPT -i lo"
+iptable_rule_set "INPUT -j ACCEPT -i docker0"
+iptable_rule_set "INPUT -j ACCEPT -p tcp --dport ssh"
+iptable_rule_set "INPUT -j ACCEPT -m state --state ESTABLISHED,RELATED"
+iptable_rule_set "INPUT -j REJECT"
+EOF
+chmod +x ${iptable}
+${iptable}
 
 systemctl enable stunnel.service
 systemctl start  stunnel.service
