@@ -23,7 +23,7 @@ case ${cmd} in
         ;&
     "")
         ssh ${opt} -p${pot} -q ${usr}@${hot}
-        [[ -n "${soc}" ]] && rm -f ${soc}
+        test -n "${soc}" && rm -f ${soc}
         ;;
     box)
         dok=${args[1]:-status}; z_err "dbox not specified" ${dok};
