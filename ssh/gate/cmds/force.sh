@@ -13,9 +13,6 @@ cmd=${args[0]}; z_err "no command specified" ${cmd};
 
 case "${cmd}" in
     ?)
-        echo "box [status]: list running devel docker"
-        echo "    <devel>:  reload devel docker"
-        echo
         echo "vms [status]: list elastic vm pool status"
         echo "    start:    start all vm in pool"
         echo "    stop:     stop all vm in pool"
@@ -30,20 +27,6 @@ case "${cmd}" in
         role=${args[2]};
         ssh -i /etc/ssh/gate/sys/agent.id -q devops@localhost \
             devops/ssh/jail.sh remo ${user} ${role}
-        ;;
-    box)
-        hot=${HOSTS["${usr}"]}; z_err "host not specified" ${hot};
-        dok=${args[1]:-status}; z_err "dbox not specified" ${dok};
-        case "${dok}" in
-            status)
-                ssh -i /etc/ssh/gate/sys/agent.id -q devops@${hot} \
-                    docker ps -f "name=${usr}-"
-                ;;
-            *)
-                ssh -i /etc/ssh/gate/sys/agent.id -q devops@${hot} \
-                    docker/etc/azure.sh ${usr} ${dok}
-                ;;
-        esac
         ;;
     vms)
         hot=${HOSTS["${usr}"]}; z_err "host not specified"   ${hot};

@@ -10,7 +10,6 @@ pot=${PORTS["${usr}"]}; z_err "port not specified" ${pot};
 cmd=${args[0]};
 
 case ${cmd} in
-    "") ;;
     jupyter)
         if [[ "${usr}" == "tcyang" ]]; then
             opt="-L19182:127.0.0.1:8888"
@@ -20,10 +19,27 @@ case ${cmd} in
             soc="/tmp/${usr}.jupyter"
             opt="-L${soc}:127.0.0.1:8888"
             rm -f ${soc}
-        fi;;
-    *)  exit 1;;
+        fi
+        ;&
+    "")
+        ssh ${opt} -p${pot} -q ${usr}@${hot}
+        [[ -n "${soc}" ]] && rm -f ${soc}
+        ;;
+    box)
+        dok=${args[1]:-status}; z_err "dbox not specified" ${dok};
+        case "${dok}" in
+            status)
+                ssh -i /etc/ssh/gate/sys/agent.id -q devops@${hot} \
+                    docker ps -f "name=${usr}-"
+                ;;
+            *)
+                ssh -i /etc/ssh/gate/sys/agent.id -q devops@${hot} \
+                    docker/etc/azure.sh ${usr} ${dok}
+                ;;
+        esac
+        ;;
+    *)
+        z_err "${cmd} not supported"
+        ;;
 esac
 
-ssh ${opt} -p${pot} -q ${usr}@${hot}
-
-if [[ ! -z ${soc} ]]; then rm -f ${soc}; fi
