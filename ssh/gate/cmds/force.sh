@@ -17,6 +17,8 @@ case "${cmd}" in
         echo "    start:    start all vm in pool"
         echo "    stop:     stop all vm in pool"
         echo
+        echo "sec:          update secrets for dev env"
+        echo
         echo "ban <user>:   block user from login"
         ;;
     ban)
@@ -26,7 +28,7 @@ case "${cmd}" in
         user=${args[1]}; z_err "user not specified" ${user};
         role=${args[2]};
         ssh -i /etc/ssh/gate/sys/agent.id -q devops@localhost \
-            devops/ssh/jail.sh remo ${user} ${role}
+            sudo devops/ssh/jail.sh remo ${user} ${role}
         ;;
     vms)
         hot=${HOSTS["${usr}"]}; z_err "host not specified"   ${hot};
