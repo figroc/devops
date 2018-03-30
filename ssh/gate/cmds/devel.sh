@@ -9,15 +9,27 @@ hot=${HOSTS["${usr}"]}; z_err "host not specified" ${hot};
 pot=${PORTS["${usr}"]}; z_err "port not specified" ${pot};
 cmd=${args[0]};
 
-case ${cmd} in
-    jupyter)
-        if [[ "${usr}" == "tcyang" ]]; then
-            opt="-L19182:127.0.0.1:8888"
-        elif [[ "${usr}" == "zhangjie" ]]; then
-            opt="-L10062:127.0.0.1:8888"
-        else
-            soc="/tmp/${usr}.jupyter"
-            opt="-L${soc}:127.0.0.1:8888"
+if [[ "${cmd}" == "jupyter" ]]; then
+    if [[ "${usr}" == "tcyang" ]]; then
+        cmd=""
+        opt="-L19182:127.0.0.1:8888"
+    elif [[ "${usr}" == "zhangjie" ]]; then
+        cmd=""
+        opt="-L10062:127.0.0.1:8888"
+    else
+        cmd="fwd"
+        args[1]="jupyter"
+        args[2]="8888"
+    fi
+fi
+
+case "${cmd}" in
+    fwd)
+        fwn=$(echo "${args[1]}" | tr -cd '[:alpha:]')
+        fwp=$(echo "${args[2]}" | tr -cd '[:digit:]')
+        if [[ -n "${fwn}" -a -n "${fwp}" ]]; then
+            soc="/tmp/${user}.${fwn}"
+            opt="-L${soc}:127.0.0.1:${fwp}"
             rm -f ${soc}
         fi
         ;&

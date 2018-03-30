@@ -1,1 +1,1 @@
- * : command="ssh -p2222 -q @@.bogon@localhost \"${SSH_ORIGINAL_COMMAND}\""
+ * : command="/etc/ssh/gate/cmds/bogon.sh @@"

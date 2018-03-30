@@ -1,1 +1,1 @@
-zhengjh : command="ssh -q devops@pts-sxs"
+ * : command="ssh -q devops@pts-sxs"
