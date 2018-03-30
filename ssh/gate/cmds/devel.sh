@@ -46,7 +46,7 @@ case "${cmd}" in
                 ;;
             *)
                 ssh -i /etc/ssh/gate/sys/agent.id -q devops@${hot} \
-                    docker/etc/azure.sh ${usr} ${dok}
+                    docker/etc/peking.sh ${usr} ${dok}
                 ;;
         esac
         ;;
