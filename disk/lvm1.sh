@@ -3,7 +3,7 @@
 # lvm disk setup
 #
 
-if [[ ${#} < 3 ]]; then
+if [[ ${#} < 2 ]]; then
     echo "${0} < init | expand > disk-seq ..."
     exit 1
 fi
