@@ -84,10 +84,8 @@ function update_jkey {
     fi
 }
 
-function genc_agent {
+function geni_agent {
     local adir=${1}
-    local cdst=${2}
-    local csrc=${3}
     if sudo mkdir -p ${adir}; then
         sudo chown ${devops}:${devops} ${adir}
     fi
@@ -96,6 +94,13 @@ function genc_agent {
         mv ${adir}/agent ${adir}/agent.id
         chmod a+r ${adir}/agent.id
     fi
+}
+
+function genc_agent {
+    local adir=${1}
+    local cdst=${2}
+    local csrc=${3}
+    geni_agent ${adir}
     if [[ -n "${csrc}" ]]; then
         scp -3 ${devops}@${csrc}:${adir}/agent.pub ${devops}@${cdst}:${adir}/${csrc}.pub
     elif [[ -n "${cdst}" ]]; then
@@ -108,7 +113,7 @@ case "${1}" in
     setup)
         case "${2}" in
             gate)
-                mkdir -p ${gate}/{sys,crews,projs}
+                mkdir -p ${gate}/{crews,projs}
                 \cp -r ${rdir}/ssh/${2}/{akc.sh,roles} ${gate}/
                 echo                             >> ${gate}/../sshd_config
                 cat ${rdir}/ssh/sshd_config      >> ${gate}/../sshd_config
@@ -116,12 +121,12 @@ case "${1}" in
                 echo                             >> ${gate}/../ssh_config
                 cat ${rdir}/ssh/ssh_config       >> ${gate}/../ssh_config
                 cat ${rdir}/ssh/${2}/ssh_config  >> ${gate}/../ssh_config
-                chown ${devops}:${devops} ${gate}/sys
+                geni_agent ${gate}/sys
                 if [[ -d "${jail}" ]]; then
-                    mkdir -p ${jail}${gate}/sys
-                    chown ${devops}:${devops} ${jail}${gate}/sys
                     \cp -r ${gate}/../ssh_config ${jail}${gate}/../
                     \cp -r ${rdir}/ssh/${2}/cmds ${jail}${gate}/
+                    geni_agent ${jail}${gate}/sys
+                    cp ${jail}${gate}/sys/agent.pub ${gate}/sys/jail.pub
                 else
                     \cp -r ${rdir}/ssh/${2}/cmds ${gate}/
                 fi
