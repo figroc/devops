@@ -284,7 +284,7 @@ case "${1}" in
         role=${3}
         if [[ -n "${user}" ]]; then
             if [[ -z "${role}" ]]; then
-                s_rm ${gate}/crews/${user}.pub
+                rm -f ${gate}/crews/${user}.pub
             elif userdel ${user}.${role} 2>/dev/null; then
                 sed -i "/^${user}\\.${role}:/d" ${jail}/etc/passwd
                 sed -i "s/\\b${user}\\.${role}\\b,\?//g;s/,$//g" ${jail}/etc/group
