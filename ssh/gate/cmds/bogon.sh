@@ -10,7 +10,7 @@ if [[ "${args[0]}" == "fwd" ]]; then
     fwn=$(echo "${args[1]}" | tr -cd '[:alpha:]')
     fwp=$(echo "${args[2]}" | tr -cd '[:digit:]')
     if [[ -n "${fwn}" ]] && [[ -n "${fwp}" ]]; then
-        soc="/tmp/${user}.${fwn}"
+        soc="/tmp/${usr}.${fwn}"
         opt="${opt} -L${soc}:${soc}"
         rm -f ${soc}
     fi

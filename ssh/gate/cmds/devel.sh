@@ -28,7 +28,7 @@ case "${cmd}" in
         fwn=$(echo "${args[1]}" | tr -cd '[:alpha:]')
         fwp=$(echo "${args[2]}" | tr -cd '[:digit:]')
         if [[ -n "${fwn}" ]] && [[ -n "${fwp}" ]]; then
-            soc="/tmp/${user}.${fwn}"
+            soc="/tmp/${usr}.${fwn}"
             opt="-L${soc}:127.0.0.1:${fwp}"
             rm -f ${soc}
         fi
