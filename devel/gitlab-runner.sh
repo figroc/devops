@@ -12,9 +12,11 @@ gitlab-runner register -n --locked false \
   -u ${R_SERVER} -r ${R_TOKENS} \
   --executor docker --docker-privileged --docker-image alpine \
   --docker-helper-image deepro.io/gitlab/gitlab-runner-helper \
+  --docker-volumes ~/devops/cert/server/test.ca.crt:/usr/local/share/ca-certificates/test.ca.crt:ro \
   --docker-volumes /etc/docker/daemon.json:/etc/docker/daemon.json:ro \
   --docker-volumes /etc/docker/certs.d:/etc/docker/certs.d:ro \
-  --docker-volumes /var/file/inn:/var/file/inn:rw && \
-awk -i inplace \
-  'FNR==NR{if(/^\s+executor\s+=\s+"docker"$/)p=NR;next}1;FNR==p{print"  environment = [\"DOCKER_DRIVER=overlay2\",\"COMPOSE_PROJECT_NAME=${CI_COMMIT_SHA}\"]"}' \
-  /etc/gitlab-runner/config.toml /etc/gitlab-runner/config.toml
+  --docker-volumes /var/file/inn:/var/file/inn:rw \
+  --docker-extra-hosts dl.google.com:${dprx} \
+  --docker-extra-hosts maven.google.com:${dprx} \
+  --env "DOCKER_DRIVER=overlay2" \
+  --pre-build-script "update-ca-certificates"
