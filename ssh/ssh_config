@@ -1,4 +1,6 @@
 
+EscapeChar none
+
 Host *
     ForwardAgent yes
     StrictHostKeyChecking no

@@ -9,19 +9,13 @@ hot=${HOSTS["${usr}"]}; z_err "host not specified" ${hot};
 pot=${PORTS["${usr}"]}; z_err "port not specified" ${pot};
 cmd=${args[0]};
 
-if [[ "${cmd}" == "jupyter" ]]; then
-    if [[ "${usr}" == "tcyang" ]]; then
-        cmd=""
-        opt="-L19182:127.0.0.1:8888"
-    elif [[ "${usr}" == "zhangjie" ]]; then
-        cmd=""
-        opt="-L10062:127.0.0.1:8888"
-    else
+case "${cmd}" in
+    jupyter)
         cmd="fwd"
         args[1]="jupyter"
         args[2]="8888"
-    fi
-fi
+        ;;
+esac
 
 case "${cmd}" in
     fwd)
