@@ -1,4 +1,6 @@
 
+AddressFamily inet
+
 AllowAgentForwarding yes
 AllowStreamLocalForwarding no
 AllowTcpForwarding no

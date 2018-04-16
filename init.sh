@@ -23,8 +23,13 @@ for pam in common-session common-session-noninteractive; do
 done
 if [ ! -f /etc/sysctl.d/50-deepro.conf ]; then
     (
+        echo "net.ipv6.conf.all.disable_ipv6 = 1"
+        echo "net.ipv6.conf.default.disable_ipv6 = 1"
+        echo "net.ipv6.conf.lo.disable_ipv6 = 1"
         echo "vm.max_map_count = 262144"
     ) | sudo tee /etc/sysctl.d/50-deepro.conf
+    sudo sysctl -w net.ipv6.conf.all.disable_ipv6=1
+    sudo sysctl -w net.ipv6.conf.default.disable_ipv6=1
     sudo sysctl -w vm.max_map_count=262144
 fi
 if [ ! -f /etc/security/limits.d/50-deepro.conf ]; then
