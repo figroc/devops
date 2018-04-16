@@ -29,7 +29,6 @@ cat >/etc/danted.conf <<EOF
 logoutput: /var/log/danted.log
 internal: 127.0.0.1 port = 1080
 external: ${DANTE_IF}
-external.rotation: same-same
 user.notprivileged: dante
 clientmethod: none
 socksmethod: none
@@ -51,8 +50,8 @@ After=network.target
 [Service]
 Restart=always
 RestartSec=37
-User=socks
-ExecStart=/usr/local/sbin/sockd -f /etc/danted.conf -D
+User=root
+ExecStart=/usr/local/sbin/sockd -f /etc/danted.conf
 
 [Install]
 WantedBy=multi-user.target
