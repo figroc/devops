@@ -13,22 +13,19 @@ DANTE_IF="${1}"
 
 apt-get install -y gcc libwrap0 libwrap0-dev make
 
-DANTE_HOME="/opt/dante"
-mkdir -p ${DANTE_HOME} && cd ${DANTE_HOME}
-
 DANTE_VERSION="dante-1.4.2"
 wget https://www.inet.no/dante/files/${DANTE_VERSION}.tar.gz
 tar -xvf ${DANTE_VERSION}.tar.gz && cd ${DANTE_VERSION}
 
-./configure --prefix=/opt/dante
+./configure --prefix=/usr/local
 make
 make install
 
-cd .. && rm -rf ${DANTE_VERSION}
+cd .. && rm -rf ${DANTE_VERSION}.tar.gz ${DANTE_VERSION}
 
 adduser --system --disabled-login --no-create-home dante || true
 
-cat >danted.conf <<EOF
+cat >/etc/danted.conf <<EOF
 logoutput: /var/log/danted.log
 internal: 127.0.0.1 port = 1080
 external: ${DANTE_IF}
@@ -55,7 +52,7 @@ After=network.target
 Restart=always
 RestartSec=37
 User=socks
-ExecStart=sockd -f /opt/dante/danted.conf -D
+ExecStart=/usr/local/sbin/sockd -f /etc/danted.conf -D
 
 [Install]
 WantedBy=multi-user.target
