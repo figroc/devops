@@ -1,6 +1,6 @@
 #!/bin/bash -e
 #
-# reverse tunnel setup
+# socks proxy setup
 #
 
 source $(dirname ${0})/../.env
@@ -23,7 +23,9 @@ make install
 
 cd .. && rm -rf ${DANTE_VERSION}.tar.gz ${DANTE_VERSION}
 
-adduser --system --disabled-login --no-create-home dante || true
+if ! id -u dante &>/dev/null; then
+    adduser --system --disabled-login --no-create-home dante
+fi
 
 cat >/etc/danted.conf <<EOF
 logoutput: /var/log/danted.log
