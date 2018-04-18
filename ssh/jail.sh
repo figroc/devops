@@ -61,6 +61,20 @@ function shadow_group {
     done
 }
 
+function remove_shadow {
+    if [[ -z "${2}" ]]; then
+        local user="${1}"
+        local match="${1}"
+    else
+        local user="${1}.${2}"
+        local match="${1}\\.${2}"
+    fi
+    if userdel ${user} 2>/dev/null; then
+        sed -i "/^${match}:/d" ${jail}/etc/passwd
+        sed -i "s/\\b${match}\\b,\?//g;s/,$//g" ${jail}/etc/group
+    fi
+}
+
 function update_pkey {
     local user=${1}
     local ownr=${2}
@@ -284,10 +298,21 @@ case "${1}" in
         role=${3}
         if [[ -n "${user}" ]]; then
             if [[ -z "${role}" ]]; then
+                role=$(grep -o "^${user}\\.[[:alpha:]]*:" /etc/passwd \
+                     | grep -o "\\.[[:alpha:]]*" \
+                     | cut -c2- \
+                     | tr '\n' ' ')
+            fi
+            for r in $(echo ${role}); do
+                remove_shadow ${user} ${r}
+            done
+            if (( $(grep -cE "^${user}(\\.[[:alpha:]]*)?:" /etc/passwd) == 1 )); then
+                if id -u ${user} &>/dev/null; then
+                    remove_shadow ${user}
+                fi
+            fi
+            if ! id -u ${user} &>/dev/null; then
                 rm -f ${gate}/crews/${user}.pub
-            elif userdel ${user}.${role} 2>/dev/null; then
-                sed -i "/^${user}\\.${role}:/d" ${jail}/etc/passwd
-                sed -i "s/\\b${user}\\.${role}\\b,\?//g;s/,$//g" ${jail}/etc/group
             fi
         fi
         ;;
