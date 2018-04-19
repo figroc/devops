@@ -40,6 +40,19 @@ function cidr {
     fi
 }
 
+function isol {
+  local ifd="${1}"
+  local ift=${ifd}
+  if ! grep ${ift} /etc/iproute2/rt_tables &>/dev/null; then
+    echo "5"$'\t'"${ift}" >> /etc/iproute2/rt_tables
+  fi
+  cidr $(ip addr show ${ifd} | grep -Eo "([[:digit:]]{1,3}[./]){4}[[:digit:]]{1,2}")
+  ip route add      default via ${ip_gate} dev ${ifd}                table ${ift}
+  ip route add      ${ip_inet}/${ip_pref}  dev ${ifd} src ${ip_addr} table ${ift}
+  ip rule  add from ${ip_addr}/32                                    table ${ift}
+  ip rule  add to   ${ip_addr}/32                                    table ${ift}
+}
+
 if [[ -z "${2}" ]]; then
     echo "${0} <action> <interface> [cidr]" 1>&2
     exit 1
@@ -50,44 +63,30 @@ ifd="${2}"
 case ${act} in
     add)
         ifc="/etc/network/interfaces.d/50-cloud-init.cfg"
-        if grep ${ifd}:1 ${ifc}; then
-            echo $'\n'"already exists" >&2
-            exit 1
-        fi
+        ifd="${ifd}:1"
         if [[ -z "${3}" ]]; then
             echo "cidr is required" >&2
             exit 1
         fi
         cidr "${3}"
-        ( echo
-          echo "auto ${ifd}:1"
-          echo "iface ${ifd}:1 inet static"
-          echo "address ${ip_addr}"
-          echo "netmask ${ip_mask}"
-        ) >> ${ifc}
-        ifup ${ifd}:1
+        cat >${ifc} <<-EOF
+			auto  ${ifd}
+			iface ${ifd} inet static
+			address ${ip_addr}
+			netmask ${ip_mask}
+			EOF
+        ifup ${ifd}
         ;;
     sol)
         ifc="/etc/network/if-up.d/50-isolate-nic.sh"
         cat >${ifc} <<-EOF
-		#!/bin/bash -e
-		$(type cidr | tail -n +2)
-		function isolate {
-		  local ifd="\${1}"
-		  local ift=\${ifd}
-		  if ! grep \${ift} /etc/iproute2/rt_tables &>/dev/null; then
-		    echo "5"$'\\t'"\${ift}" >> /etc/iproute2/rt_tables
-		  fi
-		  cidr \$(ip addr show \${ifd} | grep -Eo "([[:digit:]]{1,3}[./]){4}[[:digit:]]{1,2}")
-		  ip route add      default via \${ip_gate} dev \${ifd}                 table \${ift}
-		  ip route add      \${ip_inet}/\${ip_pref} dev \${ifd} src \${ip_addr} table \${ift}
-		  ip rule  add from \${ip_addr}/32                                      table \${ift}
-		  ip rule  add to   \${ip_addr}/32                                      table \${ift}
-		}
-		if [[ "\${IFACE}" == "${ifd}" ]]; then
-		  isolate "${ifd}"
-		fi
-		EOF
+			#!/bin/bash -e
+			$(type cidr | tail -n+2)
+			$(type isol | tail -n+2)
+			if [[ "\${IFACE}" == "${ifd}" ]]; then
+			  isol "${ifd}"
+			fi
+			EOF
         chmod +x ${ifc}
         IFACE=${ifd} ${ifc}
         ;;
