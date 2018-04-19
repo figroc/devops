@@ -5,25 +5,20 @@
 
 source $(dirname ${0})/../.env
 
-function ipparse {
-    ip_comp="${1}"
-    ip_addr="${ip_comp%/*}"
-    ip_size="${ip_comp#*/}"
+function cidr {
+    ip_cidr=$(echo "${1}" | grep -Eo "([[:digit:]]{1,3}\\.){3}[[:digit:]]{1,3}/[[:digit:]]{1,2}")
+    if [[ -z "${ip_cidr}" ]]; then
+        echo "invalid CIDR address: ${1}" 1>&2
+        exit 1
+    fi
 
-    local m=0
-    local i=${ip_size}
-    while ((${i} > 0)); do
-        local m=$((${m} * 2))
-        local m=$((${m} + 1))
-        local i=$((${i} - 1))
-    done
-    local i=$((32 - ${ip_size}))
-    while ((${i} > 0)); do
-        local m=$((${m} * 2))
-        local i=$((${i} - 1))
-    done
+    ip_addr=${ip_cidr%/*}
+    ip_pref=${ip_cidr#*/}
+    ip_size=$((32 - ${ip_pref}))
 
     ip_mask=""
+    local m=$((  -1 >> ${ip_size}))
+    local m=$((${m} << ${ip_size}))
     for i in {1..4}; do
         ip_mask="$((${m} & 255)).${ip_mask}"
         local m=$((${m} >> 8))
@@ -32,13 +27,13 @@ function ipparse {
 
     ip_inet=""
     for i in {1..4}; do
-        local p=$(echo ${ip_addr} | cut -d. -f${i})
+        local a=$(echo ${ip_addr} | cut -d. -f${i})
         local m=$(echo ${ip_mask} | cut -d. -f${i})
-        ip_inet="${ip_inet}.$((${p} & ${m}))"
+        ip_inet="${ip_inet}.$((${a} & ${m}))"
     done
     ip_inet="${ip_inet#.}"
 
-    if ((${ip_size} >= 32)); then
+    if ((${ip_pref} >= 32)); then
         ip_gate="${ip_addr}"
     else
         ip_gate="${ip_inet%.*}.$((${ip_inet##*.} + 1))"
@@ -46,7 +41,7 @@ function ipparse {
 }
 
 if [[ -z "${2}" ]]; then
-    echo "${0} <action> <interface> [ip_address]" 1>&2
+    echo "${0} <action> <interface> [cidr]" 1>&2
     exit 1
 fi
 
@@ -60,10 +55,10 @@ case ${act} in
             exit 1
         fi
         if [[ -z "${3}" ]]; then
-            echo "ip_address is required" >&2
+            echo "cidr is required" >&2
             exit 1
         fi
-        ipparse "${3}"
+        cidr "${3}"
         ( echo
           echo "auto ${ifd}:1"
           echo "iface ${ifd}:1 inet static"
@@ -76,21 +71,21 @@ case ${act} in
         ifc="/etc/network/if-up.d/50-isolate-nic.sh"
         cat >${ifc} <<-EOF
 		#!/bin/bash -e
-		function main {
+		$(type cidr | tail -n +2)
+		function isolate {
 		  local ifd="\${1}"
 		  local ift=\${ifd}
 		  if ! grep \${ift} /etc/iproute2/rt_tables &>/dev/null; then
 		    echo "5"$'\\t'"\${ift}" >> /etc/iproute2/rt_tables
 		  fi
-		  local ip4=\$(ip addr show dev \${ifd} | grep -Eo "([[:digit:]]{1,3}[./]){4}[[:digit:]]{1,2}" | cut -d/ -f1)
-		  local ip3=\${ip4%.*}
-		  ip route add      default      via \${ip3}.1 dev \${ifd}             table \${ift}
-		  ip route add      \${ip3}.0/24               dev \${ifd} src \${ip4} table \${ift}
-		  ip rule  add from \${ip4}/32                                         table \${ift}
-		  ip rule  add to   \${ip4}/32                                         table \${ift}
+		  cidr \$(ip addr show \${ifd} | grep -Eo "([[:digit:]]{1,3}[./]){4}[[:digit:]]{1,2}")
+		  ip route add      default via \${ip_gate} dev \${ifd}                 table \${ift}
+		  ip route add      \${ip_inet}/\${ip_pref} dev \${ifd} src \${ip_addr} table \${ift}
+		  ip rule  add from \${ip_addr}/32                                      table \${ift}
+		  ip rule  add to   \${ip_addr}/32                                      table \${ift}
 		}
 		if [[ "\${IFACE}" == "${ifd}" ]]; then
-		  main "${ifd}"
+		  isolate "${ifd}"
 		fi
 		EOF
         chmod +x ${ifc}
