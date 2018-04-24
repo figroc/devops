@@ -13,9 +13,9 @@ if [[ "${b}" != "master" ]]; then
 fi
 
 sudo apt-get -y update
-sudo apt-get -y upgrade
 sudo apt-get -y dist-upgrade
 sudo apt-get -y autoremove
+sudo apt-get -y autoclean
 
 while ((${#} > 0)); do
     ssh -q ${1} ~/devops/update.sh
