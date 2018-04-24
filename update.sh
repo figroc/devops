@@ -1,14 +1,15 @@
 #!/bin/bash
 
-g="git -C ~/devops"
-b=$(${g} branch | grep '^\* ' | cut -d' ' -f2)
+cd ~/devops
+
+b=$(git branch | grep '^\* ' | cut -d' ' -f2)
 if [[ "${b}" != "master" ]]; then
-    ${g} checkout master
+    git checkout master
 fi
-${g} pull --rebase
+git pull --rebase
 if [[ "${b}" != "master" ]]; then
-    ${g} checkout ${b}
-    ${g} rebase
+    git checkout ${b}
+    git rebase
 fi
 
 sudo apt-get -y update
