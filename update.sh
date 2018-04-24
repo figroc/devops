@@ -1,6 +1,6 @@
 #!/bin/bash
 
-g='git -C ~/devops'
+g="git -C ~/devops"
 b=$(${g} branch | grep '^\* ' | cut -d' ' -f2)
 if [[ "${b}" != "master" ]]; then
     ${g} checkout master
