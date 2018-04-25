@@ -46,7 +46,7 @@ function isol {
   if ! grep ${ift} /etc/iproute2/rt_tables &>/dev/null; then
     echo "5"$'\t'"${ift}" >> /etc/iproute2/rt_tables
   fi
-  cidr $(ip addr show ${ifd} | grep -Eo "([[:digit:]]{1,3}[./]){4}[[:digit:]]{1,2}")
+  cidr $(ip -4 addr show ${ifd} | grep -Eo "([[:digit:]]{1,3}[./]){4}[[:digit:]]{1,2}")
   ip route add      default via ${ip_gate} dev ${ifd}                table ${ift}
   ip route add      ${ip_inet}/${ip_pref}  dev ${ifd} src ${ip_addr} table ${ift}
   ip rule  add from ${ip_addr}/32                                    table ${ift}
