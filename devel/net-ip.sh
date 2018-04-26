@@ -6,7 +6,7 @@
 source $(dirname ${0})/../.env
 
 function cidr {
-    ip_cidr=$(echo "${1}" | grep -Eo "([[:digit:]]{1,3}\\.){3}[[:digit:]]{1,3}/[[:digit:]]{1,2}")
+    ip_cidr=$(echo "${1}" | grep -Eo '([[:digit:]]{1,3}\.){3}[[:digit:]]{1,3}/[[:digit:]]{1,2}')
     if [[ -z "${ip_cidr}" ]]; then
         echo "invalid CIDR address: ${1}" 1>&2
         exit 1
@@ -42,15 +42,19 @@ function cidr {
 
 function isol {
   local ifd="${1}"
-  local ift=${ifd}
+  local ift="${1}"
   if ! grep ${ift} /etc/iproute2/rt_tables &>/dev/null; then
     echo "5"$'\t'"${ift}" >> /etc/iproute2/rt_tables
   fi
-  cidr $(ip -4 addr show ${ifd} | grep -Eo "([[:digit:]]{1,3}[./]){4}[[:digit:]]{1,2}")
-  ip route add      default via ${ip_gate} dev ${ifd}                table ${ift}
-  ip route add      ${ip_inet}/${ip_pref}  dev ${ifd} src ${ip_addr} table ${ift}
-  ip rule  add from ${ip_addr}/32                                    table ${ift}
-  ip rule  add to   ${ip_addr}/32                                    table ${ift}
+
+  cidr $(ip -4 addr show ${ifd} | grep 'inet')
+  ip route add default via ${ip_gate} dev ${ifd}                table ${ift}
+  ip route add ${ip_inet}/${ip_pref}  dev ${ifd} src ${ip_addr} table ${ift}
+
+  local irs=($(ip rule | grep ${ift} | grep -Eo '^[[:digit:]]+'))
+  for irn in ${irs[@]}; do ip rule del pref ${irn}; done
+  ip rule  add from ${ip_addr}/32 table ${ift}
+  ip rule  add to   ${ip_addr}/32 table ${ift}
 }
 
 if [[ -z "${2}" ]]; then
