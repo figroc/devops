@@ -5,6 +5,11 @@
 
 source $(dirname ${0})/../.env
 
+svc_target="${devops}@${1}"
+if [[ ! -f /home/${devops}/.ssh/id_rsa.pub ]]; then
+    sudo -E su -p ${devops} -c "ssh-keygen -t rsa -b 2048 -N ''; ssh-copy-id ${svc_target}"
+fi
+
 case "${2}" in
     ssh)
         svc_name="stunnel.service"
@@ -30,12 +35,6 @@ case "${2}" in
         exit 1
         ;;
 esac
-
-svc_target="${devops}@${1}"
-if [[ ! -f /home/${devops}/.ssh/id_rsa.pub ]]; then
-    ssh-keygen -t rsa -b 2048 -N '' -f /home/${devops}/.ssh/id_rsa
-    ssh-copy-id -i /home/${devops}/.ssh/id_rsa.pub ${svc_target}
-fi
 
 cat >/etc/systemd/system/${svc_name} <<EOF
 [Unit]
