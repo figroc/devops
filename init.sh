@@ -56,3 +56,5 @@ fi
 
 sudo apt-get update && \
 sudo apt-get install -y gdisk tree plzip zip
+
+sudo update-alternatives --set editor /usr/bin/vim.basic
