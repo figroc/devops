@@ -94,6 +94,22 @@ case ${act} in
         chmod +x ${ifc}
         IFACE=${ifd} ${ifc}
         ;;
+    gar)
+        ipt="/etc/network/if-pre-up.d/stunnel"
+        cat >${ipt} <<-'EOF'
+			#!/bin/bash
+			function iptable_rule_set {
+			  iptables -C ${1} &>/dev/null || iptables -A ${1}
+			}
+			iptable_rule_set "INPUT -j ACCEPT -i lo"
+			iptable_rule_set "INPUT -j ACCEPT -i docker0"
+			iptable_rule_set "INPUT -j ACCEPT -p tcp --dport ssh"
+			iptable_rule_set "INPUT -j ACCEPT -m state --state ESTABLISHED,RELATED"
+			iptable_rule_set "INPUT -j REJECT"
+			EOF
+        chmod +x ${ipt}
+        ${ipt}
+        ;;
     *)
         echo "unkown command: ${act}" 1>&2
         exit 1
