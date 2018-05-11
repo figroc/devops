@@ -19,4 +19,4 @@ gitlab-runner register -n --locked false \
   --docker-extra-hosts dl.google.com:${dprx} \
   --docker-extra-hosts maven.google.com:${dprx} \
   --env "DOCKER_DRIVER=overlay2" \
-  --pre-build-script "update-ca-certificates"
+  --pre-build-script "\$(which update-ca-certificates)"
