@@ -25,7 +25,7 @@ case "${cmd}" in
         else
             act="docker/etc/peking.sh ${usr} ${dok}"
         fi
-        ssh -i /etc/ssh/gate/sys/agent.id -q ${devops}@${hot} ${act}
+        ssh -i /etc/ssh/gate/sys/agent.id -q devops@${hot} ${act}
         ;;
     fwd)
         fwn=$(echo "${args[1]}" | tr -cd '[:alpha:]')
