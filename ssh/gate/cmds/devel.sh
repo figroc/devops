@@ -18,6 +18,15 @@ case "${cmd}" in
 esac
 
 case "${cmd}" in
+    box)
+        dok="${args[1]}"
+        if [[ -z "${dok}" ]]; then
+            act="docker ps -f \"name=${usr}-\""
+        else
+            act="docker/etc/peking.sh ${usr} ${dok}"
+        fi
+        ssh -i /etc/ssh/gate/sys/agent.id -q ${devops}@${hot} ${act}
+        ;;
     fwd)
         fwn=$(echo "${args[1]}" | tr -cd '[:alpha:]')
         fwp=$(echo "${args[2]}" | tr -cd '[:digit:]')
@@ -31,21 +40,7 @@ case "${cmd}" in
         ssh ${opt} -p${pot} -q ${usr}@${hot}
         test -n "${soc}" && rm -f ${soc}
         ;;
-    box)
-        dok=${args[1]:-status}; z_err "dbox not specified" ${dok};
-        case "${dok}" in
-            status)
-                ssh -i /etc/ssh/gate/sys/agent.id -q devops@${hot} \
-                    docker ps -f "name=${usr}-"
-                ;;
-            *)
-                ssh -i /etc/ssh/gate/sys/agent.id -q devops@${hot} \
-                    docker/etc/peking.sh ${usr} ${dok}
-                ;;
-        esac
-        ;;
     *)
         z_err "${cmd} not supported"
         ;;
 esac
-
