@@ -4,9 +4,9 @@ source $(dirname $0)/.env
 
 read -a args <<< "${SSH_ORIGINAL_COMMAND}"
 
-usr=${1};               z_err "user not specified" ${usr};
-hot=${HOSTS["${usr}"]}; z_err "host not specified" ${hot};
-pot=${PORTS["${usr}"]}; z_err "port not specified" ${pot};
+usr=${1};             z_err "user not specified" ${usr};
+hot=$(u_host ${usr}); z_err "host not specified" ${hot};
+pot=$(u_port ${usr}); z_err "port not specified" ${pot};
 cmd=${args[0]};
 
 case "${cmd}" in

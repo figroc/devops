@@ -31,7 +31,7 @@ case "${cmd}" in
             sudo devops/ssh/jail.sh remo ${user} ${role}
         ;;
     vms)
-        hot=${HOSTS["${usr}"]}; z_err "host not specified"   ${hot};
+        hot=$(u_host ${usr});   z_err "host not specified"   ${hot};
         act=${args[1]:-status}; z_err "action not specified" ${act};
         if [[ " status start stop " != *" ${act} "* ]]; then
             z_err "action not supported"
