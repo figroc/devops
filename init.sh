@@ -5,15 +5,15 @@
 
 source $(dirname ${0})/.env
 
-if [ "$(id -u)" -eq "0" ]; then
-    useradd -m -U -s /bin/bash -c Ubuntu \
+if [ ! "$(whoami)" -eq "${devops}" ]; then
+    sudo useradd -m -U -s /bin/bash -c Ubuntu \
         -G sudo,dialout,dip,plugdev,netdev,cdrom,floppy,audio,video \
         ${devops}
-    echo "devops ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/90-cloud-init-users
-    cp -a ~/.ssh /home/${devops}/
-    mv ~/${devops} /home/${devops}/
-    chown -R ${devops}:${devops} /home/${devops}/.ssh /home/${devops}/${devops}
-    shutdown -r now
+    echo "${devops} ALL=(ALL) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/90-cloud-init-users
+    sudo cp -a ~/.ssh /home/${devops}/
+    sudo mv ~/${devops} /home/${devops}/
+    sudo chown -R ${devops}:${devops} /home/${devops}/.ssh /home/${devops}/${devops}
+    sudo shutdown -r now
 fi
 
 for pam in common-session common-session-noninteractive; do
