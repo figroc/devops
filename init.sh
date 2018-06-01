@@ -5,7 +5,7 @@
 
 source $(dirname ${0})/.env
 
-if [ ! "$(whoami)" -eq "${devops}" ]; then
+if [[ ! "$(whoami)" -eq "${devops}" ]]; then
     sudo useradd -m -U -s /bin/bash -c Ubuntu \
         -G sudo,dialout,dip,plugdev,netdev,cdrom,floppy,audio,video \
         ${devops}
@@ -21,7 +21,7 @@ for pam in common-session common-session-noninteractive; do
         echo "session required pam_limits.so" | sudo tee -a /etc/pam.d/${pam}
     fi
 done
-if [ ! -f /etc/sysctl.d/50-deepro.conf ]; then
+if [[ ! -f /etc/sysctl.d/50-deepro.conf ]]; then
     (
         echo "net.ipv6.conf.all.disable_ipv6 = 1"
         echo "net.ipv6.conf.default.disable_ipv6 = 1"
@@ -32,7 +32,7 @@ if [ ! -f /etc/sysctl.d/50-deepro.conf ]; then
     sudo sysctl -w net.ipv6.conf.default.disable_ipv6=1
     sudo sysctl -w vm.max_map_count=262144
 fi
-if [ ! -f /etc/security/limits.d/50-deepro.conf ]; then
+if [[ ! -f /etc/security/limits.d/50-deepro.conf ]]; then
     (
         echo "root hard nofile  unlimited"
         echo "root soft nofile  unlimited"
@@ -50,7 +50,7 @@ if ! grep deepro.io /etc/hosts; then
     echo "10.2.0.4  deepro.io" | sudo tee -a /etc/hosts
 fi
 
-if [ ! -d ~/${devops} ]; then
+if [[ ! -d ~/${devops} ]]; then
     git -C ~ clone ${repo}
 fi
 
