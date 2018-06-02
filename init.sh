@@ -5,7 +5,7 @@
 
 source $(dirname ${0})/.env
 
-if [[ ! "$(whoami)" -eq "${devops}" ]]; then
+if [[ ! "$(whoami)" -eq "devops" ]]; then
     sudo useradd -m -U -s /bin/bash -c Ubuntu \
         -G sudo,dialout,dip,plugdev,netdev,cdrom,floppy,audio,video \
         ${devops}
