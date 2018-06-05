@@ -13,7 +13,7 @@ if dpkg -s nvidia-docker >/dev/null 2>&1; then
 fi
 
 if ! dpkg -s cuda-drivers >/dev/null 2>&1; then
-  wget -NP /tmp http://developer.download.nvidia.com/compute/cuda/repos/ubuntu1604/x86_64/cuda-repo-ubuntu1604_9.1.85-1_amd64.deb
+  wget -NP /tmp http://developer.download.nvidia.com/compute/cuda/repos/ubuntu1604/x86_64/cuda-repo-ubuntu1604_9.2.88-1_amd64.deb
   dpkg -i /tmp/cuda-repo-*.deb && rm /tmp/cuda-repo-*.deb
   apt-key adv --fetch-keys http://developer.download.nvidia.com/compute/cuda/repos/ubuntu1604/x86_64/7fa2af80.pub
   apt-get update && apt-get install -y cuda-drivers && apt-mark hold cuda-drivers
