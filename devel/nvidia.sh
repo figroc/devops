@@ -13,15 +13,15 @@ if dpkg -s nvidia-docker >/dev/null 2>&1; then
 fi
 
 if ! dpkg -s cuda-drivers >/dev/null 2>&1; then
-  wget -NP /tmp http://developer.download.nvidia.com/compute/cuda/repos/ubuntu1604/x86_64/cuda-repo-ubuntu1604_9.2.88-1_amd64.deb
+  apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1604/x86_64/7fa2af80.pub
+  wget -NP /tmp https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1604/x86_64/cuda-repo-ubuntu1604_9.2.88-1_amd64.deb
   dpkg -i /tmp/cuda-repo-*.deb && rm /tmp/cuda-repo-*.deb
-  apt-key adv --fetch-keys http://developer.download.nvidia.com/compute/cuda/repos/ubuntu1604/x86_64/7fa2af80.pub
   apt-get update && apt-get install -y cuda-drivers && apt-mark hold cuda-drivers
   shutdown -r now
 fi
 
 if ! dpkg -s nvidia-docker2 >/dev/null 2>&1; then
-  curl -fsSL https://nvidia.github.io/nvidia-docker/gpgkey | apt-key add -
+  apt-key adv --fetch-keys https://nvidia.github.io/nvidia-docker/gpgkey
   wget -NP /etc/apt/sources.list.d https://nvidia.github.io/nvidia-docker/ubuntu16.04/amd64/nvidia-docker.list
   apt-get update && apt-get install -y nvidia-docker2 && apt-mark hold nvidia-docker2
   sed -i '$ d'      /etc/docker/daemon.json && \
