@@ -9,7 +9,7 @@ if [[ "$(whoami)" != "devops" ]]; then
     sudo useradd -m -U -s /bin/bash -c Ubuntu \
         -G sudo,dialout,dip,plugdev,netdev,cdrom,floppy,audio,video \
         ${devops}
-    echo "${devops} ALL=(ALL) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/90-cloud-init-users
+    echo "${devops} ALL=(ALL) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/50-deepro
     sudo cp -a ~/.ssh /home/${devops}/
     sudo mv ~/${devops} /home/${devops}/
     sudo chown -R ${devops}:${devops} /home/${devops}/.ssh /home/${devops}/${devops}
