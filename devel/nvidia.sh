@@ -16,6 +16,7 @@ if ! dpkg -s cuda-drivers >/dev/null 2>&1; then
   apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1604/x86_64/7fa2af80.pub
   wget -NP /tmp https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1604/x86_64/cuda-repo-ubuntu1604_9.2.88-1_amd64.deb
   dpkg -i /tmp/cuda-repo-*.deb && rm /tmp/cuda-repo-*.deb
+  sed -i 's/ http:/ https:/' /etc/apt/sources.list.d/cuda.list
   apt-get update && apt-get install -y cuda-drivers && apt-mark hold cuda-drivers
   shutdown -r now
 fi
