@@ -29,12 +29,12 @@ case "${1}" in
 
         sed -i "/ossfs ${bucket} .*/d" /etc/rc.local
         sed -i "/exit 0/d" /etc/rc.local
-        echo "ossfs ${bucket} ${mpoint} -ourl=${epoint}" >> /etc/rc.local
+        echo "ossfs ${bucket} ${mpoint} -ononempty,url=${epoint}" >> /etc/rc.local
         echo "exit 0" >> /etc/rc.local
         ;&
 
     mount)
-        ossfs ${bucket} ${mpoint} -ourl=${epoint}
+        ossfs ${bucket} ${mpoint} -ononempty,url=${epoint}
         ;;
 
     umount)
