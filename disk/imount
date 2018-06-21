@@ -10,7 +10,8 @@ function imount {
     uid=$(blkid ${dev} | grep -o ': UUID="[^"]*"')
     uid=${uid:2}
     uid=${uid//\"/}
-    echo ${uid}$'\t'${data}$'\text4\tdefaults\t0\t2'\
+    sed -i "\\^${data}^d" /etc/fstab
+    echo "${uid} ${data} ext4 defaults 0 2" \
         | tee -a /etc/fstab
 
     mkdir -p ${data}
