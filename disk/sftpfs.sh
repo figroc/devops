@@ -19,7 +19,7 @@ case "${1}" in
         echo "sshfs sftp@sftp: ${sftp} -o allow_other,reconnect,nonempty" \
              "-o IdentityFile=${gate}/sys/agent.id" >> /etc/rc.local
         echo "exit 0" >> /etc/rc.local
-        ;;
+        ;&
 
     mount)
         sshfs sftp@sftp: ${sftp} -o allow_other,reconnect,nonempty \
