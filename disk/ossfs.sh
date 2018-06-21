@@ -3,10 +3,10 @@
 # ossfs mount uitility
 #
 
-bucket=${1}
-access=${2}
-mpoint=${3}
+mpoint=${2}
+bucket=${3}
 epoint=${4}
+access=${5}
 
 source $(dirname ${0})/../.env
 
