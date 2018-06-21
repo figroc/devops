@@ -12,12 +12,12 @@ source $(dirname ${0})/../.env
 
 case "${1}" in
     setup)
-        rm -rf /tmp/ossfs.deb && \
+        rm -rf /tmp/ossfs.deb
         curl -fSL -o /tmp/ossfs.deb \
-            https://github.com/aliyun/ossfs/releases/download/v1.80.5/ossfs_1.80.5_ubuntu16.04_amd64.deb && \
-        apt-get update && \
-        apt-get install -y gdebi-core && \
-        gdebi /tmp/ossfs.deb && \
+            https://github.com/aliyun/ossfs/releases/download/v1.80.5/ossfs_1.80.5_ubuntu16.04_amd64.deb
+        apt-get update
+        apt-get install -y gdebi-core
+        yes | gdebi /tmp/ossfs.deb
         rm -rf /tmp/ossfs.deb
 
         echo "${bucket}:${access}" > /etc/passwd-ossfs
