@@ -28,5 +28,5 @@ if [[ "${cmd}" == "init" ]]; then
     imount /dev/vg0/lv0
 else
     vgextend vg0 ${rsd}
-    lvresize -l 100%FREE -r vg0/lv0
+    lvextend -l 100%VG -r /dev/vg0/lv0
 fi
