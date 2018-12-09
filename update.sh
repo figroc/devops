@@ -2,6 +2,8 @@
 
 cd ~/devops
 
+DEBIAN_FRONTEND=noninteractive
+
 b=$(git branch | grep '^\* ' | cut -d' ' -f2)
 if [[ "${b}" != "master" ]]; then
     git checkout master
