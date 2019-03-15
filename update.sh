@@ -22,6 +22,9 @@ sudo apt-get -y autoclean
 if [[ -n "$(which pip)" ]]; then
     sudo pip install -U pip
 fi
+if [[ -n "$(which docker-compose)" ]]; then
+    sudo pip install -U docker-compose
+fi
 
 while ((${#} > 0)); do
     ssh -q ${1} ~/devops/update.sh
