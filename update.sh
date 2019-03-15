@@ -19,6 +19,10 @@ sudo apt-get -y dist-upgrade
 sudo apt-get -y autoremove
 sudo apt-get -y autoclean
 
+if [[ -n "$(which pip)" ]]; then
+    sudo pip install -U pip
+fi
+
 while ((${#} > 0)); do
     ssh -q ${1} ~/devops/update.sh
     shift
