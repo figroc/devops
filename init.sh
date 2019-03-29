@@ -46,10 +46,6 @@ if [[ ! -f /etc/security/limits.d/50-deepro.conf ]]; then
     sudo shutdown -r now
 fi
 
-if ! grep deepro.io /etc/hosts; then
-    echo "10.2.0.4  deepro.io" | sudo tee -a /etc/hosts
-fi
-
 if [[ ! -d ~/${devops} ]]; then
     git -C ~ clone ${repo}
 fi
