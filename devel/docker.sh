@@ -12,7 +12,6 @@ if [[ -n "${mirror}" ]]; then
 fi
 
 source $(dirname ${0})/../.env
-cert=$(dirname ${0})/../cert/server/asset.ca.crt
 
 apt-get update
 apt-get install -y curl apt-transport-https ca-certificates software-properties-common
@@ -45,13 +44,6 @@ fi
     fi
     echo '}'
 ) | tee /etc/docker/daemon.json
-
-if mkdir -p ${dkr_crt}; then
-    chown root:root ${dkr_crt}
-fi
-cp ${cert} ${dkr_crt}/ca.crt
-chown root:root ${dkr_crt}/ca.crt
-chmod 644 ${dkr_crt}/ca.crt
 
 usermod -G docker -a ${devops}
 systemctl start docker

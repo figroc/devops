@@ -14,10 +14,16 @@ if [[ "${b}" != "master" ]]; then
     git rebase
 fi
 
+if [[ "${1}" == "--with-docker" ]]; then
+    sudo apt-mark unhold docker-ce
+fi
 sudo apt-get -y update
 sudo apt-get -y dist-upgrade
 sudo apt-get -y autoremove
 sudo apt-get -y autoclean
+if [[ "${1}" == "--with-docker" ]]; then
+    sudo apt-mark hold docker-ce
+fi
 
 if [[ -n "$(which pip)" ]]; then
     sudo pip install -U pip
