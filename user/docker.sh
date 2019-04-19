@@ -22,8 +22,9 @@ mkdir -p ${home}
 if useradd -m -b ${home} -s /usr/sbin/nologin ${user}; then
     gpasswd -a ${user} docker
 fi
-
 mkdir -p ${home}/${user}/.ssh
+chown ${user}:${user} ${home}/${user}
+
 \cp ${rdir}/pub/${user}.pub ${gate}/crews/
 chown ${user}:${user} ${gate}/crews/${user}.pub
 chmod 644 ${gate}/crews/${user}.pub
