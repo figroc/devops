@@ -15,6 +15,7 @@ gitlab-runner register -n --locked false \
   --docker-services docker:dind \
   --env "DOCKER_DRIVER=overlay2" \
   --env "DOCKER_HOST=tcp://docker:2375" \
-  --docker-volumes /etc/docker/daemon.json:/etc/docker/daemon.json:ro \
-  --docker-volumes /var/file/inn:/var/file/inn:rw \
+  --env "GIT_SUBMODULE_STRATEGY=recursive" \
+  --docker-volumes "/etc/docker/daemon.json:/etc/docker/daemon.json:ro" \
+  --docker-volumes "/var/file/inn:/var/file/inn:rw" \
   --docker-helper-image deepro.io/gitlab/gitlab-runner-helper
