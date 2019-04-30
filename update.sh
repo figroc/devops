@@ -15,13 +15,18 @@ if [[ "${b}" != "master" ]]; then
 fi
 
 if [[ "${1}" == "--with-docker" ]]; then
+    with_docker="1"
+    shift
+fi
+
+if [[ -n "${with_docker}" ]]; then
     sudo apt-mark unhold docker-ce
 fi
 sudo apt-get -y update
 sudo apt-get -y dist-upgrade
 sudo apt-get -y autoremove
 sudo apt-get -y autoclean
-if [[ "${1}" == "--with-docker" ]]; then
+if [[ -n "${with_docker}" ]]; then
     sudo apt-mark hold docker-ce
 fi
 
@@ -33,6 +38,6 @@ if [[ -n "$(which docker-compose)" ]]; then
 fi
 
 while ((${#} > 0)); do
-    ssh -q ${1} ~/devops/update.sh
+    ssh -q ${1} ~/devops/update.sh ${with_docker:+--with-docker}
     shift
 done
