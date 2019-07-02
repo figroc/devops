@@ -50,4 +50,4 @@ systemctl start docker
 
 apt-get -y install python3-pip
 pip3 install ${mirror:+-i https://mirrors.aliyun.com/pypi/simple} --upgrade pip
-pip3 install ${mirror:+-i https://mirrors.aliyun.com/pypi/simple} --upgrade docker-compose
+pip install ${mirror:+-i https://mirrors.aliyun.com/pypi/simple} --upgrade docker-compose
