@@ -30,11 +30,11 @@ if [[ -n "${with_docker}" ]]; then
     sudo apt-mark hold docker-ce
 fi
 
-if [[ -n "$(which pip)" ]]; then
-    sudo pip install -U pip
+if [[ -n "$(which pip3)" ]]; then
+    sudo pip3 install -U pip
 fi
 if [[ -n "$(which docker-compose)" ]]; then
-    sudo pip install -U docker-compose
+    sudo pip3 install -U docker-compose
 fi
 
 while ((${#} > 0)); do

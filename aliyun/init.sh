@@ -3,7 +3,7 @@
 sudo apt-get update
 sudo apt-get install -y \
     jq
-sudo pip install -U \
+sudo pip3 install -U \
     aliyuncli \
     aliyun-python-sdk-core \
     aliyun-python-sdk-ecs \
