@@ -69,7 +69,7 @@ function remove_shadow {
         local user="${1}.${2}"
         local match="${1}\\.${2}"
     fi
-    if userdel ${user} 2>/dev/null; then
+    if userdel ${user}; then
         sed -i "/^${match}:/d" ${jail}/etc/passwd
         sed -i "s/\\b${match}\\b,\?//g;s/,$//g" ${jail}/etc/group
     fi
@@ -307,11 +307,11 @@ case "${1}" in
                 remove_shadow ${user} ${r}
             done
             if (( $(grep -cE "^${user}(\\.[[:alpha:]]*)?:" /etc/passwd) == 1 )); then
-                if id -u ${user} &>/dev/null; then
+                if id -u ${user}; then
                     remove_shadow ${user}
                 fi
             fi
-            if ! id -u ${user} &>/dev/null; then
+            if ! id -u ${user}; then
                 rm -f ${gate}/crews/${user}.pub
             fi
         fi
