@@ -15,6 +15,5 @@ gitlab-runner register -n --locked false \
   --env "GIT_SUBMODULE_STRATEGY=recursive" \
   --docker-volumes "/var/data/docker" \
   --docker-volumes "/etc/docker/daemon.json:/etc/docker/daemon.json:ro" \
-  --docker-volumes "/var/file/inn:/var/file/inn:rw" \
   --docker-helper-image deepro.io/gitlab/gitlab-runner-helper \
   --pre-build-script "service docker start"
