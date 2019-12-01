@@ -31,7 +31,7 @@ if [[ -n "${with_docker}" ]]; then
 fi
 
 if [[ -n "$(which pip)" ]]; then
-    sudo pip install -U pip
+    sudo pip install -U pip wheel setuptools
 fi
 if [[ -n "$(which docker-compose)" ]]; then
     sudo pip install -U docker-compose

@@ -48,7 +48,8 @@ if [[ ! -d ~/${devops} ]]; then
     git -C ~ clone ${repo}
 fi
 
-sudo apt-get update && \
-sudo apt-get install -y gdisk tree plzip zip
+sudo apt-get update && sudo apt-get install -y \
+  gdisk tree plzip zip python3
+sudo pip3 install -U pip wheel setuptools
 
 sudo update-alternatives --set editor /usr/bin/vim.basic
