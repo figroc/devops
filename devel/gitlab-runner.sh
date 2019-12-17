@@ -5,8 +5,10 @@
 
 source $(dirname ${0})/../.env
 
-gitlab-runner register -n --locked false \
-  -u ${1:?gitlab coordinator} -r ${2:?registration token} \
+gitlab-runner register -n \
+  --locked=false \
+  -u ${1:?gitlab coordinator} \
+  -r ${2:?registration token} \
   --executor docker \
   --docker-privileged \
   --docker-image alpine \
