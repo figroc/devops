@@ -5,10 +5,8 @@
 
 source $(dirname ${0})/../.env
 
-while [[ -z "${R_SERVER}" ]]; do read -p "Gitlab coordinator: " R_SERVER; done
-while [[ -z "${R_TOKENS}" ]]; do read -p "Registration token: " R_TOKENS; done
 gitlab-runner register -n --locked false \
-  -u ${R_SERVER} -r ${R_TOKENS} \
+  -u ${1:?gitlab coordinator} -r ${2:?registration token} \
   --executor docker \
   --docker-privileged \
   --docker-image alpine \
