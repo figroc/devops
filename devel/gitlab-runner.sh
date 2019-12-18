@@ -12,7 +12,7 @@ gitlab-runner register -n \
   --executor docker \
   --docker-privileged \
   --docker-image alpine \
-  --docker-disable-cache \
-  --env "GIT_SUBMODULE_STRATEGY=recursive" \
   --docker-helper-image deepro.io/gitlab/gitlab-runner-helper \
-  --pre-build-script "service docker start"
+  --pre-build-script "rm -rf /var/lib/docker/* && service docker start && sleep 3" \
+  --post-build-script "service docker stop && sleep 3 && rm -rf /var/lib/docker/*" \
+  --env "GIT_SUBMODULE_STRATEGY=recursive"
