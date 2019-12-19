@@ -11,7 +11,7 @@ gitlab-runner register -n \
   -r ${2:?registration token} \
   --executor docker \
   --docker-privileged \
-  --docker-image alpine \
+  --docker-image deepro.io/cloudbrain/devel:devel \
   --docker-helper-image deepro.io/gitlab/gitlab-runner-helper \
   --pre-build-script "rm -rf /var/lib/docker/* && service docker start && sleep 3" \
   --post-build-script "service docker stop && sleep 3 && rm -rf /var/lib/docker/*" \
