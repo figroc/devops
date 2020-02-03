@@ -37,7 +37,7 @@ fi
     if [[ -n "${mirror}" ]]; then
         echo '  },'
         echo '  "registry-mirrors": ['
-        echo '    "https://f62945bb.mirror.aliyuncs.com"'
+        echo '    "https://n7ha6koh.mirror.aliyuncs.com"'
         echo '  ]'
     else
         echo '  }'
